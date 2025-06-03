@@ -49,6 +49,27 @@
     damage:
       types:
         Slash: 5 # Reduce?
+        
+  - type: PressureProtection
+    lowMultiplier: 1000
+  - type: Barotrauma
+    damage:
+      types:
+        Burn: 0.15 #plating protects from pressure, but causes internal overheating in high-pressure.
+  - type: Temperature
+    coldDamageThreshold: -100 # Floof: Space-fairing chickens
+    heatDamageThreshold: 320.15 # Suffers from the same fate as Resomi
+    coldDamage:
+      types:
+        Cold : 0
+    heatDamage:
+      types:
+        Heat : 3 #per second, scales with temperature & other constants
+  - type: TemperatureSpeed
+    thresholds:
+      185.15: 0.85 # fluorosulfonyl-(trifluoromethanesulfonyl)imide
+      77.15: 0.7 # N,N-diethylmethylamine
+
   - type: Sprite # Need to redefine the whole order to draw the tail over their gas tank
     layers:
     - map: [ "enum.HumanoidVisualLayers.Chest" ]
