@@ -59,10 +59,6 @@
     Poison:
       effects:
       - !type:HealthChange
-        conditions:
-        - !type:OrganType
-          type: Vox
-          shouldHave: false
         damage:
           types:
             Poison: 0.5
@@ -159,20 +155,12 @@
     Poison:
       effects:
       - !type:HealthChange
-        conditions:
-          - !type:OrganType
-            type: Vox
-            shouldHave: false
         damage:
           types:
             Heat: 2
       - !type:FlammableReaction
         multiplier: 0.5
       - !type:Ignite
-          conditions:
-          - !type:OrganType
-            type: Vox
-            shouldHave: false
       - !type:Emote
         emote: Laugh
         probability: 0.25
