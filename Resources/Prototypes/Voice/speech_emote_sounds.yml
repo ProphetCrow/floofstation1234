@@ -162,6 +162,10 @@
   sounds:
     Squish:
       collection: Squishes
+    Bubble:
+      collection: Bubbles # imp
+    Pop:
+      collection: Pops # imp
     Scream:
       collection: SlimeMaleScreams
     Laugh:
@@ -200,6 +204,10 @@
   sounds:
     Squish:
       collection: Squishes
+    Bubble:
+      collection: Bubbles # imp
+    Pop:
+      collection: Pops # imp
     Scream:
       collection: SlimeFemaleScreams
     Laugh:
@@ -281,7 +289,7 @@
     Scream:
       collection: SlimeFemaleScreams
     Laugh:
-      collection: MaleLaugh
+      collection: FemaleLaugh
     Sneeze:
       collection: FemaleSneezes
     Cough:
@@ -699,18 +707,25 @@
   sounds:
     Clap:
       collection: Claps
+    ClapSingle:
+      collection: ClapSingle
     Snap:
       collection: Snaps
       params:
         volume: -6
     Salute:
       collection: Salutes
+    Blink: # Imp
+      collection: Blinks # Imp
 
 - type: emoteSounds
   id: DionaBodyEmotes
   sounds:
     Clap:
       path: /Audio/Voice/Diona/diona_clap.ogg
+    # TODO: Replace this with a similar wood themed single clap
+    ClapSingle:
+      collection: ClapSingle
     Snap:
       path: /Audio/Voice/Diona/diona_snap.ogg
       params:
@@ -719,6 +734,8 @@
       path: /Audio/Voice/Diona/diona_salute.ogg
       params:
        volume: -5
+    Blink: # Imp
+      collection: Blinks # Imp
 
 - type: emoteSounds
   id: ReptilianBodyEmotes
@@ -729,12 +746,16 @@
         variation: 0.125
     Clap:
       collection: Claps
+    ClapSingle:
+      collection: ClapSingle
     Snap:
       collection: Snaps
       params:
         volume: -6
     Salute:
       collection: Salutes
+    Blink: # Imp
+      collection: Blinks # Imp
 
 # mobs
 - type: emoteSounds

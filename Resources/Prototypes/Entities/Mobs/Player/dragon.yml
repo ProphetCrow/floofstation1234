@@ -143,11 +143,19 @@
     tags:
     - CannotSuicide
     - DoorBumpOpener
+    - Carp
   - type: NightVision
     isActive: true
     color: "#808080"
     activateSound: null
     deactivateSound: null
+  - type: LanguageKnowledge #Floof
+    speaks:
+    - TauCetiBasic
+    - Kobold
+    understands:
+    - TauCetiBasic
+    - Kobold
 
 - type: entity
   parent: BaseMobDragon

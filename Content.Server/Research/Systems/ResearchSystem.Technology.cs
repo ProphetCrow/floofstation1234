@@ -1,3 +1,4 @@
+using Content.Server._DEN.Research.Components;
 using Content.Shared.Database;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
@@ -20,6 +21,7 @@ public sealed partial class ResearchSystem
         primaryDb.SupportedDisciplines = otherDb.SupportedDisciplines;
         primaryDb.UnlockedTechnologies = otherDb.UnlockedTechnologies;
         primaryDb.UnlockedRecipes = otherDb.UnlockedRecipes;
+        primaryDb.SoftCapMultiplier = otherDb.SoftCapMultiplier; // Floofstation - why was this missing?!
 
         Dirty(primaryUid, primaryDb);
 
@@ -70,21 +72,42 @@ public sealed partial class ResearchSystem
         ResearchClientComponent? component = null,
         TechnologyDatabaseComponent? clientDatabase = null)
     {
-        if (!Resolve(client, ref component, ref clientDatabase, false))
+        if (!Resolve(client, ref component, ref clientDatabase, false)
+            || !TryGetClientServer(client, out var serverEnt, out _, component)
+            || !CanServerUnlockTechnology(client, prototype, clientDatabase, component)
+            || !PrototypeManager.TryIndex(prototype.Discipline, out var disciplinePrototype)
+            || !TryComp<ResearchServerComponent>(serverEnt.Value, out var researchServer)
+            || !TryComp<TechnologyDatabaseComponent>(serverEnt.Value, out var serverDatabase) // Floofstation
+            || prototype.Cost * serverDatabase.SoftCapMultiplier > researchServer.Points)
             return false;
 
-        if (!TryGetClientServer(client, out var serverEnt, out _, component))
-            return false;
+        // The den section start
+        var station = _station.GetOwningStation(client);
+        var oldSoftCap = serverDatabase.SoftCapMultiplier; // Floofstation - server is authoritative
+        // The den section end
 
-        if (!CanServerUnlockTechnology(client, prototype, clientDatabase, component))
-            return false;
+        if (prototype.Tier >= disciplinePrototype.LockoutTier)
+        {
+            // Floofstation - server is authoritative
+            serverDatabase.SoftCapMultiplier *= prototype.SoftCapContribution;
+            clientDatabase.SoftCapMultiplier = serverDatabase.SoftCapMultiplier;
+        }
+
+        // TheDen edit
+        if (station != null
+            && Exists(station)
+            && station != EntityUid.Invalid
+            && TryComp<StationResearchRecordComponent>(station, out var record))
+            record.SoftCapMultiplier = MathF.Max(serverDatabase.SoftCapMultiplier, record.SoftCapMultiplier); // Floofstation - use max here
 
         AddTechnology(serverEnt.Value, prototype);
         TrySetMainDiscipline(prototype, serverEnt.Value);
-        ModifyServerPoints(serverEnt.Value, -prototype.Cost);
+        ModifyServerPoints(serverEnt.Value, -(int) (prototype.Cost * oldSoftCap)); // TheDen - multiply by the old soft cap instead of the one
         UpdateTechnologyCards(serverEnt.Value);
 
-        _adminLog.Add(LogType.Action, LogImpact.Medium,
+        _adminLog.Add(
+            LogType.Action,
+            LogImpact.Medium,
             $"{ToPrettyString(user):player} unlocked {prototype.ID} (discipline: {prototype.Discipline}, tier: {prototype.Tier}) at {ToPrettyString(client)}, for server {ToPrettyString(serverEnt.Value)}.");
         return true;
     }
@@ -123,6 +146,7 @@ public sealed partial class ResearchSystem
         {
             if (component.UnlockedRecipes.Contains(unlock))
                 continue;
+
             component.UnlockedRecipes.Add(unlock);
         }
         Dirty(uid, component);
@@ -151,7 +175,7 @@ public sealed partial class ResearchSystem
         if (!IsTechnologyAvailable(database, technology))
             return false;
 
-        if (technology.Cost > serverComp.Points)
+        if (technology.Cost * database.SoftCapMultiplier > serverComp.Points)
             return false;
 
         return true;

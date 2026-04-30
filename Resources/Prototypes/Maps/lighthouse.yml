@@ -32,7 +32,6 @@
           Boxer: [ 2, 2 ]
           Chef: [ 1, 2 ]
           Clown: [ 1, 1 ]
-          Lawyer: [ 2, 2 ]
           Reporter: [ 0, 2 ]
           Musician: [ 1, 1 ]
           Janitor: [ 1, 2 ]
@@ -58,7 +57,6 @@
           Scientist: [ 3, 4 ]
           Roboticist: [ 1, 1 ]
           ResearchAssistant: [ 2, 3 ]
-          Borg: [ 1, 2 ]
           Librarian: [ 1, 1 ]
           SeniorResearcher: [ 1, 1 ]
         #security
@@ -78,5 +76,14 @@
           CargoTechnician: [ 2, 4 ]
         #civilian
           Passenger: [ -1, -1 ]
-          # Silicon
+        # Silicon
           #StationAi: [ 1, 1 ]
+          Borg: [ 1, 2 ]
+          ServiceQuadBorg: [ 1, 2 ] #Floofstation
+          MedicalQuadBorg: [ 1, 2 ] #Floofstation
+          MedicalBorg: [ 1, 2 ]
+        # Justice added by FloofStation
+          ChiefJustice: [ 1, 1 ] #FloofStation
+          Clerk: [ 1, 1 ] #FloofStation
+          Lawyer: [ 2, 2 ] #FloofStation
+          Prosecutor: [ 1, 1 ] #FloofStation

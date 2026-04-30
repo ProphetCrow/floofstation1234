@@ -1,3 +1,4 @@
+using System.Threading;
 using Content.Server.Chat.Managers;
 using Content.Server.Popups;
 using Content.Shared.Alert;
@@ -107,6 +108,13 @@ public sealed class MoodSystem : EntitySystem
 
     private void ApplyEffect(EntityUid uid, MoodComponent component, MoodEffectPrototype prototype, float eventModifier = 1, float eventOffset = 0)
     {
+        // Floofstation - cancel any previous timers on this prototype to reset the timeout
+        var oldToken = component.CancellationTokens.GetValueOrDefault(prototype.ID);
+        // ... and create a new one before applying the effect
+        var cancelSource = new CancellationTokenSource();
+        component.CancellationTokens[prototype.ID] = cancelSource;
+        // None of this would be necessary if the system didn't rely on timers. But oh well.
+
         // Apply categorised effect
         if (prototype.Category != null)
         {
@@ -125,14 +133,17 @@ public sealed class MoodSystem : EntitySystem
             else
                 component.CategorisedEffects.Add(prototype.Category, prototype.ID);
 
+            // Floof - add cancellation tokens
+            oldToken?.Cancel();
             if (prototype.Timeout != 0)
-                Timer.Spawn(TimeSpan.FromSeconds(prototype.Timeout), () => RemoveTimedOutEffect(uid, prototype.ID, prototype.Category));
+                Timer.Spawn(TimeSpan.FromSeconds(prototype.Timeout), () => RemoveTimedOutEffect(uid, prototype.ID, prototype.Category), cancelSource.Token);
         }
         // Apply uncategorised effect
         else
         {
-            if (component.UncategorisedEffects.TryGetValue(prototype.ID, out _))
-                return;
+            // Floofstation - this sucks
+            // if (component.UncategorisedEffects.TryGetValue(prototype.ID, out _))
+            //     return;
 
             var moodChange = prototype.MoodChange * eventModifier + eventOffset;
             if (moodChange == 0)
@@ -142,10 +153,13 @@ public sealed class MoodSystem : EntitySystem
             if (!component.UncategorisedEffects.ContainsKey(prototype.ID))
                 SendEffectText(uid, prototype);
 
-            component.UncategorisedEffects.Add(prototype.ID, moodChange);
+            // Floof - use setter syntax instead of Add to avoid having that if statement above
+            component.UncategorisedEffects[prototype.ID] = moodChange;
 
+            // Floof - add cancellation tokens
+            oldToken?.Cancel();
             if (prototype.Timeout != 0)
-                Timer.Spawn(TimeSpan.FromSeconds(prototype.Timeout), () => RemoveTimedOutEffect(uid, prototype.ID));
+                Timer.Spawn(TimeSpan.FromSeconds(prototype.Timeout), () => RemoveTimedOutEffect(uid, prototype.ID), cancelSource.Token);
         }
 
         RefreshMood(uid, component);

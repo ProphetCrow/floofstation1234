@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Shared._Floof.LoadoutsAndTraits.Data;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Consent;
 using Content.Shared.Clothing.Loadouts.Systems;
@@ -248,12 +249,15 @@ namespace Content.Server.Database
                 backpack,
                 (PreferenceUnavailableMode) profile.PreferenceUnavailable,
                 antags.ToHashSet(),
-                traits.ToHashSet(),
+                traits.Select(t => new TraitPreference(t)).ToHashSet(),
                 loadouts.Select(l => new LoadoutPreference(l.LoadoutName)
                 {
                     CustomName = l.CustomName, CustomDescription = l.CustomDescription,
                     CustomColorTint = l.CustomColorTint, CustomHeirloom = l.CustomHeirloom, Selected = true,
-                }).ToHashSet()
+                }).ToHashSet(),
+
+                // Floof
+                profile.FavoriteDrink
             );
         }
 
@@ -312,6 +316,9 @@ namespace Content.Server.Database
             profile.Loadouts.Clear();
             profile.Loadouts.AddRange(humanoid.LoadoutPreferences
                 .Select(l => new Loadout(l.LoadoutName, l.CustomName, l.CustomDescription, l.CustomColorTint, l.CustomHeirloom)));
+
+            // Floof
+            profile.FavoriteDrink = humanoid.FavoriteDrink;
 
             return profile;
         }
