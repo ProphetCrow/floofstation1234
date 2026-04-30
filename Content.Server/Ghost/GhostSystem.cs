@@ -55,7 +55,6 @@ namespace Content.Server.Ghost
             _ghostQuery = GetEntityQuery<GhostComponent>();
             _physicsQuery = GetEntityQuery<PhysicsComponent>();
 
-            SubscribeLocalEvent<GhostComponent, ComponentStartup>(OnGhostStartup);
             SubscribeLocalEvent<GhostComponent, MapInitEvent>(OnMapInit);
             SubscribeLocalEvent<GhostComponent, ComponentShutdown>(OnGhostShutdown);
 
@@ -147,24 +146,6 @@ namespace Content.Server.Ghost
             _ticker.OnGhostAttempt(mindId, component.CanReturn, mind: mind);
         }
 
-        private void OnGhostStartup(EntityUid uid, GhostComponent component, ComponentStartup args)
-        {
-            // Allow this entity to be seen by other ghosts.
-            var visibility = EnsureComp<VisibilityComponent>(uid);
-
-            if (_ticker.RunLevel != GameRunLevel.PostRound)
-            {
-                _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.Ghost, false);
-                _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
-                _visibilitySystem.RefreshVisibility(uid, visibilityComponent: visibility);
-            }
-
-            SetCanSeeGhosts(uid, true);
-
-            var time = _gameTiming.CurTime;
-            component.TimeOfDeath = time;
-        }
-
         private void OnGhostShutdown(EntityUid uid, GhostComponent component, ComponentShutdown args)
         {
             // Perf: If the entity is deleting itself, no reason to change these back.
@@ -197,15 +178,26 @@ namespace Content.Server.Ghost
 
         private void OnMapInit(EntityUid uid, GhostComponent component, MapInitEvent args)
         {
-            if (_actions.AddAction(uid, ref component.BooActionEntity, out var act, component.BooAction)
-                && act.UseDelay != null)
+            // Allow this entity to be seen by other ghosts.
+            var visibility = EnsureComp<VisibilityComponent>(uid);
+
+            if (_ticker.RunLevel != GameRunLevel.PostRound)
             {
-                var start = _gameTiming.CurTime;
-                var end = start + act.UseDelay.Value;
-                _actions.SetCooldown(component.BooActionEntity.Value, start, end);
+                _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.Ghost, false);
+                _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
+                _visibilitySystem.RefreshVisibility(uid, visibilityComponent: visibility);
             }
 
-            _actions.AddAction(uid, ref component.ToggleGhostHearingActionEntity, component.ToggleGhostHearingAction);
+            SetCanSeeGhosts(uid, true);
+
+            var time = _gameTiming.CurTime; // Vulpstation note - BodySystem was changed to use CurTime as well. Adjust it if this is ever changed.
+            component.TimeOfDeath = time;
+
+            _actions.AddAction(uid, ref component.BooActionEntity, component.BooAction);
+            if (HasComp<GhostHearingComponent>(uid)) // Floof - M3739 - #1300 | Restrict normal ghosts from hearing everything
+            {
+                _actions.AddAction(uid, ref component.ToggleGhostHearingActionEntity, component.ToggleGhostHearingAction);
+            }
             _actions.AddAction(uid, ref component.ToggleLightingActionEntity, component.ToggleLightingAction);
             _actions.AddAction(uid, ref component.ToggleFoVActionEntity, component.ToggleFoVAction);
             _actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);

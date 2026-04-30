@@ -1,0 +1,135 @@
+#For Librarian, Wizard PDAs.
+- type: entity
+  parent: BasePDA
+  id: BaseWidePDA
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda"
+    - state: "light_overlay_wide"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay_wide"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+
+- type: entity
+  parent: CentcomPDA
+  id: SurgeonGeneralPDA
+  name: surgeon general PDA
+  description: Extraordinarily shiny and sterile PDA made for the surgeon general. Has a built-in health analyzer. Produced by SESWC
+  components:
+  - type: HealthAnalyzer
+    scanDelay: 1
+    scanningEndSound:
+      path: "/Audio/Items/Medical/healthscanner.ogg"
+  - type: Pda
+    id: SurgeonGeneralIDCard
+    state: pda-centcom
+    penSlot:
+      startingItem: PenCentcom
+      priority: -1
+      whitelist:
+        tags:
+        - Write
+
+- type: entity
+  parent: BaseMedicalPDA
+  id: FreelancerPDA
+  name: Freelancer PDA
+  description: Refurbished standard PDA
+  components:
+  - type: Sprite
+    sprite: _Floof/Objects/Devices/pda.rsi
+  - type: Pda
+    id: FreelancerIDCard
+    state: pda-free
+  - type: PdaBorderColor
+    borderColor: "#668643"
+
+- type: entity
+  parent: BasePDA
+  id: InvSpecPDA
+  name: inventory specialist PDA
+  description: Covered in tally marks.
+  components:
+  - type: Pda
+    id: InvSpecIDCard
+    state: pda-cargo
+  - type: PdaBorderColor
+    borderColor: "#e39751"
+  # - type: Icon
+  #   state: pda-cargo
+  - type: CartridgeLoader # DeltaV
+    preinstalled:
+    - CrewManifestCartridge
+    - NotekeeperCartridge
+    - NewsReaderCartridge
+    - StockTradingCartridge # DeltaV - StockTrading
+    - NanoChatCartridge # DeltaV
+
+# Cyborg PDAs
+- type: entity
+  parent: DetectivePDA
+  id: DetectivePDACyborg
+  name: integrated detective PDA
+  description: Smells like digital rain... pouring down the virtual rooftops...
+  components:
+    - type: Pda
+      id: null
+      penSlot:
+        startingItem: null
+        priority: -1
+        whitelist:
+          tags:
+            - Write
+      bookSlot: # Frontier
+        startingItem: null
+        priority: -2
+        whitelist:
+          tags:
+            - BookSpaceLaw
+            - BookJusticeSop
+            - BookSecuritySop
+      state: pda-detective
+
+#PDA for sapient animals
+- type: entity
+  parent: BaseWidePDA
+  id: AnimalPDA
+  name: Beast PDA
+  description: Covered in scratches. A coordinate switch has been soldered onto the open circuits. Mind your claws around the wires.
+  components:
+  - type: Sprite
+    sprite: _Floof/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda-animal"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay_wide"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Pda
+    id: PassengerIDCard
+    state: pda-animal
+  - type: PdaBorderColor
+    borderColor: "#ffe685"
+  - type: SuitSensor
+    activationSlot: "pda"
+    randomMode: false
+    mode: SensorCords
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    transmitFrequencyId: SuitSensor
+  - type: WirelessNetworkConnection
+    range: 1200
+  - type: StationLimitedNetwork

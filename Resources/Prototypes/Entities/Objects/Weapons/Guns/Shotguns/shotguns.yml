@@ -9,9 +9,10 @@
     layers:
     - state: icon
       map: [ "enum.GunVisualLayers.Base" ]
-  - type: Item
-    # If you update this also update the bulldog's size.
+  - type: Item # Floof - Gun Shape Refactor
     size: Large
+    shape:
+    - 0,0,4,1
   - type: Clothing
     sprite: DeltaV/Objects/Weapons/Guns/Shotguns/db_shotgun.rsi # Delta-V
     quickEquip: false
@@ -43,6 +44,25 @@
         ents: []
   - type: StaticPrice
     price: 500
+  - type: Execution
+  - type: MeleeWeapon
+    attackRate: 1.4
+    damage:
+      types:
+        Blunt: 10
+    bluntStaminaDamageFactor: 1.3333
+    swapKeys: true
+    disableHeavy: true
+    animation: WeaponArcThrust
+    wideAnimationRotation: 180
+    soundHit:
+      collection: MetalThud
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 2.5
+  - type: DamageOtherOnHit
+    staminaCost: 9.5
 
 - type: entity
   name: Bulldog
@@ -58,8 +78,10 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-0
       map: ["enum.GunVisualLayers.Mag"]
-  - type: Item
+  - type: Item # Floof - Gun Shape Refactor
     size: Large
+    shape:
+    - 0,0,4,1
   - type: Clothing
     sprite: Objects/Weapons/Guns/Shotguns/bulldog.rsi
     quickEquip: false
@@ -102,6 +124,25 @@
   - type: Appearance
   - type: StaticPrice
     price: 500
+  - type: Execution
+  - type: MeleeWeapon
+    attackRate: 1.4
+    damage:
+      types:
+        Blunt: 10
+    bluntStaminaDamageFactor: 1.3333
+    swapKeys: true
+    disableHeavy: true
+    animation: WeaponArcThrust
+    wideAnimationRotation: 180
+    soundHit:
+      collection: MetalThud
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 2.5
+  - type: DamageOtherOnHit
+    staminaCost: 9.5
 
 - type: entity
   name: antique Bulldog
@@ -136,6 +177,12 @@
     graph: ShotgunSawn
     node: start
     deconstructionTarget: null
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 8.5
+  - type: DamageOtherOnHit
+    staminaCost: 7.5
 
 - type: entity
   name: double-barreled shotgun
@@ -162,6 +209,13 @@
   - type: BallisticAmmoProvider
   - type: Wieldable
   - type: GunRequiresWield
+  - type: MeleeWeapon
+    attackRate: 1.4
+    damage:
+      types:
+        Blunt: 9
+  - type: DamageOtherOnHit
+    staminaCost: 8.0
 
 - type: entity
   parent: WeaponShotgunEnforcer
@@ -216,6 +270,13 @@
     graph: ShotgunSawn
     node: shotgunsawn
     deconstructionTarget: null
+  - type: MeleeWeapon
+    attackRate: 1.2
+    damage:
+      types:
+        Blunt: 7.5
+  - type: DamageOtherOnHit
+    staminaCost: 6
 
 - type: entity
   name: sawn-off shogun
@@ -237,9 +298,11 @@
   id: WeaponShotgunHandmade
   description: Looks unreliable. Uses .50 shotgun shells.
   components:
-  - type: Item
+  - type: Item # Floof - Gun Shape Refactor
     size: Small
-    storedRotation: 90
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
   - type: Sprite
     sprite: Objects/Weapons/Guns/Shotguns/hm_pistol.rsi
   - type: Clothing
@@ -255,6 +318,14 @@
     deconstructionTarget: null
   - type: StaticPrice
     price: 0
+  - type: MeleeWeapon
+    attackRate: 1.2
+    damage:
+      types:
+        Blunt: 7.5
+    wideAnimationRotation: 135
+  - type: DamageOtherOnHit
+    staminaCost: 5
 
 - type: entity
   name: blunderbuss

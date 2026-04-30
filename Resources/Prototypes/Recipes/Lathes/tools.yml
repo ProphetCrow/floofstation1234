@@ -42,7 +42,7 @@
   id: CableStack
   result: CableApcStack1
   category: Parts
-  completetime: 2
+  completetime: 0.2
   materials:
     Steel: 30
 
@@ -50,7 +50,7 @@
   id: CableMVStack
   result: CableMVStack1
   category: Parts
-  completetime: 2
+  completetime: 0.2
   materials:
     Steel: 30
 
@@ -58,7 +58,7 @@
   id: CableHVStack
   result: CableHVStack1
   category: Parts
-  completetime: 2
+  completetime: 0.2
   materials:
     Steel: 30
 
@@ -206,15 +206,6 @@
     Steel: 650
     Plastic: 150
     Gold: 50
-
-- type: latheRecipe
-  id: MiningDrill
-  result: MiningDrill
-  category: Tools
-  completetime: 3
-  materials:
-    Steel: 500
-    Plastic: 100
 
 - type: latheRecipe
   id: WelderExperimental

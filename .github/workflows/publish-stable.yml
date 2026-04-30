@@ -3,6 +3,7 @@ name: Publish stable
 concurrency:
   group: publish
 on:
+  workflow_dispatch:
   push:
     branches:
       - stable  # or the branch where merge requests are being merged into (e.g., 'master')
@@ -23,7 +24,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3.2.0
       with:
-        dotnet-version: 8.0.100
+        dotnet-version: 9.0.x
 
     - name: Get Engine Tag
       run: |
@@ -59,7 +60,7 @@ jobs:
         ARTIFACT_ID: ${{ steps.artifact-upload-step.outputs.artifact-id }}
         GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
         ROBUST_CDN_URL: ${{ vars.ROBUST_CDN_URL }}
-        FORK_ID: "floofstation-main"
+        FORK_ID: "floof-station-nova"
 
     # - name: Publish changelog (Discord)
     #   run: Tools/actions_changelogs_since_last_run.py
@@ -72,7 +73,7 @@ jobs:
       run: Tools/actions_changelog_rss.py
       env:
         CHANGELOG_RSS_KEY: ${{ secrets.CHANGELOG_RSS_KEY }}
-
+    
     - uses: geekyeggo/delete-artifact@v5
       if: always()
       with:

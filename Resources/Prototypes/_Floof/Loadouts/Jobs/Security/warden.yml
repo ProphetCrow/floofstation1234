@@ -1,0 +1,91 @@
+# Warden
+# Backpacks
+
+# Belt
+
+# Ears
+
+# Equipment
+
+# Eyes
+
+# Gloves // Removed Krav Maga from Loadout for Warden to only have one set on station //
+#- type: loadout
+#  id: LoadoutClothingHandsKravMaga
+#  category: JobsSecurityWarden
+#  cost: 0
+#  requirements:
+#    - !type:CharacterItemGroupRequirement
+#      group: LoadoutWardenGloves
+#    - !type:CharacterJobRequirement
+#      jobs:
+#        - Warden
+#  items:
+#    - ClothingHandsGlovesKravMaga
+
+# Head
+- type: loadout
+  id: LoadoutClothingHeadHatWarden
+  category: JobsSecurityWarden
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatWarden
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutWardenHead
+    - !type:CharacterJobRequirement
+      jobs:
+        - Warden
+
+# Id
+
+# Neck
+
+# Mask
+
+# Outer
+- type: loadout
+  id: LoadoutClothingOuterWinterWarden
+  category: JobsSecurityWarden
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingOuterWinterWarden
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutWardenOuter
+    - !type:CharacterJobRequirement
+      jobs:
+        - Warden
+
+- type: loadout
+  id: LoadoutClothingOuterLongcoatWarden
+  category: JobsSecurityWarden
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingLongcoatWarden
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutWardenOuter
+    - !type:CharacterJobRequirement
+      jobs:
+        - Warden
+
+# Shoes
+- type: loadout
+  id: LoadoutWardenShoesBootsWinter
+  category: JobsSecurityWarden
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingShoesBootsWinterWarden
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutWardenShoes
+    - !type:CharacterJobRequirement
+      jobs:
+        - Warden
+
+# Uniforms

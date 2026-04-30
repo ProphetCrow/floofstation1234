@@ -1,35 +1,71 @@
 - type: characterItemGroup
   id: LoadoutGloves
   items:
-    - type: loadout
-      id: LoadoutHandsColorPurple
-    - type: loadout
-      id: LoadoutHandsColorRed
-    - type: loadout
-      id: LoadoutHandsColorBlack
-    - type: loadout
-      id: LoadoutHandsColorBlue
-    - type: loadout
-      id: LoadoutHandsColorBrown
-    - type: loadout
-      id: LoadoutHandsColorGray
-    - type: loadout
-      id: LoadoutHandsColorGreen
-    - type: loadout
-      id: LoadoutHandsColorLightBrown
-    - type: loadout
-      id: LoadoutHandsColorOrange
-    - type: loadout
-      id: LoadoutHandsColorWhite
-    - type: loadout
-      id: LoadoutHandsColorYellowBudget
-    - type: loadout
-      id: LoadoutHandsGlovesLeather
-    - type: loadout
-      id: LoadoutHandsGlovesPowerglove
-    - type: loadout
-      id: LoadoutHandsGlovesRobohands
-    - type: loadout
-      id: LoadoutHandsGlovesFingerless
-    - type: loadout
-      id: LoadoutGoldRing
+  - type: loadout
+    id: LoadoutHandsColorWhite
+  - type: loadout
+    id: LoadoutHandsColorYellowBudget
+  - type: loadout
+    id: LoadoutHandsGlovesLeather
+  - type: loadout
+    id: LoadoutHandsGlovesPowerglove
+  - type: loadout
+    id: LoadoutHandsGlovesRobohands
+  - type: loadout
+    id: LoadoutHandsGlovesFingerless
+  - type: loadout
+    id: LoadoutGoldRing
+  # start Floof
+  - type: loadout
+    id: LoadoutHandsColorPurple
+  - type: loadout
+    id: LoadoutHandsColorRed
+  - type: loadout
+    id: LoadoutHandsColorBlack
+  - type: loadout
+    id: LoadoutHandsColorBlue
+  - type: loadout
+    id: LoadoutHandsColorBrown
+  - type: loadout
+    id: LoadoutHandsColorGray
+  - type: loadout
+    id: LoadoutHandsColorGreen
+  - type: loadout
+    id: LoadoutHandsColorLightBrown
+  - type: loadout
+    id: LoadoutHandsColorOrange
+  - type: loadout
+    id: LoadoutHandsGlovesTacticalMaid
+  - type: loadout
+    id: LoadoutClothingHandsPlainWarmers
+  - type: loadout
+    id: LoadoutClothingHandsStripePurpleWarmers
+  - type: loadout
+    id: LoadoutClothingHandsStripeRainbowWarmers
+  - type: loadout
+    id: LoadoutClothingHandsCoderWarmers
+  - type: loadout
+    id: LoadoutClothingHandsCoderValidWarmers
+  - type: loadout
+    id: LoadoutClothingHandsBeeWarmers
+  - type: loadout
+    id: LoadoutClothingUnderHandsRainbow
+  - type: loadout
+    id: LoadoutClothingUnderHandsAce
+  - type: loadout
+    id: LoadoutClothingUnderHandsAro
+  - type: loadout
+    id: LoadoutClothingUnderHandsBi
+  - type: loadout
+    id: LoadoutClothingUnderHandsGay
+  - type: loadout
+    id: LoadoutClothingUnderHandsInter
+  - type: loadout
+    id: LoadoutClothingUnderHandsLesbian
+  - type: loadout
+    id: LoadoutClothingUnderHandsNon
+  - type: loadout
+    id: LoadoutClothingUnderHandsPan
+  - type: loadout
+    id: LoadoutClothingUnderHandsTrans
+  # end Floof

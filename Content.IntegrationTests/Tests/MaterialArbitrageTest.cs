@@ -44,6 +44,7 @@ public sealed class MaterialArbitrageTest
         var pricing = entManager.System<PricingSystem>();
         var stackSys = entManager.System<StackSystem>();
         var mapSystem = server.System<SharedMapSystem>();
+        var latheSys = server.System<SharedLatheSystem>();
         var compFact = server.ResolveDependency<IComponentFactory>();
 
         Assert.That(mapSystem.IsInitialized(testMap.MapId));
@@ -53,12 +54,8 @@ public sealed class MaterialArbitrageTest
         var materialName = compFact.GetComponentName(typeof(MaterialComponent));
         var destructibleName = compFact.GetComponentName(typeof(DestructibleComponent));
 
-        // construct inverted lathe recipe dictionary
-        Dictionary<string, List<LatheRecipePrototype>> latheRecipes = new();
-        foreach (var proto in protoManager.EnumeratePrototypes<LatheRecipePrototype>())
-        {
-            latheRecipes.GetOrNew(proto.Result).Add(proto);
-        }
+        // get the inverted lathe recipe dictionary
+        var latheRecipes = latheSys.InverseRecipes;
 
         // Lets assume the possible lathe for resource multipliers:
         var multiplier = MathF.Pow(LatheComponent.DefaultPartRatingMaterialUseMultiplier, MachinePartComponent.MaxRating - 1);
@@ -192,7 +189,7 @@ public sealed class MaterialArbitrageTest
                 {
                     foreach (var recipe in recipes)
                     {
-                        foreach (var (matId, amount) in recipe.RequiredMaterials)
+                        foreach (var (matId, amount) in recipe.Materials)
                         {
                             var actualAmount = SharedLatheSystem.AdjustMaterial(amount, recipe.ApplyMaterialDiscount, multiplier);
                             if (spawnedMats.TryGetValue(matId, out var numSpawned))
@@ -272,7 +269,7 @@ public sealed class MaterialArbitrageTest
                 {
                     foreach (var recipe in recipes)
                     {
-                        foreach (var (matId, amount) in recipe.RequiredMaterials)
+                        foreach (var (matId, amount) in recipe.Materials)
                         {
                             var actualAmount = SharedLatheSystem.AdjustMaterial(amount, recipe.ApplyMaterialDiscount, multiplier);
                             if (deconstructedMats.TryGetValue(matId, out var numSpawned))
@@ -327,7 +324,7 @@ public sealed class MaterialArbitrageTest
                 {
                     foreach (var recipe in recipes)
                     {
-                        foreach (var (matId, amount) in recipe.RequiredMaterials)
+                        foreach (var (matId, amount) in recipe.Materials)
                         {
                             var actualAmount = SharedLatheSystem.AdjustMaterial(amount, recipe.ApplyMaterialDiscount, multiplier);
                             if (compositionComponent.MaterialComposition.TryGetValue(matId, out var numSpawned))

@@ -31,6 +31,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SharedWiresSystem _wires = default!;
 
     public override void Initialize()
     {
@@ -39,6 +40,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
         SubscribeLocalEvent<EncryptionKeyHolderComponent, ExaminedEvent>(OnHolderExamined);
 
         SubscribeLocalEvent<EncryptionKeyHolderComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<EncryptionKeyHolderComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<EncryptionKeyHolderComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<EncryptionKeyHolderComponent, EntInsertedIntoContainerMessage>(OnContainerModified);
         SubscribeLocalEvent<EncryptionKeyHolderComponent, EntRemovedFromContainerMessage>(OnContainerModified);
@@ -50,19 +52,31 @@ public sealed partial class EncryptionKeySystem : EntitySystem
         if (args.Cancelled)
             return;
 
+        // Floof: fix unremovable keys being removed by PickupOrDrop, count number successfully popped out
+        var poppedOut = 0;
         var contained = component.KeyContainer.ContainedEntities.ToArray();
-        _container.EmptyContainer(component.KeyContainer, reparent: false);
         foreach (var ent in contained)
         {
+            if (!_container.TryRemoveFromContainer(ent))
+                continue;
             _hands.PickupOrDrop(args.User, ent);
+            poppedOut++;
         }
 
         if (!_timing.IsFirstTimePredicted)
             return;
 
         // TODO add predicted pop-up overrides.
+        // Floof: locale strings for unremovable keys
         if (_net.IsServer)
-            _popup.PopupEntity(Loc.GetString("encryption-keys-all-extracted"), uid, args.User);
+        {
+            if (poppedOut == contained.Length)
+                _popup.PopupEntity(Loc.GetString("encryption-keys-all-extracted", ("count", poppedOut)), uid, args.User);
+            else if (poppedOut > 0)
+                _popup.PopupEntity(Loc.GetString("encryption-keys-some-extracted", ("count", poppedOut)), uid, args.User);
+            else
+                _popup.PopupEntity(Loc.GetString("encryption-keys-none-extracted", ("remaining", contained.Length)), uid, args.User);
+        }
 
         _audio.PlayPredicted(component.KeyExtractionSound, uid, args.User);
     }
@@ -104,7 +118,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             TryInsertKey(uid, component, args);
         }
         else if (TryComp<ToolComponent>(args.Used, out var tool)
-                 && tool.Qualities.Contains(component.KeysExtractionMethod)
+                 && _tool.HasQuality(args.Used, component.KeysExtractionMethod, tool)
                  && component.KeyContainer.ContainedEntities.Count > 0) // dont block deconstruction
         {
             args.Handled = true;
@@ -150,7 +164,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             return;
         }
 
-        if (TryComp<WiresPanelComponent>(uid, out var panel) && !panel.Open)
+        if (!_wires.IsPanelOpen(uid))
         {
             _popup.PopupClient(Loc.GetString("encryption-keys-panel-locked"), uid, args.User);
             return;
@@ -168,6 +182,10 @@ public sealed partial class EncryptionKeySystem : EntitySystem
     private void OnStartup(EntityUid uid, EncryptionKeyHolderComponent component, ComponentStartup args)
     {
         component.KeyContainer = _container.EnsureContainer<Container>(uid, EncryptionKeyHolderComponent.KeyContainerName);
+    }
+
+    private void OnMapInit(EntityUid uid, EncryptionKeyHolderComponent component, MapInitEvent args)
+    {
         UpdateChannels(uid, component);
     }
 
@@ -186,8 +204,15 @@ public sealed partial class EncryptionKeySystem : EntitySystem
 
         if (component.Channels.Count > 0)
         {
-            args.PushMarkup(Loc.GetString("examine-encryption-channels-prefix"));
-            AddChannelsExamine(component.Channels, component.DefaultChannel, args, _protoManager, "examine-encryption-channel");
+            using (args.PushGroup(nameof(EncryptionKeyComponent)))
+            {
+                args.PushMarkup(Loc.GetString("examine-encryption-channels-prefix"));
+                AddChannelsExamine(component.Channels,
+                    component.DefaultChannel,
+                    args,
+                    _protoManager,
+                    "examine-encryption-channel");
+            }
         }
     }
 
@@ -216,6 +241,13 @@ public sealed partial class EncryptionKeySystem : EntitySystem
         {
             proto = _protoManager.Index<RadioChannelPrototype>(id);
 
+            //Floof - Hide Syndicate key from examine
+            if (proto.ID == "Syndicate" & !HasComp<EncryptionKeyComponent>(examineEvent.Examined))
+            {
+                continue;
+            }
+            //Floof - End
+
             var key = id == SharedChatSystem.CommonChannel
                 ? SharedChatSystem.RadioCommonPrefix.ToString()
                 : $"{SharedChatSystem.RadioChannelPrefix}{proto.KeyCode}";
@@ -231,6 +263,12 @@ public sealed partial class EncryptionKeySystem : EntitySystem
         {
             if (HasComp<HeadsetComponent>(examineEvent.Examined))
             {
+                //Floof - Hide Syndicate key from examine
+                if (defaultChannel == "Syndicate")
+                {
+                    return;
+                }
+                //Floof - End
                 var msg = Loc.GetString("examine-headset-default-channel",
                 ("prefix", SharedChatSystem.DefaultChannelPrefix),
                 ("channel", defaultChannel),

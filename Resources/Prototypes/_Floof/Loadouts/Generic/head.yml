@@ -1,0 +1,256 @@
+- type: loadout
+  id: LoadoutTacticalMaidHeadband
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 1
+  exclusive: true
+  items:
+    - ClothingHeadHatTacticalMaidHeadband
+  requirements:
+    - !type:CharacterDepartmentRequirement
+       inverted: true
+       departments:
+         - Security
+         - Command
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatAnimalCat
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatAnimalCat
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatAnimalCatBrown
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatAnimalCatBrown
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadAnimalCatBlack
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatAnimalCatBlack
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadAnimalHeadslime
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatAnimalHeadslime
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatAnimalMonkey
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatAnimalMonkey
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatWitch1
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatWitch1
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatPlaguedoctor
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatPlaguedoctor
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatUshanka
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatUshanka
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatWitch
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatWitch
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatTrucker
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatTrucker
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadPaperSack
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadPaperSack
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatFlowerWreath
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatFlowerWreath
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatSquid
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatSquid
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatRedRacoon
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingHeadHatRedRacoon
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatDogEarsCosmetic
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 1
+  exclusive: true
+  items:
+    - ClothingHeadHatDogEarsCosmetic
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatCatEarsCosmetic
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 1
+  exclusive: true
+  items:
+    - ClothingHeadHatCatEarsCosmetic
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadLily
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  items:
+    - FoodLily
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatHolyWatermelon
+  category: Head
+  cost: 1
+  canBeHeirloom: true
+  exclusive: true
+  items:
+    - ClothingHeadHatHolyWatermelon
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: HatPirateTricord
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 1
+  exclusive: true
+  items:
+    - ClothingHeadHatPirateTricord
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadHatPirate
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 1
+  exclusive: true
+  items:
+    - ClothingHeadHatPirate
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead

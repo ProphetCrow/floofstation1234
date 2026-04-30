@@ -4,10 +4,12 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Contests;
 using Content.Shared.DoAfter;
 using Content.Shared.Ghost;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.InteractionVerbs.Events;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
@@ -36,6 +38,7 @@ public abstract class SharedInteractionVerbsSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popups = default!;
     [Dependency] private readonly IPrototypeManager _protoMan = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
     public override void Initialize()
     {
@@ -156,9 +159,9 @@ public abstract class SharedInteractionVerbsSystem : EntitySystem
             Broadcast = true,
             BreakOnHandChange = proto.RequiresHands,
             NeedHand = proto.RequiresHands,
-            RequireCanInteract = proto.RequiresCanAccess,
+            RequireCanInteract = proto.RequiresCanInteract, // Floof - actual CanInteract
             Delay = delay,
-            Event = new InteractionVerbDoAfterEvent(proto.ID, args)
+            Event = new InteractionVerbDoAfterEvent(proto.ID, args),
         };
 
         var isSuccess = _doAfters.TryStartDoAfter(doAfter);
@@ -272,7 +275,15 @@ public abstract class SharedInteractionVerbsSystem : EntitySystem
             return false;
         }
 
-        if (!args.CanInteract || proto.RequiresCanAccess && !args.CanAccess || !proto.Range.IsInRange(distance))
+        // Floofstation - added this block
+        if (proto.RequiresConsciousness && !_actionBlocker.CanConsciouslyPerformAction(args.User))
+        {
+            errorLocale = "interaction-verb-unconscious";
+            return false;
+        }
+
+        // Floof - added RequiresCanInteract
+        if (proto.RequiresCanInteract && !args.CanInteract || proto.RequiresCanAccess && !args.CanAccess || !proto.Range.IsInRange(distance))
         {
             errorLocale = "interaction-verb-cannot-reach";
             return false;
@@ -383,8 +394,8 @@ public abstract class SharedInteractionVerbsSystem : EntitySystem
 
             (string, object)[] localeArgs =
             [
-                ("user", user),
-                ("target", target),
+                ("user", Identity.Entity(user, EntityManager)), // Floof - use identity
+                ("target", Identity.Entity(target, EntityManager)), // Floof - use identity
                 ("used", used ?? EntityUid.Invalid),
                 ("selfTarget", user == target),
                 ("hasUsed", used != null)
@@ -410,10 +421,10 @@ public abstract class SharedInteractionVerbsSystem : EntitySystem
         if (specifier.Sound is { } sound)
         {
             // TODO we have a choice between having an accurate sound source or saving on an entity spawn...
-            _audio.PlayEntity(sound, Filter.Entities(user, target), target, false, specifier.SoundParams);
+            _audio.PlayEntity(sound, Filter.Entities(user, target), target, false, specifier.SoundParams ?? sound.Params); // Floof - use sound params if no custom ones are provided
 
             if (specifier.SoundPerceivedByOthers)
-                _audio.PlayEntity(sound, othersFilter, othersTarget, false, specifier.SoundParams);
+                _audio.PlayEntity(sound, othersFilter, othersTarget, false, specifier.SoundParams ?? sound.Params); // Floof - use sound params if no custom ones are provided
         }
     }
 

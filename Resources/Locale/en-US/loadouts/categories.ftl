@@ -17,6 +17,10 @@ loadout-category-JobsCommand = Command
 loadout-category-JobsCommandAUncategorized = All Command
 loadout-category-JobsCommandCaptain = Captain
 loadout-category-JobsCommandHeadOfPersonnel = Head of Personnel
+loadout-category-JobsCommandAdminAssistant = Administrative Assistant
+loadout-category-JobsCommandBlueshieldOfficer = Blueshield Officer
+loadout-category-JobsCommandNanorep = Nanotrasen Representative
+loadout-category-JobsCommandMagistrate = Magistrate
 
 # Engineering
 loadout-category-JobsEngineering = Engineering
@@ -33,7 +37,8 @@ loadout-category-JobsEpistemicsAAUncategorized = All Epistemiologists
 loadout-category-JobsEpistemicsAcolyte = Acolyte
 loadout-category-JobsEpistemicsCataloger = Cataloger
 loadout-category-JobsEpistemicsChaplain = Chaplain
-loadout-category-JobsEpistemicsGolemancer = Golemancer
+# Floof - renamed back
+loadout-category-JobsEpistemicsGolemancer = Roboticist
 loadout-category-JobsEpistemicsMystagogue = Mystagogue
 loadout-category-JobsEpistemicsMystic = Mystic
 loadout-category-JobsEpistemicsNoviciate = Noviciate
@@ -44,6 +49,8 @@ loadout-category-JobsLogistics = Logistics
 loadout-category-JobsLogisticsAUncategorized = All Logistics
 loadout-category-JobsLogisticsCargoTechnician = Cargo Technician
 loadout-category-JobsLogisticsCourier = Courier
+# Floof - senior cargo
+loadout-category-JobsLogisticsInventorySpecialist = Inventory Specialist
 loadout-category-JobsLogisticsLogisticsOfficer = Logistics Officer
 loadout-category-JobsLogisticsSalvageSpecialist = Salvage Specialist
 
@@ -61,6 +68,7 @@ loadout-category-JobsMedicalSeniorPhysician = Senior Physician
 # Security
 loadout-category-JobsSecurity = Security
 loadout-category-JobsSecurityAUncategorized = All Security
+loadout-category-JobsSecurityWeapons = Service Weapons 
 loadout-category-JobsSecurityCadet = Cadet
 loadout-category-JobsSecurityCorpsman = Corpsman
 loadout-category-JobsSecurityDetective = Detective
@@ -68,6 +76,8 @@ loadout-category-JobsSecurityHeadOfSecurity = Head of Security
 loadout-category-JobsSecuritySecurityOfficer = Security Officer
 loadout-category-JobsSecuritySeniorOfficer = Senior Officer
 loadout-category-JobsSecurityWarden = Warden
+# Floof - Prison Guard loadout implementation
+loadout-category-JobsSecurityPrisonGuard = Prison Guard
 
 # Service
 loadout-category-JobsService = Service
@@ -77,7 +87,8 @@ loadout-category-JobsServiceBotanist = Botanist
 loadout-category-JobsServiceChef = Chef
 loadout-category-JobsServiceClown = Clown
 loadout-category-JobsServiceJanitor = Janitor
-loadout-category-JobsServiceLawyer = Lawyer
+# Floof - Lawyer has been changed to Attorney in this FTL as part of the Justice loadout implementation.
+loadout-category-JobsServiceLawyer = Attorney
 loadout-category-JobsServiceMime = Mime
 loadout-category-JobsServiceMusician = Musician
 loadout-category-JobsServiceReporter = Reporter

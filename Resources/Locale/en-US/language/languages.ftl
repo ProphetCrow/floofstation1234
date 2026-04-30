@@ -8,7 +8,7 @@ language-RootSpeak-name = Rootspeak
 language-RootSpeak-description = The strange whistling-style language spoken by the Diona.
 
 language-Nekomimetic-name = Nekomimetic
-language-Nekomimetic-description = To the casual observer, this language is an incomprehensible mess of broken Japanese. To the Felinids and Oni, it's somehow comprehensible.
+language-Nekomimetic-description = To the casual observer, this language is an incomprehensible mess of broken Japanese. To the Felinids, Oni and Kitsune, it's somehow comprehensible.
 
 language-Draconic-name = Sinta'Unathi
 language-Draconic-description =
@@ -62,7 +62,7 @@ language-Sign-name = Tau-Ceti Basic Sign Language
 language-Sign-description = TCB-SL for short, this sign language is prevalent among mute and deaf people.
 
 language-Marish-name = Marish
-language-Marish-description =  An inherently empathetic language, conveying emotions with a single word; spoken effortlessly by Shadowkins, though nearly impossible to learn or replicate.
+language-Marish-description =  An inherently empathetic language, conveying emotions with a single word; spoken effortlessly by Shadekins, though nearly impossible to learn or replicate.
 
 language-ValyrianStandard-name = Valyrian Standard
 language-ValyrianStandard-description =
@@ -70,20 +70,37 @@ language-ValyrianStandard-description =
     It is rarely spoken outside of the worlds of its native speakers, and has in modern times been supplanted by the 'Conlangs of the Sol Alliance.
     Its speakers are those who wish to uphold the traditions and beliefs of ancient peoples from before the colonial era.
 
-language-Cat-name = Cat
-language-Cat-description = Meow
+language-Chittin-name = Chittin
+language-Chittin-description =
+    A language consisting of clicks, buzzes, and some variety of harsh insect sounds.
+    Most of what makes up their speech comes from their antennae, making it a near-impossible language for those without to learn.
 
-language-Dog-name = Dog
-language-Dog-description = Bark!
+language-Nehina-name = Nēhina
+language-Nehina-description =  A language spoken by the Feroxi, well adapted to speaking under the waters of ocean planets.
 
-language-Fox-name = Fox
-language-Fox-description = Yeeps!
+language-Kagebun-name = Kagebun
+language-Kagebun-description =
+    An ancient language primarily used by the yōkai, originating from their supernatural roots.
+    To the uninitiated, it is a chorus of sounds ranging from eerie whispers to ritualistic chanting.
+    To those who speak it, it is a living tongue that links them to the spirit world and their ancient pacts.
+
+# Animal Languages
+
+# Floof - some of those are rebranded. Why do we have two sources of truth for language names?
+language-Cat-name = Felidae
+language-Cat-description = The proto-language primarily utilized by felids, such as house cats or lions.
+
+language-Dog-name = Canini
+language-Dog-description = The proto-language primarily utilized by 'dog-like' animals, such as corgis and wolves.
+
+language-Fox-name = Vulpini
+language-Fox-description = The proto-language primarily utilized by 'fox-like' animals... Do you really need an example?
 
 language-Xeno-name = Xeno
 language-Xeno-description = Sssss!
 
-language-Monkey-name = Monkey
-language-Monkey-description = oooook!
+language-Monkey-name = Simian
+language-Monkey-description = The proto-language primarily utilized by anthropoids, such as monkeys and apes.
 
 language-Mouse-name = Mouse
 language-Mouse-description = Squeeek!
@@ -109,14 +126,24 @@ language-Pig-description = Oink!
 language-Crab-name = Crab
 language-Crab-description = Click!
 
-language-Kobold-name = Kobold
-language-Kobold-description = Hiss!
+language-Kobold-name = Draconic
+language-Kobold-description = The proto-language primarily utilized by kobolds. Unlike other proto-languages, some unathi still speak it to this very day.
 
 language-Hissing-name = Hissing
 language-Hissing-description = Hiss!
 
+# Floof section begin
 language-ScugSign-name = ScugSign
 language-ScugSign-description = Wawa! The secret ScugSign making you able to understand your fellows scug!
 
 language-Arachnic-name = Arachnic
 language-Arachnic-description = The language of arachnids is composed of mostly clicks and hisses, it almost has a rhythmic character to it at times.
+
+language-Penguin-name = Penguin
+language-Penguin-description = Wank!
+# Floof section end
+
+language-Eldritch-name = Eldritch
+language-Eldritch-description =
+    A language that is considered to be long forgotten - now the only speakers of this profaned tongue of screeches and
+    mumbles are the followers of an ancient God of Blood.

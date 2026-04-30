@@ -4,6 +4,7 @@
   roundStart: true
   prototype: MobHuman
   sprites: MobHumanSprites
+  defaultSkinTone: "#c0967f"
   markingLimits: MobHumanMarkingLimits
   dollPrototype: MobHumanDummy
   skinColoration: Hues
@@ -18,11 +19,16 @@
 - type: speciesBaseSprites
   id: MobHumanSprites
   sprites:
+    TailBehind: MobHumanoidAnyMarking
+    TailOversuit: MobHumanoidAnyMarking
     Head: MobHumanHead
+    Face: MobHumanoidAnyMarking
     Hair: MobHumanoidAnyMarking
     FacialHair: MobHumanoidAnyMarking
     Snout: MobHumanoidAnyMarking
     Chest: MobHumanTorso
+    Underwear: MobHumanoidAnyMarking # Floof, add underwear
+    Undershirt: MobHumanoidAnyMarking # Floof, add underwear
     Eyes: MobHumanoidEyes
     LArm: MobHumanLArm
     RArm: MobHumanRArm
@@ -40,6 +46,12 @@
 - type: markingPoints
   id: MobHumanMarkingLimits
   points:
+    Underwear:
+      points: 2 # FLOOF CHANGE
+      required: false # Floof, add underwear
+    Undershirt:
+      points: 2 # FLOOF CHANGE
+      required: false # Floof, add underwear
     Hair:
       points: 1
       required: false
@@ -56,37 +68,37 @@
       points: 1
       required: false
     HeadTop:
-      points: 1
-      required: false
-    Chest:
-      points: 1
-      required: false
-    RightLeg:
-      points: 2
-      required: false
-    RightFoot:
-      points: 2
-      required: false
-    LeftLeg:
-      points: 2
-      required: false
-    LeftFoot:
-      points: 2
-      required: false
-    RightArm:
-      points: 2
-      required: false
-    RightHand:
-      points: 2
-      required: false
-    LeftArm:
-      points: 2
-      required: false
-    LeftHand:
-      points: 2
+      points: 6
       required: false
     HeadSide:
-      points: 1
+      points: 6
+      required: false
+    Chest:
+      points: 6
+      required: false
+    RightLeg:
+      points: 6
+      required: false
+    RightFoot:
+      points: 6
+      required: false
+    LeftLeg:
+      points: 6
+      required: false
+    LeftFoot:
+      points: 6
+      required: false
+    RightArm:
+      points: 6
+      required: false
+    RightHand:
+      points: 6
+      required: false
+    LeftArm:
+      points: 6
+      required: false
+    LeftHand:
+      points: 6
       required: false
 
 - type: humanoidBaseSprite

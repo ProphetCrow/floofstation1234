@@ -7,13 +7,17 @@
   - type: StorageFill
     contents:
       - id: Hemostat
-      - id: Saw
+      - id: SawElectric # Shitmed Change
       - id: Drill
       - id: Cautery
       - id: Retractor
       - id: Scalpel
-      - id: BoneGel
+      - id: BoneGel # Shitmed Change
       - id: NitrousOxideTankFilled # DeltaV - add anesthesia
+      - id: ClothingHandsGlovesNitrile # Floof
+      - id: EmergencyRollerBedSpawnFolded
+      - id: ClothingMaskBreathMedical
+      - id: ClothingMaskSterile
 
 - type: entity
   id: ClothingBackpackDuffelCBURNFilled
@@ -48,8 +52,10 @@
       - id: ScalpelAdvanced
       - id: ClothingHandsGlovesNitrile
       - id: EmergencyRollerBedSpawnFolded
-      - id: BoneGel
+      - id: BoneGel # Shitmed Change
       - id: NitrousOxideTankFilled # DeltaV - add anesthesia
+      - id: ClothingMaskBreathMedical # Floof
+      - id: ClothingMaskSterile
 
 - type: entity
   parent: ClothingBackpackDuffelSyndicateBundle
@@ -111,9 +117,9 @@
     contents:
       - id: WeaponLauncherChinaLake
       - id: GrenadeBlast
-        amount: 4
-      - id: GrenadeFrag
-        amount: 4
+        amount: 8 # Floof - Only blast to reduce overall damage.
+      # - id: GrenadeFrag
+      #   amount: 4
 
 - type: entity
   parent: ClothingBackpackDuffelSyndicateBundle
@@ -355,6 +361,7 @@
       - id: HandheldHealthAnalyzer
       - id: CombatMedipen
       - id: DeathAcidifierImplanter
+      - id: OmnimedToolSyndie # Shitmed Change
 
 - type: entity
   parent: ClothingBackpackDuffelSyndicateMedicalBundle

@@ -9,8 +9,10 @@
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
-  - type: Item
-    size: Huge
+  - type: Item # Floof - Gun Shape Refactor
+    size: Large
+    shape:
+    - 0,0,5,1
   - type: Clothing
     sprite: Objects/Weapons/Guns/Snipers/bolt_gun_wood.rsi
     quickEquip: false
@@ -39,13 +41,37 @@
         ents: []
   - type: StaticPrice
     price: 500
+  - type: Execution
+  - type: MeleeWeapon
+    attackRate: 1.3333
+    damage:
+      types:
+        Blunt: 8.0
+    bluntStaminaDamageFactor: 1.25
+    swapKeys: true
+    disableHeavy: true
+    wideAnimationRotation: 135
+    animation: WeaponArcThrust
+    soundHit:
+      collection: MetalThud
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 2.5
+  - type: DamageOtherOnHit
+    staminaCost: 7.5
 
 - type: entity
   name: Kardashev-Mosin
   parent: [BaseWeaponSniper, BaseGunWieldable]
   id: WeaponSniperMosin
-  description: A civilian grade weapon for hunting, or endless trench warfare. Uses .30 rifle ammo. Now with new shiny bayonet!
+  description: A weapon for hunting, or endless trench warfare, with a bayonet attached at the barrel. Uses .30 rifle ammo.
   components:
+  - type: Item # Floof - Gun Shape Refactor
+    size: Large
+    storedRotation: 45
+    shape:
+    - 0,0,5,1
   - type: Sprite
     sprite: Objects/Weapons/Guns/Snipers/bolt_gun_wood.rsi
     state: base
@@ -66,34 +92,37 @@
       path: /Audio/Weapons/Guns/Gunshots/sniper.ogg
     fireOnDropChance: 1
   - type: MeleeWeapon
-    attackRate: .85
+    range: 1.75
     damage:
       types:
-       Slash: 10
-       Piercing: 5
-    angle: 0
+        Piercing: 5
+        Slash: 3.5
     wideAnimationRotation: -135
-    animation: WeaponArcThrust
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
-  - type: EmbeddableProjectile
-    offset: 0.15,0.15
-  - type: ThrowingAngle
-    angle: -135
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Piercing: 4
+        Slash: 2
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 5
-        Piercing: 10
-  - type: Sharp
-  - type: Clothing
+        Piercing: 8
+        Slash: 3
+  - type: EmbeddableProjectile
+    removalTime: 3.5
+  - type: EmbedPassiveDamage
+  - type: ThrowingAngle
+    angle: 225
+  - type: DisarmMalus # Floof
+    malus: 0.225
+  - type: Sharp # Floof
+  - type: Clothing # Floof
     quickEquip: false
     slots:
     - back
     - suitStorage
-    sprite: Objects/Weapons/Guns/Snipers/bolt_gun_wood.rsi
-  - type: DisarmMalus
-    malus: 0.225
 
 - type: entity
   name: Kardashev-Mosin
@@ -108,6 +137,21 @@
       tags:
       - CartridgeLightRifle
 
+- type: entity
+  name: Kardashev-Mosin
+  parent: WeaponSniperMosin
+  id: WeaponSniperMosinEmpty
+  description: A weapon for hunting, or endless trench warfare. Uses .30 rifle ammo.
+  suffix: Empty
+  components:
+  - type: BallisticAmmoProvider
+    proto: null
+  - type: ExtendDescription
+    descriptionList:
+      - description: "gun-legality-salvage"
+        fontSize: 12
+        color: "#ff4f00"
+        requireDetailRange: false
 
 - type: entity
   name: Hristov
@@ -115,6 +159,11 @@
   id: WeaponSniperHristov
   description: A portable anti-materiel rifle. Fires armor piercing 14.5mm shells. Uses .60 anti-materiel ammo.
   components:
+  - type: Item # Floof - Gun Shape Refactor
+    size: Huge
+    storedRotation: 45
+    shape:
+    - 0,0,7,1
   - type: Sprite
     sprite: Objects/Weapons/Guns/Snipers/heavy_sniper.rsi
   - type: Clothing
@@ -133,9 +182,12 @@
   id: Musket
   description: This should've been in a museum long before you were born. Uses .60 anti-materiel ammo.
   components:
-  - type: Sharp
-  - type: Item
+  - type: Item # Floof - Gun Shape Refactor
     size: Large
+    storedRotation: 45
+    shape:
+    - 0,0,5,1
+  - type: Sharp
   - type: Sprite
     sprite: Objects/Weapons/Guns/Snipers/musket.rsi
     state: base
@@ -156,15 +208,29 @@
     capacity: 1
     proto: CartridgeAntiMateriel
   - type: MeleeWeapon
-    wideAnimationRotation: -135
+    range: 1.75
     damage:
       types:
-        Piercing: 15 #you fucking stab em
-        Bloodloss: 2 #no way to apply bleed, triangular bayonet wounds are hard to fix(source:that one copypasta)
-    angle: 0
-    animation: WeaponArcThrust
+        Piercing: 5
+        Slash: 3.5
+    wideAnimationRotation: -135
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Piercing: 4
+        Slash: 2
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Piercing: 8
+        Slash: 3
+  - type: EmbeddableProjectile
+    removalTime: 3.5
+  - type: EmbedPassiveDamage
+  - type: ThrowingAngle
+    angle: 225
 
 - type: entity
   name: flintlock pistol
@@ -176,9 +242,11 @@
     minAngle: 0
     maxAngle: 30 #miss him entirely because the barrel is smoothbore
     fireOnDropChance: 1
-  - type: Item
+  - type: Item # Floof - Gun Shape Refactor
     size: Small
-    storedRotation: 90
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
   - type: Sprite
     sprite: Objects/Weapons/Guns/Snipers/flintlock.rsi
   - type: Clothing
@@ -194,4 +262,12 @@
     proto: CartridgeAntiMateriel
   - type: StaticPrice
     price: 0
-
+  - type: MeleeWeapon
+    attackRate: 1.2
+    damage:
+      types:
+        Blunt: 7.5
+    bluntStaminaDamageFactor: 1.0
+    wideAnimationRotation: 135
+  - type: DamageOtherOnHit
+    staminaCost: 5

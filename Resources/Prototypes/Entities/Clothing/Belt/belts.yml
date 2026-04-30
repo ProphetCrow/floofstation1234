@@ -172,9 +172,16 @@
     sprite: Clothing/Belt/assault.rsi
   - type: Storage
     whitelist:
-      tags:
+      tags: # Floof - M3739 - #1097
         - CigPack
         - Taser
+        - SecBeltEquip
+        - Radio
+        - Sidearm
+        - MagazinePistol
+        - MagazineMagnum
+        - CombatKnife
+        - Truncheon
       components:
         - Stunbaton
         - FlashOnTrigger
@@ -183,6 +190,11 @@
         - Handcuff
         - BallisticAmmoProvider
         - Ammo
+        - CartridgeAmmo
+        - DoorRemote
+        - Whistle
+        - HolosignProjector
+        - BalloonPopper
   - type: ItemMapper
     mapLayers:
       flashbang:
@@ -269,7 +281,7 @@
         - Radio
         - DiscreteHealthAnalyzer
       components:
-        - SurgeryTool
+        - SurgeryTool # Shitmed Change
         - Hypospray
         - Injector
         - Pill
@@ -631,6 +643,7 @@
       - id: Stunbaton
       - id: Handcuffs
       - id: Handcuffs
+
 - type: entity
   parent: ClothingBeltStorageBase
   id: ClothingBeltMercWebbing
@@ -657,7 +670,7 @@
   parent: [ClothingBeltStorageBase, ContentsExplosionResistanceBase]
   id: ClothingBeltMilitaryWebbing
   name: chest rig
-  description: A set of tactical webbing worn by Syndicate boarding parties.
+  description: A set of tactical webbing worn by boarding parties.
   components:
   - type: Sprite
     sprite: Clothing/Belt/militarywebbing.rsi

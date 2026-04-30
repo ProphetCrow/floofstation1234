@@ -82,6 +82,9 @@
   description: This implant has a tracking device attached to the suit sensor network, as well as a condition monitor for the Security radio channel.
   categories: [ HideSpawnMenu ]
   components:
+     # type: Sprite  #Floof change
+     # sprite: Objects/Specific/Medical/implanter.rsi
+     # state: implanter1
     - type: SubdermalImplant
       whitelist:
         components:
@@ -101,7 +104,7 @@
       mobState:
       - Critical
     - type: Rattle
-      radioChannel: "Security"
+      radioChannel: "Medical" # Floof change medical should know when a mass cass happen
 
 #Traitor implants
 
@@ -143,7 +146,7 @@
         - Cuffable # useless if you cant be cuffed
 
 - type: entity
-  parent: BaseSubdermalImplant
+  parent: [ BaseSubdermalImplant, StorePresetUplink ]
   id: UplinkImplant
   name: uplink implant
   description: This implant lets the user access a hidden Syndicate uplink at will.
@@ -155,7 +158,6 @@
       components:
       - Hands # prevent mouse buying grenade penguin since its not telepathic
   - type: Store
-    preset: StorePresetUplink
     balance:
       Telecrystal: 0
   - type: UserInterface
@@ -208,7 +210,7 @@
   id: MagillitisSerumImplant
   name: magillitis serum implant
   description: An experimental biochip which causes irreversable rapid muscular growth in Hominidae. Side-affects may include hypertrichosis, violent outbursts, and an unending affinity for bananas.
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
     - type: SubdermalImplant
       implantAction: ActionActivateMagillitisSerumImplant
@@ -331,7 +333,7 @@
   parent: BaseSubdermalImplant
   id: MindShieldImplant
   name: mind-shield implant
-  description: This implant will ensure loyalty to Nanotrasen and prevent mind control devices.
+  description: This implant will shield the brain from external influences and prevent mind control devices. # DeltaV - mindshield does not enforce loyalty
   categories: [ HideSpawnMenu ]
   components:
    - type: SubdermalImplant
@@ -339,3 +341,16 @@
    - type: Tag
      tags:
        - MindShield
+
+# Example component adding implant
+- type: entity
+  parent: BaseSubdermalImplant
+  id: ComponentImplant
+  name: Add A component DEBUG
+  description: Example component adding implant
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+  - type: AddComponentsImplant
+    componentsToAdd:
+    - type: Dispellable

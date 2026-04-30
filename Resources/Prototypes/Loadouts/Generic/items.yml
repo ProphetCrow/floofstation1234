@@ -1,6 +1,7 @@
 #Smokes
 - type: loadout
   id: LoadoutItemCig
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -11,6 +12,7 @@
 
 - type: loadout
   id: LoadoutItemCigsGreen
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -21,6 +23,7 @@
 
 - type: loadout
   id: LoadoutItemCigsRed
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -31,6 +34,7 @@
 
 - type: loadout
   id: LoadoutItemCigsBlue
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -41,6 +45,7 @@
 
 - type: loadout
   id: LoadoutItemCigsBlack
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -51,6 +56,7 @@
 
 - type: loadout
   id: LoadoutItemCigsMixed
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -61,6 +67,7 @@
 
 - type: loadout
   id: LoadoutItemCigsSyndicate
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -71,8 +78,10 @@
 
 - type: loadout
   id: LoadoutItemLighter
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
+  customColorTint: true
   items:
     - Lighter
   requirements:
@@ -81,8 +90,10 @@
 
 - type: loadout
   id: LoadoutItemLighterCheap
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
+  customColorTint: true
   items:
     - CheapLighter
   requirements:
@@ -91,8 +102,10 @@
 
 - type: loadout
   id: LoadoutItemLighterFlippo
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
+  customColorTint: true
   items:
     - FlippoLighter
   requirements:
@@ -101,6 +114,7 @@
 
 - type: loadout
   id: LoadoutItemSmokingPipeFilledTobacco
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -111,6 +125,7 @@
 
 - type: loadout
   id: LoadoutItemBlunt
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -121,6 +136,7 @@
 
 - type: loadout
   id: LoadoutItemJoint
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -132,6 +148,7 @@
 # Instruments
 - type: loadout
   id: LoadoutItemMicrophoneInstrument
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -146,6 +163,7 @@
 
 - type: loadout
   id: LoadoutItemKalimbaInstrument
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -160,6 +178,7 @@
 
 - type: loadout
   id: LoadoutItemTrumpetInstrument
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 4
   items:
@@ -174,6 +193,7 @@
 
 - type: loadout
   id: LoadoutItemElectricGuitar
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 5
   items:
@@ -188,6 +208,7 @@
 
 - type: loadout
   id: LoadoutItemBassGuitar
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 5
   items:
@@ -202,6 +223,7 @@
 
 - type: loadout
   id: LoadoutItemRockGuitar
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 5
   items:
@@ -216,6 +238,7 @@
 
 - type: loadout
   id: LoadoutItemAcousticGuitar
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 5
   items:
@@ -230,6 +253,7 @@
 
 - type: loadout
   id: LoadoutItemViolin
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 4
   items:
@@ -244,6 +268,7 @@
 
 - type: loadout
   id: LoadoutItemHarmonica
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -258,6 +283,7 @@
 
 - type: loadout
   id: LoadoutItemAccordion
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 4
   items:
@@ -272,6 +298,7 @@
 
 - type: loadout
   id: LoadoutItemFlute
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -286,6 +313,7 @@
 
 - type: loadout
   id: LoadoutItemOcarina
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -301,6 +329,7 @@
 # Survival Kit
 - type: loadout
   id: LoadoutItemsEmergencyOxygenTank
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -311,6 +340,7 @@
 
 - type: loadout
   id: LoadoutItemsExtendedEmergencyOxygenTank
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -321,6 +351,7 @@
 
 - type: loadout
   id: LoadoutItemsDoubleEmergencyOxygenTank
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -331,6 +362,7 @@
 
 - type: loadout
   id: LoadoutItemClothingMaskBreath
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -338,6 +370,7 @@
 
 - type: loadout
   id: LoadoutItemsEmergencyCrowbar
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 3
   items:
@@ -345,6 +378,7 @@
 
 - type: loadout
   id: LoadoutItemFireExtinguisher
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 3
   items:
@@ -352,6 +386,7 @@
 
 - type: loadout
   id: LoadoutItemFlashlightLantern
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -359,6 +394,7 @@
 
 - type: loadout
   id: LoadoutItemFlare
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -366,6 +402,7 @@
 
 - type: loadout
   id: LoadoutEmergencyMedipen
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -373,6 +410,7 @@
 
 - type: loadout
   id: LoadoutSpaceMedipen
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -381,6 +419,7 @@
 # Paperwork
 - type: loadout
   id: LoadoutItemPapers
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -394,6 +433,7 @@
 
 - type: loadout
   id: LoadoutItemBoxFolderGrey
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -404,6 +444,7 @@
 
 - type: loadout
   id: LoadoutBookRandom
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -414,6 +455,7 @@
 
 - type: loadout
   id: LoadoutPen
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
@@ -425,6 +467,7 @@
 # Food and drink
 - type: loadout
   id: LoadoutDrinkWaterBottleFull
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -432,6 +475,7 @@
 
 - type: loadout
   id: LoadoutItemLunchboxGenericFilledRandom
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 3
   items:
@@ -439,6 +483,7 @@
 
 - type: loadout
   id: LoadoutItemDrinkMREFlask
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -447,11 +492,16 @@
 # Survival boxes
 - type: loadout
   id: LoadoutItemBoxSurvival
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
     - BoxSurvival
   requirements:
+    - !type:CharacterSpeciesRequirement
+       inverted: true
+       species:
+          - Feroxi
     - !type:CharacterDepartmentRequirement
        inverted: true
        departments:
@@ -466,12 +516,41 @@
       group: LoadoutBoxKits
 
 - type: loadout
+  id: LoadoutItemBoxSurvivalWaterVapor
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 0
+  items:
+  - BoxSurvivalWaterVapor
+  requirements:
+    - !type:CharacterSpeciesRequirement
+     species:
+       - Feroxi
+    - !type:CharacterDepartmentRequirement
+     inverted: true
+     departments:
+       - Security
+       - Medical
+       - Engineering
+    - !type:CharacterJobRequirement
+     inverted: true
+     jobs:
+        - Clown
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutBoxKits
+
+- type: loadout
   id: LoadoutItemBoxSurvivalEngineering
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
     - BoxSurvivalEngineering
   requirements:
+    - !type:CharacterSpeciesRequirement
+      inverted: true
+      species:
+        - Feroxi
     - !type:CharacterDepartmentRequirement
        departments:
          - Engineering
@@ -479,42 +558,129 @@
       group: LoadoutBoxKits
 
 - type: loadout
-  id: LoadoutItemBoxSurvivalSecurity
+  id: LoadoutItemBoxSurvivalEngineeringWaterVapor
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
-    - BoxSurvivalSecurity
+  - BoxSurvivalEngineeringWaterVapor
   requirements:
+    - !type:CharacterSpeciesRequirement
+      species:
+        - Feroxi
     - !type:CharacterDepartmentRequirement
-       departments:
-         - Security
+      departments:
+        - Engineering
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutBoxKits
+
+- type: loadout
+  id: LoadoutItemBoxSurvivalSecurity
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 0
+  items:
+  - BoxSurvivalSecurity
+  requirements:
+    - !type:CharacterSpeciesRequirement
+      inverted: true
+      species:
+        - Feroxi
+    - !type:CharacterDepartmentRequirement
+      departments:
+        - Security
     - !type:CharacterJobRequirement
-       inverted: true
-       jobs:
-         - Brigmedic
+      inverted: true
+      jobs:
+        - Brigmedic
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutBoxKits
+
+- type: loadout
+  id: LoadoutItemBoxSurvivalSecurityWaterVapor
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 0
+  items:
+  - BoxSurvivalSecurityWaterVapor
+  requirements:
+    - !type:CharacterSpeciesRequirement
+      species:
+        - Feroxi
+    - !type:CharacterDepartmentRequirement
+      departments:
+        - Security
+    - !type:CharacterJobRequirement
+      inverted: true
+      jobs:
+        - Brigmedic
     - !type:CharacterItemGroupRequirement
       group: LoadoutBoxKits
 
 - type: loadout
   id: LoadoutItemBoxSurvivalBrigmedic
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
-    - BoxSurvivalBrigmedic
+  - BoxSurvivalBrigmedic
   requirements:
+    - !type:CharacterSpeciesRequirement
+      inverted: true
+      species:
+        - Feroxi
     - !type:CharacterJobRequirement
-       jobs:
-         - Brigmedic
+      jobs:
+        - Brigmedic
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutBoxKits
+
+- type: loadout
+  id: LoadoutItemBoxSurvivalBrigmedicWaterVapor
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 0
+  items:
+  - BoxSurvivalBrigmedicWaterVapor
+  requirements:
+    - !type:CharacterSpeciesRequirement
+      species:
+        - Feroxi
+    - !type:CharacterJobRequirement
+      jobs:
+        - Brigmedic
     - !type:CharacterItemGroupRequirement
       group: LoadoutBoxKits
 
 - type: loadout
   id: LoadoutItemBoxSurvivalMedical
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
     - BoxSurvivalMedical
   requirements:
+    - !type:CharacterSpeciesRequirement
+      inverted: true
+      species:
+        - Feroxi
+    - !type:CharacterDepartmentRequirement
+       departments:
+         - Medical
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutBoxKits
+
+- type: loadout
+  id: LoadoutItemBoxSurvivalMedicalWaterVapor
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 0
+  items:
+    - BoxSurvivalMedicalWaterVapor
+  requirements:
+    - !type:CharacterSpeciesRequirement
+      species:
+        - Feroxi
     - !type:CharacterDepartmentRequirement
        departments:
          - Medical
@@ -523,11 +689,33 @@
 
 - type: loadout
   id: LoadoutItemBoxHug
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 0
   items:
     - BoxHug
   requirements:
+    - !type:CharacterSpeciesRequirement
+      inverted: true
+      species:
+        - Feroxi
+    - !type:CharacterJobRequirement
+       jobs:
+         - Clown
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutBoxKits
+
+- type: loadout
+  id: LoadoutItemBoxHugWaterVapor
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 0
+  items:
+    - BoxHugWaterVapor
+  requirements:
+    - !type:CharacterSpeciesRequirement
+      species:
+        - Feroxi
     - !type:CharacterJobRequirement
        jobs:
          - Clown
@@ -537,6 +725,7 @@
 # Medkits
 - type: loadout
   id: LoadoutMedkitFilled
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -547,6 +736,7 @@
 
 - type: loadout
   id: LoadoutMedkitBruteFilled
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -555,6 +745,7 @@
     - !type:CharacterJobRequirement
       jobs:
         - MedicalDoctor
+        - SeniorPhysician # Floof - Let senior physican start with medkits
         - Paramedic
         - ChiefMedicalOfficer
         - MedicalIntern
@@ -564,6 +755,7 @@
 
 - type: loadout
   id: LoadoutMedkitBurnFilled
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -572,6 +764,7 @@
     - !type:CharacterJobRequirement
       jobs:
         - MedicalDoctor
+        - SeniorPhysician # Floof - Let senior physican start with medkits
         - Paramedic
         - ChiefMedicalOfficer
         - MedicalIntern
@@ -581,6 +774,7 @@
 
 - type: loadout
   id: LoadoutMedkitToxinFilled
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -589,6 +783,7 @@
     - !type:CharacterJobRequirement
       jobs:
         - MedicalDoctor
+        - SeniorPhysician # Floof - Let senior physican start with medkits
         - Paramedic
         - ChiefMedicalOfficer
         - MedicalIntern
@@ -598,6 +793,7 @@
 
 - type: loadout
   id: LoadoutMedkitOxygenFilled
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -606,6 +802,7 @@
     - !type:CharacterJobRequirement
       jobs:
         - MedicalDoctor
+        - SeniorPhysician # Floof - Let senior physican start with medkits
         - Paramedic
         - ChiefMedicalOfficer
         - MedicalIntern
@@ -615,6 +812,7 @@
 
 - type: loadout
   id: LoadoutMedkitRadiationFilled
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -623,6 +821,7 @@
     - !type:CharacterJobRequirement
       jobs:
         - MedicalDoctor
+        - SeniorPhysician # Floof - Let senior physican start with medkits
         - Paramedic
         - ChiefMedicalOfficer
         - MedicalIntern
@@ -632,6 +831,7 @@
 
 - type: loadout
   id: LoadoutMedkitAdvancedFilled
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 3
   items:
@@ -640,6 +840,7 @@
     - !type:CharacterJobRequirement
       jobs:
         - MedicalDoctor
+        - SeniorPhysician # Floof - Let senior physican start with medkits
         - Paramedic
         - ChiefMedicalOfficer
         - MedicalIntern
@@ -649,6 +850,7 @@
 
 - type: loadout
   id: LoadoutMedkitCombatFilled
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 3
   items:
@@ -664,6 +866,7 @@
 #Misc Items
 - type: loadout
   id: LoadoutItemFlash
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
   items:
@@ -678,6 +881,7 @@
 
 - type: loadout
   id: LoadoutItemPAI
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 3
   items:
@@ -685,6 +889,7 @@
 
 - type: loadout
   id: LoadoutItemWaistbag
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -697,6 +902,7 @@
 
 - type: loadout
   id: LoadoutItemCrayonBox
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 4
   items:
@@ -704,6 +910,7 @@
 
 - type: loadout
   id: LoadoutItemBarberScissors
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 4
   items:
@@ -711,6 +918,7 @@
 
 - type: loadout
   id: LoadoutSolCommonTranslator
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 3
   items:
@@ -718,6 +926,7 @@
 
 - type: loadout
   id: LoadoutHandLabeler
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 3
   items:
@@ -725,6 +934,7 @@
 
 - type: loadout
   id: LoadoutItemHandheldStationMap
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -732,6 +942,7 @@
 
 - type: loadout
   id: LoadoutItemLantern
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 2
   items:
@@ -739,21 +950,110 @@
 
 - type: loadout
   id: LoadoutItemDrinkShinyFlask
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
+  customColorTint: true
   items:
     - DrinkShinyFlask
 
 - type: loadout
   id: LoadoutItemDrinkLithiumFlask
+  canBeHeirloom: true #FLOOF
   category: Items
   cost: 1
+  customColorTint: true
   items:
     - DrinkLithiumFlask
 
 - type: loadout
   id: LoadoutItemDrinkVacuumFlask
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 1
+  customColorTint: true
+  items:
+    - DrinkVacuumFlask
+
+- type: loadout
+  id: LoadoutItemCaneBlind
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 0 # It shouldnt cost points to be able to function.
+  items:
+    - WhiteCane
+
+- type: loadout
+  id: LoadoutItemAACTablet
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 0 # Floof - M3739 - Assistive technologies shall be free for mute people.
+  items:
+    - AACTablet
+  requirements:
+    - !type:CharacterJobRequirement
+      inverted: true
+      jobs:
+        - Mime # Floof - M3739 - See AACTabletSystem.cs, lines 38 to 39. We're just saving them the trouble.
+    - !type:CharacterTraitRequirement
+      traits:
+        - Muted # Floof - M3739 - But for it to be free, you must be officially vocally impaired.
+# Pets
+- type: loadout
+  id: LoadoutItemPetMouse
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 2
+  items:
+    - MobMousePet
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutPets
+  functions:
+    - !type:LoadoutMakeFollower
+
+- type: loadout
+  id: LoadoutItemPetHamster
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 2
+  items:
+    - MobHamsterPet
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutPets
+  functions:
+    - !type:LoadoutMakeFollower
+
+- type: loadout
+  id: LoadoutItemPetMothroach
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 2
+  items:
+    - MobMothroachPet
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutPets
+  functions:
+    - !type:LoadoutMakeFollower
+
+- type: loadout
+  id: LoadoutItemPetCockroach
+  canBeHeirloom: true #FLOOF
+  category: Items
+  cost: 2
+  items:
+    - MobCockroachPet
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutPets
+  functions:
+    - !type:LoadoutMakeFollower
+    
+- type: loadout # Floof - Mood Lighting for LONG ERP sessions
+  id: LoadoutItemBoxCandleInfinite
   category: Items
   cost: 1
   items:
-    - DrinkVacuumFlask
+    - BoxCandleInfinite

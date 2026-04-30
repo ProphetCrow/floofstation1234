@@ -3,20 +3,26 @@
   parent:
   - BaseMob
   - MobDamageable
+  - MobPolymorphable
   - MobCombat
+  - StripableInventoryBase
   id: BaseMobSpecies
   abstract: true
   components:
   - type: Sprite
     layers:
+    - map: [ "enum.HumanoidVisualLayers.TailBehind" ]
     - map: [ "enum.HumanoidVisualLayers.Chest" ]
     - map: [ "enum.HumanoidVisualLayers.Head" ]
     - map: [ "enum.HumanoidVisualLayers.Snout" ]
     - map: [ "enum.HumanoidVisualLayers.Eyes" ]
+    - map: [ "enum.HumanoidVisualLayers.Face" ]
     - map: [ "enum.HumanoidVisualLayers.RArm" ]
     - map: [ "enum.HumanoidVisualLayers.LArm" ]
     - map: [ "enum.HumanoidVisualLayers.RLeg" ]
     - map: [ "enum.HumanoidVisualLayers.LLeg" ]
+    - map: [ "enum.HumanoidVisualLayers.Underwear" ] # Floof, add underwear
+    - map: [ "enum.HumanoidVisualLayers.Undershirt" ] # Floof, add underwear
     - map: ["jumpsuit"]
     - map: ["enum.HumanoidVisualLayers.LFoot"]
     - map: ["enum.HumanoidVisualLayers.RFoot"]
@@ -26,6 +32,7 @@
     - map: [ "shoes" ]
     - map: [ "ears" ]
     - map: [ "outerClothing" ]
+    - map: [ "enum.HumanoidVisualLayers.TailOversuit" ]
     - map: [ "eyes" ]
     - map: [ "belt" ]
     - map: [ "id" ]
@@ -36,6 +43,7 @@
     - map: [ "enum.HumanoidVisualLayers.HeadSide" ]
     - map: [ "enum.HumanoidVisualLayers.HeadTop" ]
     - map: [ "enum.HumanoidVisualLayers.Tail" ]
+    - map: [ "enum.HumanoidVisualLayers.Wings" ]
     - map: [ "mask" ]
     - map: [ "head" ]
     - map: [ "pocket1" ]
@@ -79,8 +87,8 @@
     species: Human
   - type: SlowOnDamage
     speedModifierThresholds:
-      60: 0.8 # DV - Was 0.7
-      80: 0.6 # DV - Was 0.5
+      60: 0.75
+      80: 0.55
   - type: Fixtures
     fixtures: # TODO: This needs a second fixture just for mob collisions.
       fix1:
@@ -131,25 +139,24 @@
     - TemporaryBlindness
     - Pacified
     - StaminaModifier
+    - Flashed
+    - RadiationProtection
+    - Drowsiness
     - PsionicsDisabled
     - PsionicallyInsulated
-  - type: Reflect
-    enabled: false
-    reflectProb: 0
   - type: Body
     prototype: Human
     requiredLegs: 2
   - type: Identity
   - type: IdExaminable
   - type: Hands
-  - type: Inventory
+  - type: ComplexInteraction
     # femaleDisplacements: # Floof - displacements
     #   jumpsuit:
     #     sizeMaps:
     #       32:
     #         sprite: Mobs/Species/Human/displacement.rsi
     #         state: jumpsuit-female
-  - type: InventorySlots
   - type: FloatingVisuals
   - type: Climbing
   - type: Cuffable
@@ -169,6 +176,11 @@
     damage:
       types:
         Blunt: 5
+    heavyRateModifier: 1
+    heavyDamageBaseModifier: 1
+    heavyPartDamageMultiplier: 1
+    heavyStaminaCost: 0
+    maxTargets: 1
   - type: SleepEmitSound
   - type: SSDIndicator
   - type: StandingState
@@ -183,7 +195,6 @@
     - NanoTrasen
   - type: CreamPied
   - type: Stripping
-  - type: Strippable
   - type: UserInterface
     interfaces:
       enum.HumanoidMarkingModifierKey.Key:
@@ -193,6 +204,10 @@
       enum.InstrumentUiKey.Key:
         type: InstrumentBoundUserInterface
         requireInputValidation: false
+      enum.RadialSelectorUiKey.Key:
+        type: RadialSelectorMenuBUI
+      enum.ListViewSelectorUiKey.Key:
+        type: ListViewSelectorBUI
       enum.SurgeryUIKey.Key:
         type: SurgeryBui
   - type: Puller
@@ -230,6 +245,7 @@
   - type: SurgeryTarget
   - type: FootPrints
   - type: Wagging
+  - type: ModifyUndies  # FLOOF Add
 
 - type: entity
   save: false
@@ -276,6 +292,8 @@
     - StaminaModifier
     - PsionicsDisabled
     - PsionicallyInsulated
+    - RadiationProtection
+    - Drowsiness
   - type: Blindable
   # Other
   - type: Temperature
@@ -289,6 +307,11 @@
     heatDamage:
       types:
         Heat: 1.5 #per second, scales with temperature & other constants
+  - type: TemperatureSpeed
+    thresholds:
+      293: 0.9
+      280: 0.8
+      260: 0.7
   - type: ThermalRegulator
     metabolismHeat: 800
     radiatedHeat: 100
@@ -317,21 +340,22 @@
   - type: Shoving
   - type: BloodstreamAffectedByMass
     power: 0.6 # A minimum size felinid will have 30% blood, a minimum size vulp will have 60%, a maximum size oni will have ~200%
+  - type: ThermalRegulatorAffectedByMass # Floofstation
 
 - type: entity
   save: false
   id: BaseSpeciesDummy
+  parent: InventoryBase
   abstract: true
   components:
   - type: Hands
-  - type: Inventory
+  - type: ComplexInteraction
     # femaleDisplacements: # Floof - displacements
     #   jumpsuit:
     #     sizeMaps:
     #       32:
     #         sprite: Mobs/Species/Human/displacement.rsi
     #         state: jumpsuit-female
-  - type: InventorySlots
   - type: ContainerContainer
   - type: Icon
     sprite: Mobs/Species/Human/parts.rsi
@@ -341,14 +365,18 @@
     noRot: true
     # TODO BODY Turn these into individual body parts?
     layers:
+    - map: [ "enum.HumanoidVisualLayers.TailBehind" ]
     - map: [ "enum.HumanoidVisualLayers.Chest" ]
     - map: [ "enum.HumanoidVisualLayers.Head" ]
     - map: [ "enum.HumanoidVisualLayers.Snout" ]
     - map: [ "enum.HumanoidVisualLayers.Eyes" ]
+    - map: [ "enum.HumanoidVisualLayers.Face" ]
     - map: [ "enum.HumanoidVisualLayers.RArm" ]
     - map: [ "enum.HumanoidVisualLayers.LArm" ]
     - map: [ "enum.HumanoidVisualLayers.RLeg" ]
     - map: [ "enum.HumanoidVisualLayers.LLeg" ]
+    - map: ["enum.HumanoidVisualLayers.Undershirt"] # Floof, add underwear
+    - map: ["enum.HumanoidVisualLayers.Underwear"] # Floof, add underwear
     - shader: StencilClear
       sprite: Mobs/Species/Human/parts.rsi
       state: l_leg
@@ -375,6 +403,7 @@
     - map: [ "belt" ]
     - map: [ "id" ]
     - map: [ "neck" ]
+    - map: [ "enum.HumanoidVisualLayers.TailOversuit" ]
     - map: [ "back" ]
     - map: [ "enum.HumanoidVisualLayers.FacialHair" ]
     - map: [ "enum.HumanoidVisualLayers.Hair" ]

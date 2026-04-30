@@ -1,0 +1,16 @@
+- type: entityTable
+  id: HypnoTempMaintLoot
+  table: !type:GroupSelector
+    children:
+    - id: PlushieHypnoTempCap
+      weight: 5
+    - id: PlushieHypnoTempMysta
+      weight: 10
+    - id: PlushieHypnoTempHoS
+      weight: 10
+    - id: PlushieHypnoTempLO
+      weight: 25
+    - id: PlushieHypnoTempHoP
+      weight: 25
+    - id: PlushieHypnoTempCMO
+      weight: 25

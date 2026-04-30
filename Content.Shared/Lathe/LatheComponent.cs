@@ -9,17 +9,22 @@ namespace Content.Shared.Lathe
     [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
     public sealed partial class LatheComponent : Component
     {
+        // FloofStation Modified
+        // AlwaysPushInheritance added so lathes that use the AutoLathe as their
+        // parent could add on some extra recipes, and changed the type to HashSet.
         /// <summary>
         /// All of the recipes that the lathe has by default
         /// </summary>
-        [DataField]
-        public List<ProtoId<LatheRecipePrototype>> StaticRecipes = new();
+        [DataField, AlwaysPushInheritance]
+        public HashSet<ProtoId<LatheRecipePrototype>> StaticRecipes = new();
 
+        // FloofStation Modified
+        // Ditto from StaticRecipes.
         /// <summary>
         /// All of the recipes that the lathe is capable of researching
         /// </summary>
-        [DataField]
-        public List<ProtoId<LatheRecipePrototype>> DynamicRecipes = new();
+        [DataField, AlwaysPushInheritance]
+        public HashSet<ProtoId<LatheRecipePrototype>> DynamicRecipes = new();
 
         /// <summary>
         /// The lathe's construction queue
@@ -32,6 +37,15 @@ namespace Content.Shared.Lathe
         /// </summary>
         [DataField]
         public SoundSpecifier? ProducingSound;
+
+        [DataField]
+        public string? ReagentOutputSlotId;
+
+        /// <summary>
+        /// The default amount that's displayed in the UI for selecting the print amount.
+        /// </summary>
+        [DataField, AutoNetworkedField]
+        public int DefaultProductionAmount = 1;
 
         #region Visualizer info
         [DataField]

@@ -1,6 +1,7 @@
 # Hats
 - type: loadout
   id: LoadoutHeadBeaverHat
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -12,10 +13,11 @@
        departments:
          - Security
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadTophat
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -23,73 +25,24 @@
     - ClothingHeadHatTophat
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadFedoraBlack
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatFedoraBlack
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadFedoraBrown
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatFedoraBrown
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadFedoraGrey
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatFedoraGrey
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadFedoraChoc
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatFedoraChoc
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadFedoraWhite
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
+  customColorTint: true
   items:
     - ClothingHeadHatFedoraWhite
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadFlatBlack
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -97,10 +50,11 @@
     - ClothingHeadHatFlatBlack
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadFlatBrown
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -112,87 +66,49 @@
        departments:
          - Security
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatCowboyBrown
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatCowboyBrown
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatCowboyBlack
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatCowboyBlack
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatCowboyGrey
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatCowboyGrey
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatCowboyRed
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatCowboyRed
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadHatCowboyWhite
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
+  customColorTint: true
   items:
     - ClothingHeadHatCowboyWhite
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadHatCowboyBountyHunter
   category: Head
   cost: 1
   exclusive: true
+  canBeHeirloom: true
   items:
     - ClothingHeadHatCowboyBountyHunter
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadTinfoil
   category: Head
   cost: 2
   exclusive: true
+  customColorTint: true
+  canBeHeirloom: true
   items:
     - ClothingHeadTinfoil
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadBellhop
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -200,10 +116,11 @@
     - ClothingHeadHatBellhop
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadPoppy
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 0
   exclusive: true
@@ -211,41 +128,25 @@
     - FoodPoppy
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
+
+- type: loadout
+  id: LoadoutHeadPoppyWhite
+  canBeHeirloom: true #FLOOF
+  category: Head
+  cost: 0
+  exclusive: true
+  customColorTint: true
+  items:
+    - FoodPoppyWhite
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutHead
 
 # Color Hats
 - type: loadout
-  id: LoadoutHeadHatBluesoft
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatBluesoft
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatBluesoftFlipped
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatBluesoftFlipped
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
   id: LoadoutHeadHatCorpsoft
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 0
   exclusive: true
@@ -253,10 +154,11 @@
     - ClothingHeadHatCorpsoft
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadHatCorpsoftFlipped
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 0
   exclusive: true
@@ -264,320 +166,63 @@
     - ClothingHeadHatCorpsoftFlipped
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatGreensoft
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatGreensoft
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatGreensoftFlipped
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatGreensoftFlipped
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatGreysoft
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatGreysoft
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatGreysoftFlipped
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatGreysoftFlipped
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadHatMimesoft
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 0
   exclusive: true
+  customColorTint: true
   items:
     - ClothingHeadHatMimesoft
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadHatMimesoftFlipped
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 0
   exclusive: true
+  customColorTint: true
   items:
     - ClothingHeadHatMimesoftFlipped
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatOrangesoft
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatOrangesoft
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatOrangesoftFlipped
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatOrangesoftFlipped
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatPurplesoft
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatPurplesoft
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatPurplesoftFlipped
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatPurplesoftFlipped
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatRedsoft
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatRedsoft
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatRedsoftFlipped
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatRedsoftFlipped
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatYellowsoft
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatYellowsoft
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadHatYellowsoftFlipped
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadHatYellowsoftFlipped
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 # Headbands
 - type: loadout
-  id: LoadoutHeadBandBlack
+  id: LoadoutHeadBandWhite
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 0
   exclusive: true
+  customColorTint: true
   items:
-    - ClothingHeadBandBlack
+    - ClothingHeadBandWhite
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadBandBlue
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadBandBlue
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadBandGold
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadBandGold
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadBandGreen
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadBandGreen
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadBandGrey
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadBandGrey
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadBandRed
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadBandRed
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadBandSkull
   category: Head
   cost: 0
   exclusive: true
+  canBeHeirloom: true
   items:
     - ClothingHeadBandSkull
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadBandMerc
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadBandMerc
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadBandBrown
-  category: Head
-  cost: 0
-  exclusive: true
-  items:
-    - ClothingHeadBandBrown
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadFishCap
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -589,10 +234,11 @@
        departments:
          - Security
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadRastaHat
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 2
   exclusive: true
@@ -604,10 +250,11 @@
        departments:
          - Security
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadFez
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -615,10 +262,11 @@
     - ClothingHeadHatFez
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadBowlerHat
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -626,11 +274,12 @@
     - ClothingHeadHatBowlerHat
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 # Flatcaps
 - type: loadout
   id: LoadoutHeadGreyFlatcap
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -638,10 +287,11 @@
     - ClothingHeadHatGreyFlatcap
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
   id: LoadoutHeadBrownFlatcap
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
@@ -653,87 +303,57 @@
        departments:
          - Security
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 # Berets
 - type: loadout
-  id: LoadoutHeadBeret
+  id: LoadoutHeadBeretWhite
+  canBeHeirloom: true #FLOOF
   category: Head
   cost: 1
   exclusive: true
+  customColorTint: true
   items:
-    - ClothingHeadHatBeret
+    - ClothingHeadHatBeretWhite
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
-  id: LoadoutHeadBeretFrench
+  id: LoadoutHeadHijabColorable
+  canBeHeirloom: true #FLOOF
   category: Head
-  cost: 1
+  cost: 0
   exclusive: true
+  customColorTint: true
   items:
-    - ClothingHeadHatBeretFrench
+    - ClothingHeadHatHijabColorable
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-# Cowboy hats
-- type: loadout
-  id: LoadoutHeadCowboyBrown
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatCowboyBrown
-  requirements:
-    - !type:CharacterDepartmentRequirement
-       inverted: true
-       departments:
-         - Security
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
-  id: LoadoutHeadCowboyBlack
+  id: LoadoutHeadTurbanColorable
+  canBeHeirloom: true #FLOOF
   category: Head
-  cost: 1
+  cost: 0
   exclusive: true
+  customColorTint: true
   items:
-    - ClothingHeadHatCowboyBlack
+    - ClothingHeadHatTurbanColorable
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead
 
 - type: loadout
-  id: LoadoutHeadCowboyWhite
+  id: LoadoutHeadKippahColorable
+  canBeHeirloom: true #FLOOF
   category: Head
-  cost: 1
+  cost: 0
   exclusive: true
+  customColorTint: true
   items:
-    - ClothingHeadHatCowboyWhite
+    - ClothingHeadHatKippahColorable
   requirements:
     - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadCowboyGrey
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatCowboyGrey
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
-
-- type: loadout
-  id: LoadoutHeadCowboyRed
-  category: Head
-  cost: 1
-  exclusive: true
-  items:
-    - ClothingHeadHatCowboyRed
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutHead2
+      group: LoadoutHead

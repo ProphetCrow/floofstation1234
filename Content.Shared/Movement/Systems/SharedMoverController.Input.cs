@@ -96,6 +96,9 @@ namespace Content.Shared.Movement.Systems
             component.HeldMoveButtons = buttons;
             RaiseLocalEvent(component.Owner, ref moveEvent);
             Dirty(component.Owner, component);
+
+            var ev = new SpriteMoveEvent(component.HeldMoveButtons != MoveButtons.None);
+            RaiseLocalEvent(component.Owner, ref ev);
         }
 
         private void OnMoverHandleState(EntityUid uid, InputMoverComponent component, ComponentHandleState args)
@@ -120,6 +123,9 @@ namespace Content.Shared.Movement.Systems
                 var moveEvent = new MoveInputEvent(uid, component, component.HeldMoveButtons);
                 component.HeldMoveButtons = state.HeldMoveButtons;
                 RaiseLocalEvent(uid, ref moveEvent);
+
+                var ev = new SpriteMoveEvent(component.HeldMoveButtons != MoveButtons.None);
+                RaiseLocalEvent(component.Owner, ref ev);
             }
         }
 
@@ -305,8 +311,11 @@ namespace Content.Shared.Movement.Systems
                 if (MoverQuery.TryGetComponent(entity, out var mover))
                     SetMoveInput(mover, MoveButtons.None);
 
-                if (!_mobState.IsIncapacitated(entity))
-                    HandleDirChange(relayMover.RelayEntity, dir, subTick, state);
+                if (_mobState.IsDead(entity)
+                    || _mobState.IsCritical(entity) && !_configManager.GetCVar(CCVars.AllowMovementWhileCrit))
+                    return;
+
+                HandleDirChange(relayMover.RelayEntity, dir, subTick, state);
 
                 return;
             }

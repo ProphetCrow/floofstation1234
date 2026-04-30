@@ -1,3 +1,5 @@
+using Content.Shared._Floof.Clothing.SlotBlocker;
+using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
@@ -55,5 +57,8 @@ public abstract partial class InteractionAction
         [Dependency] public readonly IRobustRandom Random = default!;
         [Dependency] public readonly IGameTiming Timing = default!;
         [Dependency] public readonly ISerializationManager Serialization = default!;
+        // Floof - changed this to dynamically resolve the system, otehrwise IoC would inject a weird instance of this class that is never initialized, leading to obscure bugs.
+        // If more *System references get added, make sure to convert them to this format. IoC doesn't support injecting entity systems.
+        public EntityWhitelistSystem WhitelistSystem => EntMan.System<EntityWhitelistSystem>();
     }
 }

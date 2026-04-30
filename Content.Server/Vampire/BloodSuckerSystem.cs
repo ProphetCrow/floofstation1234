@@ -75,7 +75,9 @@ namespace Content.Server.Vampiric
 
         private void OnHealthExamined(EntityUid uid, BloodSuckedComponent component, HealthBeingExaminedEvent args)
         {
-            args.Message.PushNewline();
+            // Floof: allow empty messages for basic examine
+            if (!args.Message.IsEmpty)
+                args.Message.PushNewline();
             args.Message.AddMarkup(Loc.GetString("bloodsucked-health-examine", ("target", uid)));
         }
 
@@ -134,8 +136,7 @@ namespace Content.Server.Vampiric
 
             var args = new DoAfterArgs(EntityManager, bloodsucker, bloodSuckerComponent.Delay, new BloodSuckDoAfterEvent(), bloodsucker, target: victim)
             {
-                BreakOnTargetMove = true,
-                BreakOnUserMove = false,
+                BreakOnMove = false,
                 DistanceThreshold = 2f,
                 NeedHand = false
             };

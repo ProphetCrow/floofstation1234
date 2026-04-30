@@ -12,17 +12,21 @@ using Content.Shared.Ensnaring.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
+using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Strip.Components;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.Player;
 using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
 using static Content.Client.Inventory.ClientInventorySystem;
 using static Robust.Client.UserInterface.Control;
 
@@ -31,11 +35,15 @@ namespace Content.Client.Inventory
     [UsedImplicitly]
     public sealed class StrippableBoundUserInterface : BoundUserInterface
     {
+        [Dependency] private readonly IPlayerManager _player = default!;
         [Dependency] private readonly IUserInterfaceManager _ui = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
+        [Dependency] private readonly IPrototypeManager _prototype = default!;
+        [Dependency] private readonly ISerializationManager _serialization = default!;
+
         private readonly ExamineSystem _examine;
         private readonly InventorySystem _inv;
         private readonly SharedCuffableSystem _cuffable;
+        private readonly StrippableSystem _strippable;
 
         [ViewVariables]
         private const int ButtonSeparation = 4;
@@ -44,39 +52,51 @@ namespace Content.Client.Inventory
         public const string HiddenPocketEntityId = "StrippingHiddenEntity";
 
         [ViewVariables]
-        private readonly StrippingMenu? _strippingMenu;
+        private StrippingMenu? _strippingMenu;
 
+        // Floof: use a list to accommodate silhouettes
         [ViewVariables]
-        private readonly EntityUid _virtualHiddenEntity;
+        private readonly List<EntityUid> _virtualHiddenEntities = new();
+
+        // Floof
+        private readonly ShaderInstance _silhouetteShader;
 
         public StrippableBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
         {
             _examine = EntMan.System<ExamineSystem>();
             _inv = EntMan.System<InventorySystem>();
             _cuffable = EntMan.System<SharedCuffableSystem>();
+            _strippable = EntMan.System<StrippableSystem>();
 
-            var title = Loc.GetString("strippable-bound-user-interface-stripping-menu-title", ("ownerName", Identity.Name(Owner, EntMan)));
-            _strippingMenu = new StrippingMenu(title, this);
-            _strippingMenu.OnClose += Close;
-            _virtualHiddenEntity = EntMan.SpawnEntity(HiddenPocketEntityId, MapCoordinates.Nullspace);
+            // Floof
+            _silhouetteShader = _prototype.Index<ShaderPrototype>("Silhouette").InstanceUnique();
         }
 
         protected override void Open()
         {
             base.Open();
+
+            _strippingMenu = this.CreateWindow<StrippingMenu>();
+            _strippingMenu.OnDirty += UpdateMenu;
+            _strippingMenu.Title = Loc.GetString("strippable-bound-user-interface-stripping-menu-title", ("ownerName", Identity.Name(Owner, EntMan)));
+
             _strippingMenu?.OpenCenteredLeft();
         }
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
-            EntMan.DeleteEntity(_virtualHiddenEntity);
-
             if (!disposing)
                 return;
 
-            _strippingMenu?.Dispose();
+            if (_strippingMenu != null)
+                _strippingMenu.OnDirty -= UpdateMenu;
+
+            // Floof: list for silhouettes
+            foreach (var entity in _virtualHiddenEntities)
+            {
+                EntMan.DeleteEntity(entity);
+            }
+            base.Dispose(disposing);
         }
 
         public void DirtyMenu()
@@ -200,9 +220,31 @@ namespace Content.Client.Inventory
             var entity = container.ContainedEntity;
 
             // If this is a full pocket, obscure the real entity
-            if (entity != null && slotDef.StripHidden
-                && !(EntMan.TryGetComponent<ThievingComponent>(_playerManager.LocalEntity, out var thiefcomponent) && thiefcomponent.IgnoreStripHidden))
-                entity = _virtualHiddenEntity;
+            // this does not work for modified clients because they are still sent the real entity
+            // Floof: show as silhouette
+            if (entity != null &&
+                _strippable.IsStripHidden(slotDef, null) &&
+                !EntMan.HasComponent<BypassInteractionChecksComponent>(PlayerManager.LocalEntity))
+            {
+                var virtualHiddenEntity = EntMan.SpawnEntity(HiddenPocketEntityId, MapCoordinates.Nullspace);
+                _virtualHiddenEntities.Add(virtualHiddenEntity);
+
+                if (EntMan.TryGetComponent<ThievingComponent>(PlayerManager.LocalEntity, out var thiefComponent)
+                        && thiefComponent.IgnoreStripHidden)
+                {
+                    if (EntMan.TryGetComponent<SpriteComponent>(entity, out var sprite))
+                    {
+                        _silhouetteShader.SetParameter("color", thiefComponent.HiddenEntityColor);
+
+                        var hiddenSprite = _serialization.CreateCopy(sprite, notNullableOverride: true);
+                        for (var i = 0; i < sprite.AllLayers.Count(); i++)
+                            hiddenSprite.LayerSetShader(i, _silhouetteShader);
+                        EntMan.AddComponent(virtualHiddenEntity, hiddenSprite, true);
+                    }
+                }
+
+                entity = virtualHiddenEntity;
+            }
 
             var button = new SlotButton(new SlotData(slotDef, container));
             button.Pressed += SlotPressed;

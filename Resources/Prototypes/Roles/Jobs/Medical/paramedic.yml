@@ -3,7 +3,6 @@
   name: job-name-paramedic
   description: job-description-paramedic
   playTimeTracker: JobParamedic
-  antagAdvantage: 2 # DeltaV - Reduced TC: External Access
   startingGear: ParamedicGear
   icon: "JobIconParamedic"
   supervisors: job-supervisors-cmo
@@ -19,7 +18,7 @@
     components:
     - type: CPRTraining
     - type: SurgerySpeedModifier
-      SpeedModifier: 1.75
+      speedModifier: 1.75
 
 - type: startingGear
   id: ParamedicGear

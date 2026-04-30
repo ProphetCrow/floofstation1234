@@ -1,0 +1,53 @@
+- type: soundCollection
+  id: Yip
+  files:
+  - /Audio/_Floof/Voice/Reptilian/yip.ogg
+
+- type: soundCollection
+  id: ReptilianHiss
+  files:
+  - /Audio/_Floof/Voice/Reptilian/hiss.ogg
+
+- type: soundCollection
+  id: VulpkaninYap
+  files:
+  - /Audio/_Floof/Voice/Vulpkanin/yap.ogg
+
+- type: soundCollection
+  id: RodentiaScreams
+  files:
+  - /Audio/_Floof/Voice/Rodentia/Rat_Scream_01.ogg
+
+- type: soundCollection
+  id: HarpyCoos
+  files:
+  - /Audio/_Floof/Voice/Harpy/harpy_coo1.ogg
+  - /Audio/_Floof/Voice/Harpy/harpy_coo2.ogg
+  - /Audio/_Floof/Voice/Harpy/harpy_coo3.ogg
+  - /Audio/_Floof/Voice/Harpy/harpy_coo4.ogg
+  - /Audio/_Floof/Voice/Harpy/harpy_coo5.ogg
+
+# Fox squeak
+- type: soundCollection
+  id: VulpkaninYips
+  files:
+  - /Audio/Animals/fox_squeak.ogg
+
+# Rest of the Fox sound collection
+- type: soundCollection
+  id: VulpkaninWhines
+  files:
+  - /Audio/Animals/fox1.ogg
+  - /Audio/Animals/fox2.ogg
+  - /Audio/Animals/fox3.ogg
+  - /Audio/Animals/fox4.ogg
+  - /Audio/Animals/fox5.ogg
+  - /Audio/Animals/fox6.ogg
+  - /Audio/Animals/fox7.ogg
+  - /Audio/Animals/fox8.ogg
+  - /Audio/Animals/fox9.ogg
+  - /Audio/Animals/fox10.ogg
+  - /Audio/Animals/fox11.ogg
+  - /Audio/Animals/fox12.ogg
+  - /Audio/Animals/fox13.ogg
+  - /Audio/Animals/fox14.ogg

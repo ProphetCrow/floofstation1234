@@ -10,7 +10,7 @@ dispel-power-metapsionic-feedback = {CAPITALIZE($entity)} is a mighty stone, sta
 # Mass Sleep
 mass-sleep-power-description = Put targets in a small area to sleep.
 mass-sleep-initialization-feedback = Reaching out to the minds around me, I have located the words that can send others to the realm of dreams.
-mass-sleep-metapsionic-feedback = {CAPITALIZE($entity)} bears the indelible mark of a dream thief.
+mass-sleep-power-metapsionic-feedback = {CAPITALIZE($entity)} bears the indelible mark of a dream thief.
 
 # Mind Swap
 mind-swap-power-description = Swap minds with the target. Either can change back after 20 seconds.
@@ -58,7 +58,7 @@ healing-word-power-initialization-feedback =
     At the beginning of time, a word was spoken that brought life into the Spheres.
     Though it taxes my mind to know it, this Secret is known to me now.
     I need only speak it.
-healing-word-power-metapsionic-feedback = {CAPITALIZE($entity)} bears the Lesser Secret of Life.
+healing-word-power-feedback = {CAPITALIZE($entity)} bears the Lesser Secret of Life.
 healing-word-begin = {CAPITALIZE($entity)} mutters a word that brings both joy and pain alike to those who hear it.
 
 # Revivify
@@ -69,7 +69,7 @@ revivify-power-initialization-feedback =
     For a moment, my soul journeys across time and space to the beginning of it all, there I hear it.
     The Secret of Life in its fullness. I feel my entire existence burning out from within, merely by knowing it.
     Power flows through me as a mighty river, begging to be released with a simple spoken word.
-revivify-power-metapsionic-feedback = {CAPITALIZE($entity)} bears the Greater Secret of Life.
+revivify-power-feedback = {CAPITALIZE($entity)} bears the Greater Secret of Life.
 revivify-begin = {CAPITALIZE($entity)} enunciates a word of such divine power, that those who hear it weep from joy.
 
 # Telegnosis
@@ -96,19 +96,21 @@ xenoglossy-power-initialization-feedback =
     I feel an empathy with all creation, so that I may understand them and be understood.
     The barrier between thought and expressions is permeable to me.
 
-psionic-language-power-metapsionic-feedback = The noösphere flows freely through {CAPITALIZE($entity)}, who seems to digest it and pass it back out undisturbed.
+psionic-language-power-feedback = The noösphere flows freely through {CAPITALIZE($entity)}, who seems to digest it and pass it back out undisturbed.
 
 # Psychognomy
 psychognomy-power-description = You have some vague sense of the form of the source of telepathic messages.
 psychognomy-power-initialization-feedback =
     I have pierced the veil, and I know I'm not alone. More concerning, the piercing I made seems to be still indefinitely permeable.
     When energy passes through the perforations in the noösphere, I get a faint glimpse of the material origin.
+psionic-psychognomy-power-feedback = {CAPITALIZE($entity)} can partially trace a telepathic message's origin.
 
 # Telepathy
 telepathy-power-description = You are capable of both sending and receiving telepathic messages.
 telepathy-power-initialization-feedback =
     The voices I've heard all my life begin to clear, yet they do not leave me. Before, they were as incoherent whispers,
     now my senses broaden, I come to a realization that they are part of a communal shared hallucination. Behind every voice is a glimmering sentience.
+psionic-telepathy-power-feedback = {CAPITALIZE($entity)} is capable of understanding and communicating without words or actions
 
 # Shadeskip
 action-name-shadeskip = Shadeskip
@@ -141,7 +143,7 @@ pyrokinetic-flare-power-initialization-feedback =
     My gaze is briefly filled with a flash of immense light and head, and for a single moment I can see a glimpse of a realm
     of fire and pain, of hunger and suffering. Just as soon as I glimpse it, the vision fades. But the memory of that flash lingers within my mind.
     I can recall it still, a glimpse of the fires of Gehenna.
-pyrokinetic-flare-power-metapsionic-feedback = Guh these don't even matter because nobody can read this line in-game and I don't know when I'm ever bringing back Narrow Pulse
+pyrokinetic-flare-power-metapsionic-feedback = {CAPITALIZE($entity)} can use a spark of fire to blind enemies
 
 # Summon Imp
 action-name-summon-imp = Summon Imp
@@ -160,21 +162,13 @@ summon-remilia-power-description = { action-description-summon-remilia }
 
 # Psionic System Messages
 mindbreaking-feedback = The light of life vanishes from {CAPITALIZE($entity)}'s eyes, leaving behind a husk pretending at sapience
+hard-mindbreaking-feedback = Your character's personhood has been obliterated. If you wish to continue playing, consider respawning as a new character.
 examine-mindbroken-message =
     Eyes unblinking, staring deep into the horizon. {CAPITALIZE($entity)} is a sack of meat pretending it has a soul.
     There is nothing behind its gaze, no evidence there can be found of the divine light of creation.
 psionic-roll-failed = For a moment, my consciousness expands, yet I feel that it is not enough.
 entity-anomaly-no-grid = There is nowhere for me to conjure beings.
 power-overwhelming-power-feedback = {CAPITALIZE($entity)} wields a vast connection to the noösphere
-
-# Shadowkin ShadeSkip
-action-description-shadowkin-shadeskip = Aaramrra!
-
-# DarkSwap
-action-name-darkswap = DarkSwap
-action-description-darkswap = Mmra Mamm!
-
-ethereal-pickup-fail = My hand sizzles as it passes through...
 
 # Psionic Familiar System
 psionic-familiar-cant-attack-master = I am bound by my Master, I cannot harm them.
@@ -184,3 +178,33 @@ ghost-role-information-familiar-description = An interdimensional creature bound
 ghost-role-information-familiar-rules =
     Obey the one who summoned you. Do not act against the interests of your Master. You will die for your Master if it is necessary.
 
+# Assay Power
+assay-begin = The air around {CAPITALIZE($entity)} begins to shimmer faintly
+assay-self = I AM.
+no-powers = {CAPITALIZE($entity)} will never awaken from the dream in this life
+assay-body = "My will cast upon {CAPITALIZE($entity)} divines these. Amplification: {$amplification} Dampening: {$dampening} Potentia: {$potentia}"
+assay-power-initialization-feedback =
+    I descend into the dreamlight once more, there I drink more fully of the cup of knowledge. The touch of the noosphere upon others becomes known to me,
+    I can cast my will upon them, divining the inner nature of others.
+assay-power-metapsionic-feedback = {CAPITALIZE($entity)} bears a spark of the divine's judgment, they have drunk deeply of the cup of knowledge.
+
+# Entity Specific Feedback Messages
+ifrit-feedback = A spirit of Gehenna, bound by the will of a powerful psychic
+prober-feedback = A mirror into the end of time, the screaming of dead stars emanates from this machine
+drain-feedback = A mirror into a realm where the stars sit still forever, a cold and distant malevolence stares back
+sophic-grammateus-feedback = SEEKER, YOU NEED ONLY ASK FOR MY WISDOM.
+oracle-feedback = WHY DO YOU BOTHER ME SEEKER? HAVE I NOT MADE MY DESIRES CLEAR?
+orecrab-feedback = Heralds of the Lord of Earth, summoned to this realm from Grome's kingdom
+reagent-slime-feedback = Heralds of the Lord of Water, summoned to this realm from Straasha's kingdom.
+flesh-golem-feedback = Abominations pulled from dead realms, twisted amalgamations of those fallen to the influence of primordial Chaos
+glimmer-mite-feedback = A semi-corporeal parasite native to the dreamlight, its presence here brings forth the screams of dead stars.
+anomaly-pyroclastic-feedback = A small mirror to the plane of Gehenna, truth lies within the Secret of Fire
+anomaly-gravity-feedback = Violet and crimson, blue of blue, impossibly dark yet greater than the whitest of white, a black star shines weakly at the end of it all
+anomaly-electricity-feedback = A mirror to a realm tiled by silicon, the lifeblood of artificial thought flows from it
+anomaly-flesh-feedback = From within it comes the suffering of damned mutants howling for all eternity
+anomaly-bluespace-feedback = A bridge of dreamlight, crossing into the space between realms of the multiverse
+anomaly-ice-feedback = Walls of blackened stone, ruin and famine wait for those who fall within
+anomaly-rock-feedback = A vast old oak dwells high over a plane of stone, it turns to stare back
+anomaly-flora-feedback = Musical notes drift around you, playfully beckoning, they wish to feast
+anomaly-liquid-feedback = A realm of twisting currents. Its placidity is a lie. The eyes within stare hungrilly
+anomaly-shadow-feedback = At the end of time, when all suns have set forever, there amidst the void stands a monument to past sins.

@@ -6,16 +6,15 @@
   abstract: true
   components:
   - type: Sprite
-    scale: 0.8, 0.8
+    #scale: 0.8, 0.8 Floofstation - while this doesn't technically cause any issues, this creates potential instability if changes to the heightAdjust system are made. As someone who made changes to the heightAdjust system, this can be very confusing.
   - type: HumanoidAppearance
     species: Felinid
-    initial: Felinid
   - type: Fixtures
     fixtures: # TODO: This needs a second fixture just for mob collisions.
       fix1:
         shape:
           !type:PhysShapeCircle
-          radius: 0.28
+          radius: 0.35 # Floofstation - changed from 0.28. Default shape scaling is both not needed and causes issues due to EE's heightAdjust system. 0.35 is standard, DeltaV used 0.28 to shrink their size to 80%
         density: 140
         restitution: 0.0
         mask:
@@ -68,22 +67,42 @@
   - type: LanguageKnowledge
     speaks:
     - TauCetiBasic
+    - SolCommon
     - Nekomimetic
     understands:
     - TauCetiBasic
+    - SolCommon
     - Nekomimetic
-  - type: Thieving
-    ignoreStripHidden: true
-    stealth: Subtle
-    stripTimeReduction: 0
-    stripTimeMultiplier: 0.667
-  - type: StepTriggerImmune
-    whitelist:
-      types:
-        - Shard
-        - Landmine
-        - Mousetrap
-        - SlipEntity
+    naturalLanguage: SolCommon # Floof: explicitly stated natural languages
+#  - type: Thieving | Floof - M3739 - #1194 - Removed due to balancing and SoP concerns
+#    ignoreStripHidden: true
+#    stealth: Subtle
+#    stripTimeReduction: 0
+#    stripTimeMultiplier: 0.667
+  - type: NightVision # Floofstation - Upstream has Felinids replaced with Tajarans and Tajarans have Cat Night Vision
+    color: "#808080"
+    activateSound: null
+    deactivateSound: null
+  - type: Flashable # Floofstation - Here incase Mnemo wants a counter balance to it
+    eyeDamageChance: 0.3
+    eyeDamage: 1
+    durationMultiplier: 1.5
+#  - type: StepTriggerImmune | Floof - M3739 - #1194 - Removed due to balancing
+#    whitelist:
+#      types:
+#        - Shard
+#        - Landmine
+#        - Mousetrap
+#        - SlipEntity
+  - type: Tag
+    tags:
+    - CanPilot
+    - FootstepSound
+    - DoorBumpOpener
+    - FelinidEmotes
+  - type: DamageForceSay # Floofstation - added unqiue pain messages
+    forceSayStringPrefix: damage-force-say-felinid-
+    forceSayStringCount: 7 # Default is 7, but defining it anyway in case it changes or someone wants to add/remove messages
 
 - type: entity
   save: false

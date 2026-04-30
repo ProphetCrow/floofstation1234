@@ -31,7 +31,6 @@
       state: glow
       shader: unshaded
     state: base
-  - type: EtherealLight
   - type: PointLight
     color: "#FFE4CE" # 5000K color temp
     energy: 0.8
@@ -332,6 +331,44 @@
     damage:
       types:
         Heat: 1
+
+- type: entity
+  id: PoweredDimSmallLight
+  suffix: Dim
+  parent: PoweredSmallLightEmpty
+  components:
+  - type: Sprite
+    state: base
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 0.5
+    softness: 3
+    color: "#ba473f"
+  - type: PoweredLight
+    hasLampOnSpawn: DimLightBulb
+    damage:
+      types:
+        Heat: 1
+
+- type: entity
+  id: PoweredWarmSmallLight
+  suffix: Warm
+  parent: PoweredSmallLightEmpty
+  components:
+  - type: Sprite
+    state: base
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 1
+    softness: 3
+    color: "#FF8A0C"
+  - type: PoweredLight
+    hasLampOnSpawn: WarmLightBulb
+    damage:
+      types:
+        Heat: 2
 
 - type: entity
   id: PoweredSmallLight

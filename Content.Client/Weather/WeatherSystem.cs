@@ -32,7 +32,10 @@ public sealed class WeatherSystem : SharedWeatherSystem
         var ent = _playerManager.LocalEntity;
 
         if (ent == null)
+        {
+            weather.Stream = _audio.Stop(weather.Stream); // Vulpstation
             return;
+        }
 
         var mapUid = Transform(uid).MapUid;
         var entXform = Transform(ent.Value);
@@ -44,25 +47,30 @@ public sealed class WeatherSystem : SharedWeatherSystem
             return;
         }
 
-        if (!Timing.IsFirstTimePredicted || weatherProto.Sound == null)
+        // Vulpstation - who thought it was a good idea to only calculate occlusion on the first tick? Removed the relevant lines.
+        if (weatherProto.Sound == null) // Don't ever generate more than one weather sound.
             return;
 
-        var playStream = _audio.PlayGlobal(weatherProto.Sound, Filter.Local(), true);
-        weather.Stream ??= playStream!.Value.Entity;
+        // Vulpstation
+        if (weather.Stream is not null and not { Valid: true })
+            weather.Stream = null;
 
-        var stream = weather.Stream.Value;
-        var comp = Comp<AudioComponent>(stream);
+        weather.Stream ??= _audio.PlayGlobal(weatherProto.Sound, Filter.Local(), true)?.Entity;
+
+        if (!TryComp(weather.Stream, out AudioComponent? comp))
+            return;
+
         var occlusion = 0f;
 
         // Work out tiles nearby to determine volume.
         if (TryComp<MapGridComponent>(entXform.GridUid, out var grid))
         {
             var gridId = entXform.GridUid.Value;
-            // Floodfill to the nearest tile and use that for audio.
+            // FloodFill to the nearest tile and use that for audio.
             var seed = _mapSystem.GetTileRef(gridId, grid, entXform.Coordinates);
             var frontier = new Queue<TileRef>();
             frontier.Enqueue(seed);
-            // If we don't have a nearest node don't play any sound.
+            // If we don't have the nearest node don't play any sound.
             EntityCoordinates? nearestNode = null;
             var visited = new HashSet<Vector2i>();
 
@@ -71,7 +79,7 @@ public sealed class WeatherSystem : SharedWeatherSystem
                 if (!visited.Add(node.GridIndices))
                     continue;
 
-                if (!CanWeatherAffect(grid, node))
+                if (!CanWeatherAffect(entXform.GridUid.Value, grid, node))
                 {
                     // Add neighbors
                     // TODO: Ideally we pick some deterministically random direction and use that
@@ -82,7 +90,7 @@ public sealed class WeatherSystem : SharedWeatherSystem
                         {
                             if (Math.Abs(x) == 1 && Math.Abs(y) == 1 ||
                                 x == 0 && y == 0 ||
-                                (new Vector2(x, y) + node.GridIndices - seed.GridIndices).Length() > 3)
+                                (new Vector2(x, y) + node.GridIndices - seed.GridIndices).Length() > 5) // Floofstation - increase max search radius to 5
                             {
                                 continue;
                             }
@@ -103,20 +111,20 @@ public sealed class WeatherSystem : SharedWeatherSystem
             if (nearestNode != null)
             {
                 var entPos = _transform.GetMapCoordinates(entXform);
-                var nodePosition = nearestNode.Value.ToMap(EntityManager, _transform).Position;
+                var nodePosition = _transform.ToMapCoordinates(nearestNode.Value).Position;
                 var delta = nodePosition - entPos.Position;
                 var distance = delta.Length();
                 occlusion = _audio.GetOcclusion(entPos, delta, distance);
             }
             else
             {
-                occlusion = 3f;
+                occlusion = 6f; // Floofstation - increase default occlusion so snowfall noise is less annoying indoors
             }
         }
 
         var alpha = GetPercent(weather, uid);
         alpha *= SharedAudioSystem.VolumeToGain(weatherProto.Sound.Params.Volume);
-        _audio.SetGain(stream, alpha, comp);
+        _audio.SetGain(weather.Stream, alpha, comp);
         comp.Occlusion = occlusion;
     }
 

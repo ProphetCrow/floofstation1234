@@ -192,6 +192,7 @@
   - type: FlashImmunity
   - type: EyeProtection
     protectionTime: 5
+  - type: VisionCorrection # Floof
   - type: Tag
     tags:
     - HamsterWearable
@@ -254,6 +255,9 @@
   - type: Clothing
     sprite: Clothing/Eyes/Glasses/ninjavisor.rsi
   - type: FlashImmunity
+  - type: NightVision
+    isEquipment: true
+  - type: VisionCorrection
 
 - type: entity #Fake goggles, the latest in anti-valid hunting technology
   parent: ClothingEyesBase

@@ -12,17 +12,24 @@ using Content.Shared.Fluids.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Whitelist;
 using Microsoft.Extensions.ObjectPool;
 using Robust.Server.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using System.Linq;
+using Content.Server._Floof.NPC.HTN.Queries.Considerations;
+using Content.Server.Atmos.Components;
+using Robust.Server.GameObjects;
+using Robust.Shared.Physics;
+
 
 namespace Content.Server.NPC.Systems;
 
@@ -45,6 +52,8 @@ public sealed class NPCUtilitySystem : EntitySystem
     [Dependency] private readonly SolutionContainerSystem _solutions = default!;
     [Dependency] private readonly WeldableSystem _weldable = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private readonly PhysicsSystem _physics = default!; // Floof
 
     private EntityQuery<PuddleComponent> _puddleQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -240,6 +249,28 @@ public sealed class NPCUtilitySystem : EntitySystem
                 // TODO: Pathfind there, though probably do it in a separate con.
                 return 1f;
             }
+            // Floofstation - because upstream didnt implement anything to prevent e.g. cleanbots from trying to clean under walls.
+            case TargetUnobstructedCon:
+            {
+                if (_lookup.GetEntitiesIntersecting(targetUid, LookupFlags.Uncontained) is not { Count: > 0 } intersectors)
+                    return 1f;
+
+                // For each obstructor, multiply the score by 0.1. This way unobstructed entities will be prioritized.
+                var score = 1f;
+                var (_, ownCollisionMask) = _physics.GetHardCollision(owner);
+                foreach (var intersector in intersectors)
+                {
+                    if (TryComp<FixturesComponent>(intersector, out var fixs)
+                        && fixs.Fixtures.Values.Any(it => it.Hard && (it.CollisionLayer & ownCollisionMask) != 0))
+                        score *= 0.1f;
+
+                    if (TryComp<AirtightComponent>(intersector, out var airtight) && airtight.AirBlocked)
+                        score *= 0.25f; // This can be a door, so we don't penalize as much, because someone might just open it for the mob
+                }
+
+                return score;
+            }
+            // Floofstation section end
             case TargetAmmoMatchesCon:
             {
                 if (!blackboard.TryGetValue(NPCBlackboard.ActiveHand, out Hand? activeHand, EntityManager) ||
@@ -248,7 +279,7 @@ public sealed class NPCUtilitySystem : EntitySystem
                     return 0f;
                 }
 
-                if (heldGun.Whitelist?.IsValid(targetUid, EntityManager) != true)
+                if (_whitelistSystem.IsWhitelistFailOrNull(heldGun.Whitelist, targetUid))
                 {
                     return 0f;
                 }
@@ -257,7 +288,7 @@ public sealed class NPCUtilitySystem : EntitySystem
             }
             case TargetDistanceCon:
             {
-                var radius = blackboard.GetValueOrDefault<float>(NPCBlackboard.VisionRadius, EntityManager);
+                var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
 
                 if (!TryComp<TransformComponent>(targetUid, out var targetXform) ||
                     !TryComp<TransformComponent>(owner, out var xform))
@@ -296,13 +327,13 @@ public sealed class NPCUtilitySystem : EntitySystem
             }
             case TargetInLOSCon:
             {
-                var radius = blackboard.GetValueOrDefault<float>(NPCBlackboard.VisionRadius, EntityManager);
+                var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
 
                 return _examine.InRangeUnOccluded(owner, targetUid, radius + 0.5f, null) ? 1f : 0f;
             }
             case TargetInLOSOrCurrentCon:
             {
-                var radius = blackboard.GetValueOrDefault<float>(NPCBlackboard.VisionRadius, EntityManager);
+                var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
                 const float bufferRange = 0.5f;
 
                 if (blackboard.TryGetValue<EntityUid>("Target", out var currentTarget, EntityManager) &&
@@ -362,7 +393,7 @@ public sealed class NPCUtilitySystem : EntitySystem
     private void Add(NPCBlackboard blackboard, HashSet<EntityUid> entities, UtilityQuery query)
     {
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
-        var vision = blackboard.GetValueOrDefault<float>(NPCBlackboard.VisionRadius, EntityManager);
+        var vision = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
 
         switch (query)
         {
@@ -371,7 +402,7 @@ public sealed class NPCUtilitySystem : EntitySystem
                 if (compQuery.Components.Count == 0)
                     return;
 
-                var mapPos = _xformQuery.GetComponent(owner).MapPosition;
+                var mapPos = _transform.GetMapCoordinates(owner, xform: _xformQuery.GetComponent(owner));
                 _compTypes.Clear();
                 var i = -1;
                 EntityPrototype.ComponentRegistryEntry compZero = default!;

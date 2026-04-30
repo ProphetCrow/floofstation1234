@@ -12,6 +12,7 @@
   recipeUnlocks:
   - WeaponProtoKineticAccelerator
   - ShuttleGunKineticCircuitboard
+  - MechEquipmentKineticAccelerator # Goobstation
   # These are roundstart but not replenishable for salvage
 
 - type: technology
@@ -27,8 +28,11 @@
   - BoxShotgunIncendiary
   - MagazineRifleIncendiary
   - MagazinePistolIncendiary
+  - MagazinePistolSubMachineGunIncendiary
+  - MagazineMagnumIncendiary
   - MagazineLightRifleIncendiary
   - SpeedLoaderMagnumIncendiary
+  - SpeedLoaderRifleHeavyIncendiary # Frontier
   - MagazineShotgunIncendiary
   - MagazineBoxPistolIncendiary
   - MagazineBoxMagnumIncendiary
@@ -50,6 +54,7 @@
   cost: 7500
   recipeUnlocks:
   - WeaponLaserCarbine
+  - WeaponMechCombatFiredartLaser # Goobstation
 
 - type: technology
   id: NonlethalAmmunition
@@ -69,6 +74,12 @@
   - CartridgeMagnumRubber
   - CartridgeLightRifleRubber
   - CartridgeRifleRubber
+  - MagazineRifleRubber
+  - MagazinePistolRubber
+  - MagazinePistolSubMachineGunRubber
+  - MagazineMagnumRubber
+  - MagazineLightRifleRubber
+  - SpeedLoaderMagnumRubber
   - MagazineBoxPistolRubber
   - MagazineBoxMagnumRubber
   - MagazineBoxLightRifleRubber
@@ -83,6 +94,11 @@
   - MagazinePistolRubber #floof
   - SpeedLoaderMagnumRubber #floof
   - WeaponDisabler
+  - MagazineBoxLightRifleRubber # Frontier
+  - MagazineBoxMagnumRubber # Frontier
+  - MagazineBoxPistolRubber # Frontier
+  - MagazineBoxRifleRubber # Frontier
+  - WeaponMechCombatDisabler # Goobstation
 
 - type: technology
   id: UraniumMunitions
@@ -96,8 +112,11 @@
   recipeUnlocks:
   - MagazineRifleUranium
   - MagazinePistolUranium
+  - MagazinePistolSubMachineGunUranium
+  - MagazineMagnumUranium
   - MagazineLightRifleUranium
   - SpeedLoaderMagnumUranium
+  - SpeedLoaderRifleHeavyUranium # Frontier
   - MagazineBoxPistolUranium
   - MagazineBoxMagnumUranium
   - MagazineBoxLightRifleUranium
@@ -122,6 +141,7 @@
   - HoloprojectorSecurity
   - WeaponDisablerSMG
   - BolaEnergy
+  - WeaponHalberd # Floofstation
 
 # Tier 2
 
@@ -153,7 +173,8 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - WeaponLaserCannon
+  - WeaponLaserCannon # 
+  - WeaponMechCombatSolarisLaser # Goobstation
 
 - type: technology
   id: WaveParticleHarnessing
@@ -203,6 +224,8 @@
   recipeUnlocks:
   - WeaponAdvancedLaser
   - PortableRecharger
+  - WeaponMechCombatImmolationGun # Goobstation
+  softCapContribution: 1.5
 
 - type: technology
   id: ExperimentalBatteryAmmo
@@ -215,6 +238,7 @@
   cost: 15000
   recipeUnlocks:
   - WeaponLaserSvalinn
+  softCapContribution: 1.25 # Floofstation - reduced due to low utility
 
 - type: technology
   id: AdvancedShuttleWeapon
@@ -231,3 +255,4 @@
   - ShuttleGunDusterCircuitboard
   technologyPrerequisites:
   - BasicShuttleArmament
+  softCapContribution: 1.25 # Floofstation - reduced due to low utility

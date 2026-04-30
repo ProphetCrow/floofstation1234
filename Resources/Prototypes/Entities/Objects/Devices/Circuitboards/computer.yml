@@ -290,7 +290,7 @@
 - type: entity
   parent: BaseComputerCircuitboard
   id: RadarConsoleCircuitboard
-  name: radar console computer board
+  name: mass scanner computer board
   components:
   - type: ComputerBoard
     prototype: ComputerRadar
@@ -412,10 +412,6 @@
       price: 150
     - type: ComputerBoard
       prototype: ComputerMassMedia
-    - type: ReverseEngineering # Nyano
-      difficulty: 3
-      recipes:
-        - ComputerMassMediaCircuitboard
 
 - type: entity
   parent: BaseComputerCircuitboard

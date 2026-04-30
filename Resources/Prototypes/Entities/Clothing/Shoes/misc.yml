@@ -88,7 +88,7 @@
   - type: NoSlip
 
 - type: entity
-  parent: [ClothingShoesBase, PowerCellSlotSmallItem]
+  parent: [ClothingShoesBase, PowerCellSlotSmallItem, BaseToggleClothing]
   id: ClothingShoesBootsSpeed
   name: speed boots
   description: High-tech boots woven with quantum fibers, able to convert electricity into pure speed!
@@ -100,12 +100,11 @@
       map: [ "enum.ToggleVisuals.Layer" ]
   - type: Clothing
     sprite: Clothing/Shoes/Boots/speedboots.rsi
-  - type: ToggleClothingSpeed
-    toggleAction: ActionToggleSpeedBoots
+  - type: ToggleClothing
+    action: ActionToggleSpeedBoots
   - type: ClothingSpeedModifier
     walkModifier: 1.5
     sprintModifier: 1.5
-    enabled: false
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -128,13 +127,10 @@
   id: ActionToggleSpeedBoots
   name: Toggle Speed Boots
   description: Toggles the speed boots on and off.
-  categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
-    itemIconStyle: NoItem
-    event: !type:ToggleClothingSpeedEvent
-    icon: { sprite: Clothing/Shoes/Boots/speedboots.rsi, state: icon }
-    iconOn: { sprite: Clothing/Shoes/Boots/speedboots.rsi, state: icon-on }
+    itemIconStyle: BigItem
+    event: !type:ToggleActionEvent
 
 - type: entity
   parent: ClothingShoesBase
@@ -153,3 +149,30 @@
     price: 75
   - type: Tag
     tags: [ ]
+   
+- type: entity
+  parent: ClothingShoesBase
+  id: ClothingShoesBootsJump
+  name: jump boots
+  description: High-tech boots that give you the incredible ability to JUMP! With these boots you can jump over lava, chasms and weird chemicals on the floor!
+  components:
+  - type: Sprite
+    sprite: Clothing/Shoes/Boots/jumpboots.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: Clothing/Shoes/Boots/jumpboots.rsi
+  - type: JumpAbility
+    jumpDistance: 4
+    jumpSound: /Audio/Effects/stealthoff.ogg
+  - type: ActionGrant
+    actions:
+    - ActionGravityJump 
+  - type: ItemActionGrant
+    actions:
+    - ActionGravityJump
+    activeIfWorn: true
+  - type: StaticPrice
+    price: 220
+  - type: Tag
+    tags: []

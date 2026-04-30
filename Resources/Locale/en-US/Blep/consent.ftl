@@ -18,8 +18,11 @@ consent-examine-verb = Consent Info
 consent-examine-not-set = This player has no consent preferences set. Ask for consent first before engaging in any erotic roleplay.
 
 # Consent toggles
-consent-Vore-name = Vore
-consent-Vore-desc = Allow yourself to be predator or prey.
+consent-Vore-name = Vore Prey
+consent-Vore-desc = Allow yourself to be prey or insert yourself into a pred.
+
+consent-VorePred-name = Vore Pred
+consent-VorePred-desc = Allow yourself to be pred or have prey insert themselves into you.
 
 consent-Digestion-name = Digestion
 consent-Digestion-desc = Allow yourself to be digested. WARNING: BEING DIGESTED WILL ROUND-REMOVE YOU.
@@ -28,4 +31,7 @@ consent-Hypno-name = Hypnosis
 consent-Hypno-desc = Allow yourself to be hypnotized.
 
 consent-NoClone-name = Disallow Paradox Anomaly
-consent-NoClone-desc = Disallow yourself to be the target of a paradox anomaly clone.
+consent-NoClone-desc = Turn this on to disallow Paradox clones of yourself.
+
+consent-NSFWDescriptions-name = Show NSFW Descriptions
+consent-NSFWDescriptions-desc = Toggle this on to see dynamic player descriptions that may contain NSFW/ERP content.

@@ -37,6 +37,7 @@
     - JobsLogistics
     - JobsMedical
     - JobsSecurity
+    - JobsJustice # Floof
     - JobsService
 
 - type: loadoutCategory
@@ -51,6 +52,10 @@
     - JobsCommandAUncategorized
     - JobsCommandCaptain
     - JobsCommandHeadOfPersonnel
+    - JobsCommandAdminAssistant
+    - JobsCommandBlueshieldOfficer
+    - JobsCommandNanorep
+    - JobsCommandMagistrate
 
 - type: loadoutCategory
   id: JobsCommandAUncategorized
@@ -60,6 +65,18 @@
 
 - type: loadoutCategory
   id: JobsCommandHeadOfPersonnel
+
+- type: loadoutCategory
+  id: JobsCommandAdminAssistant
+
+- type: loadoutCategory
+  id: JobsCommandBlueshieldOfficer
+
+- type: loadoutCategory
+  id: JobsCommandNanorep
+
+- type: loadoutCategory
+  id: JobsCommandMagistrate
 
 # Engineering
 - type: loadoutCategory
@@ -140,6 +157,7 @@
     - JobsLogisticsCourier
     - JobsLogisticsLogisticsOfficer
     - JobsLogisticsSalvageSpecialist
+    - JobsLogisticsInventorySpecialist #floof senior cargo
 
 - type: loadoutCategory
   id: JobsLogisticsAUncategorized
@@ -155,6 +173,9 @@
 
 - type: loadoutCategory
   id: JobsLogisticsSalvageSpecialist
+
+- type: loadoutCategory
+  id: JobsLogisticsInventorySpecialist #floof senior cargo
 
 # Medical
 - type: loadoutCategory
@@ -198,6 +219,7 @@
   id: JobsSecurity
   subCategories:
     - JobsSecurityAUncategorized
+    - JobsSecurityWeapons
     - JobsSecurityCadet
     - JobsSecurityCorpsman
     - JobsSecurityDetective
@@ -205,9 +227,13 @@
     - JobsSecuritySecurityOfficer
     - JobsSecuritySeniorOfficer
     - JobsSecurityWarden
+    - JobsSecurityPrisonGuard # Floof - Prison Guard
 
 - type: loadoutCategory
   id: JobsSecurityAUncategorized
+
+- type: loadoutCategory
+  id: JobsSecurityWeapons
 
 - type: loadoutCategory
   id: JobsSecurityCadet
@@ -230,6 +256,9 @@
 - type: loadoutCategory
   id: JobsSecurityWarden
 
+- type: loadoutCategory
+  id: JobsSecurityPrisonGuard # Floof - Prison Guard
+  
 # Service
 - type: loadoutCategory
   id: JobsService
@@ -240,7 +269,7 @@
     - JobsServiceChef
     - JobsServiceClown
     - JobsServiceJanitor
-    - JobsServiceLawyer
+    # - JobsServiceLawyer - Floof
     - JobsServiceMime
     - JobsServiceMusician
     - JobsServiceReporter

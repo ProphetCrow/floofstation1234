@@ -3,16 +3,16 @@
   name: job-name-cargotech
   description: job-description-cargotech
   playTimeTracker: JobCargoTechnician
-  antagAdvantage: 2 # DeltaV - Reduced TC: External Access
   startingGear: CargoTechGear
   icon: "JobIconCargoTechnician"
   supervisors: job-supervisors-qm
   access:
   - Cargo
   - Maintenance
+  # - Orders # Floof - Removed for Inv Spec role
   extendedAccess:
   - Salvage
-  - Orders # DeltaV - Orders, see Resources/Prototypes/DeltaV/Access/cargo.yml
+  - Orders # DeltaV - Orders, see Resources/Prototypes/DeltaV/Access/cargo.yml # Floof - Returned for low pop
 
 - type: startingGear
   id: CargoTechGear

@@ -11,4 +11,9 @@ species-name-moth = Moth Person
 species-name-skeleton = Skeleton
 species-name-vox = Vox
 species-name-ipc = IPC
-species-name-shadowkin = Shadowkin
+species-name-shadowkin = Shadekin
+species-name-shadekin = Shadekin
+
+## Misc species things
+
+snail-hurt-by-salt-popup = The salty solution burns like acid!

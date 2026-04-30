@@ -1,0 +1,104 @@
+# Chief Engineer
+# Backpacks
+
+# Belt
+
+# Ears
+
+# Equipment
+
+# Eyes
+
+# Gloves
+- type: loadout
+  id: LoadoutClothingHandsChiefEngiWarmers
+  category: JobsEngineeringChiefEngineer
+  cost: 0
+  exclusive: true
+  items:
+  - ClothingHandsChiefEngiWarmers
+  requirements:
+  - !type:CharacterJobRequirement
+    jobs:
+    - ChiefEngineer
+
+# Head
+
+# Id
+
+# Neck
+
+# Mask
+
+# Outer
+- type: loadout
+  id: LoadoutChiefEngineerOuterLongcoat
+  category: JobsEngineeringChiefEngineer
+  cost: 0
+  items:
+    - ClothingLongcoatCE
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutChiefEngineerOuter
+    - !type:CharacterJobRequirement
+      jobs:
+        - ChiefEngineer
+
+# Shoes
+- type: loadout
+  id: LoadoutClothingUnderSocksChiefEngi
+  category: JobsEngineeringChiefEngineer
+  cost: 0
+  exclusive: true
+  items:
+  - ClothingUnderSocksChiefEngi
+  requirements:
+  - !type:CharacterSpeciesRequirement
+    inverted: true
+    species:
+    - Diona
+    - Harpy
+  - !type:CharacterJobRequirement
+    jobs:
+    - ChiefEngineer
+
+# Uniforms
+- type: loadout
+  id: LoadoutClothingUniformChiefEngiThong
+  category: JobsEngineeringChiefEngineer
+  cost: 0
+  exclusive: true
+  items:
+  - ClothingUniformChiefEngiThong
+  requirements:
+  - !type:CharacterJobRequirement
+    jobs:
+    - ChiefEngineer
+
+- type: loadout
+  id: LoadoutChiefEngineerUniformTurtle
+  category: JobsEngineeringChiefEngineer
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingUniformJumpsuitChiefEngineerTurtle
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutChiefEngineerUniforms
+    - !type:CharacterJobRequirement
+      jobs:
+        - ChiefEngineer
+
+- type: loadout
+  id: LoadoutChiefEngineerUniformTurtleSkirt
+  category: JobsEngineeringChiefEngineer
+  cost: 0
+  exclusive: true
+  items:
+    - ClothingUniformJumpskirtChiefEngineerTurtle
+  requirements:
+    - !type:CharacterItemGroupRequirement
+      group: LoadoutChiefEngineerUniforms
+    - !type:CharacterJobRequirement
+      jobs:
+        - ChiefEngineer

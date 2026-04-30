@@ -21,6 +21,13 @@
     maxItemSize: Large
     storageInsertSound:
       path: /Audio/Voice/Slime/slime_squish.ogg
+    storageRemoveSound: # Floof: add remove sound too
+      path: /Audio/Voice/Slime/slime_squish.ogg
+  - type: StorageBlockedByClothing # Floof
+    slots:
+    - INNERCLOTHING
+    allowedTags:
+    - ShirtlessClothing
   - type: ContainerContainer
     containers:
       storagebase: !type:Container
@@ -35,6 +42,9 @@
         type: StrippableBoundUserInterface
       enum.SurgeryUIKey.Key:
         type: SurgeryBui
+      enum.InstrumentUiKey.Key: # Floof - M3739 - It seems like using the UserInterface component with the Interfaces complex field will effectively overwrite any Interfaces inherited from the parent. Ergo, unfortunately, we have to respecify as shown here.
+        type: InstrumentBoundUserInterface
+        requireInputValidation: false
   # to prevent bag open/honk spam
   - type: UseDelay
     delay: 0.5
@@ -43,7 +53,7 @@
   - type: Speech
     speechVerb: Slime
     speechSounds: Slime
-    allowedEmotes: ['Squish']
+    allowedEmotes: ['Squish', 'Bubble', 'Pop']
   - type: TypingIndicator
     proto: slime
   - type: Vocal
@@ -119,9 +129,19 @@
     understands:
     - TauCetiBasic
     - Bubblish
+    naturalLanguage: Bubblish # Floof: explicitly stated natural languages
   - type: FootPrints
     leftBarePrint: "footprint-left-bare-slime"
     rightBarePrint: "footprint-right-bare-slime"
+  - type: DamageForceSay # Floofstation - added unqiue pain messages
+    forceSayStringPrefix: damage-force-say-slime-
+    forceSayStringCount: 7 # Default is 7, but defining it anyway in case it changes or someone wants to add/remove messages
+  - type: Tag #floof
+    tags:
+    - SlimeEmotes
+    - CanPilot # Floof - M3739 - 1307 | Fix Tags
+    - FootstepSound
+    - DoorBumpOpener
 
 - type: entity
   parent: MobHumanDummy

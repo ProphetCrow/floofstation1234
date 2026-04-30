@@ -23,6 +23,7 @@ public sealed class InternalsSystem : EntitySystem
     [Dependency] private readonly GasTankSystem _gasTank = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private readonly RespiratorSystem _respirator = default!;
 
     private EntityQuery<InternalsComponent> _internalsQuery;
 
@@ -38,15 +39,30 @@ public sealed class InternalsSystem : EntitySystem
         SubscribeLocalEvent<InternalsComponent, GetVerbsEvent<InteractionVerb>>(OnGetInteractionVerbs);
         SubscribeLocalEvent<InternalsComponent, InternalsDoAfterEvent>(OnDoAfter);
 
-        SubscribeLocalEvent<StartingGearEquippedEvent>(OnStartingGear);
+        SubscribeLocalEvent<InternalsComponent, StartingGearEquippedEvent>(OnStartingGear);
     }
 
-    private void OnStartingGear(ref StartingGearEquippedEvent ev)
+    private void OnStartingGear(EntityUid uid, InternalsComponent component, ref StartingGearEquippedEvent args)
     {
-        if (!_internalsQuery.TryComp(ev.Entity, out var internals) || internals.BreathToolEntity == null)
+        if (component.BreathToolEntity == null)
             return;
 
-        ToggleInternals(ev.Entity, ev.Entity, force: false, internals);
+        if (component.GasTankEntity != null)
+            return; // already connected
+
+        // Can the entity breathe the air it is currently exposed to?
+        if (!TryComp(uid, out RespiratorComponent? respirator) || _respirator.CanMetabolizeInhaledAir((uid, respirator)))
+            return;
+
+        var tank = FindBestGasTank(uid);
+        if (tank == null)
+            return;
+
+        // Could the entity metabolise the air in the linked gas tank?
+        if (!_respirator.CanMetabolizeGas(uid, tank.Value.Comp.Air))
+            return;
+
+        ToggleInternals(uid, uid, force: false, component);
     }
 
     private void OnGetInteractionVerbs(
@@ -126,9 +142,8 @@ public sealed class InternalsSystem : EntitySystem
 
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, delay, new InternalsDoAfterEvent(), targetEnt, target: targetEnt)
         {
-            BreakOnUserMove = true,
             BreakOnDamage = true,
-            BreakOnTargetMove = true,
+            BreakOnMove =  true,
             MovementThreshold = 0.1f,
         });
     }
@@ -244,13 +259,16 @@ public sealed class InternalsSystem : EntitySystem
     public Entity<GasTankComponent>? FindBestGasTank(
         Entity<HandsComponent?, InventoryComponent?, ContainerManagerComponent?> user)
     {
+        // TODO use _respirator.CanMetabolizeGas() to prioritize metabolizable gasses
         // Prioritise
         // 1. back equipped tanks
         // 2. exo-slot tanks
         // 3. in-hand tanks
         // 4. pocket/belt tanks
 
-        if (!Resolve(user, ref user.Comp1, ref user.Comp2, ref user.Comp3))
+        // Floofstation - do not require the entity to have hands
+        user.Comp1 ??= CompOrNull<HandsComponent>(user);
+        if (!Resolve(user, ref user.Comp2, ref user.Comp3))
             return null;
 
         if (_inventory.TryGetSlotEntity(user, "back", out var backEntity, user.Comp2, user.Comp3) &&
@@ -266,6 +284,10 @@ public sealed class InternalsSystem : EntitySystem
         {
             return (entity.Value, gasTank);
         }
+
+        // Floofstation - see above
+        if (user.Comp1 is null)
+            return null;
 
         foreach (var item in _inventory.GetHandOrInventoryEntities((user.Owner, user.Comp1, user.Comp2)))
         {

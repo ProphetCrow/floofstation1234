@@ -108,6 +108,7 @@
 # Head
 - type: loadout
   id: LoadoutEngineeringHeadBeret
+  canBeHeirloom: true #FLOOF
   category: JobsEngineeringAAUncategorized
   cost: 0
   exclusive: true
@@ -122,6 +123,7 @@
 
 - type: loadout
   id: LoadoutEngineeringHeadHardhatBlue
+  canBeHeirloom: true #FLOOF
   category: JobsEngineeringAAUncategorized
   cost: 0
   exclusive: true
@@ -136,6 +138,7 @@
 
 - type: loadout
   id: LoadoutEngineeringHeadHardhatOrange
+  canBeHeirloom: true #FLOOF
   category: JobsEngineeringAAUncategorized
   cost: 0
   exclusive: true
@@ -150,6 +153,7 @@
 
 - type: loadout
   id: LoadoutEngineeringHeadHardhatYellow
+  canBeHeirloom: true #FLOOF
   category: JobsEngineeringAAUncategorized
   cost: 0
   exclusive: true
@@ -164,9 +168,11 @@
 
 - type: loadout
   id: LoadoutEngineeringHeadHardhatWhite
+  canBeHeirloom: true #FLOOF
   category: JobsEngineeringAAUncategorized
   cost: 0
   exclusive: true
+  customColorTint: true
   requirements:
     - !type:CharacterItemGroupRequirement
       group: LoadoutEngineeringHead
@@ -178,6 +184,7 @@
 
 - type: loadout
   id: LoadoutEngineeringHeadHardhatRed
+  canBeHeirloom: true #FLOOF
   category: JobsEngineeringAAUncategorized
   cost: 0
   exclusive: true
@@ -197,6 +204,20 @@
 # Mask
 
 # Outer
+
+- type: loadout
+  id: LoadoutEngineeringWinterCoat
+  category: JobsEngineeringAAUncategorized
+  cost: 0
+  requirements:
+  - !type:CharacterItemGroupRequirement
+    group: LoadoutEngineeringOuter
+  - !type:CharacterDepartmentRequirement
+    departments:
+      - Engineering
+  items:
+  - ClothingOuterWinterEngi
+
 - type: loadout
   id: LoadoutEngineeringOuterHazard
   category: JobsEngineeringAAUncategorized

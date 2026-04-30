@@ -32,6 +32,7 @@
     duration: 10
     igniteSound:
       path: /Audio/Items/match_strike.ogg
+  - type: ItemTogglePointLight
   - type: PointLight
     enabled: false
     radius: 1.1
@@ -41,6 +42,7 @@
     unlitIcon: match_unlit
     litIcon: match_lit
     burntIcon: match_burnt
+  # Shitmed Change
   - type: Cautery
     speed: 0.2
   - type: SurgeryTool

@@ -8,7 +8,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.Body.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedBodySystem))]
+[Access(typeof(SharedBodySystem), Other = AccessPermissions.ReadWrite)] // Floof - stop limiting access ffs
 public sealed partial class BodyComponent : Component
 {
     /// <summary>
@@ -41,4 +41,7 @@ public sealed partial class BodyComponent : Component
     [ViewVariables]
     [DataField, AutoNetworkedField]
     public HashSet<EntityUid> LegEntities = new();
+
+    [DataField, AutoNetworkedField]
+    public bool ThermalVisibility = true;
 }

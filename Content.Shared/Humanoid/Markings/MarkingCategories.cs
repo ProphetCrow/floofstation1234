@@ -5,13 +5,17 @@ namespace Content.Shared.Humanoid.Markings
     [Serializable, NetSerializable]
     public enum MarkingCategories : byte
     {
+        Face,
         Hair,
         FacialHair,
         Head,
         HeadTop,
         HeadSide,
         Snout,
+        Eyes, //imp, eye customization
         Chest,
+        Underwear, // Floof, add underwear
+        Undershirt, // Floof, add underwear
         RightArm,
         RightHand,
         LeftArm,
@@ -20,8 +24,8 @@ namespace Content.Shared.Humanoid.Markings
         RightFoot,
         LeftLeg,
         LeftFoot,
-        Tail,
         Wings,
+        Tail,
         Overlay
     }
 
@@ -31,6 +35,7 @@ namespace Content.Shared.Humanoid.Markings
         {
             return layer switch
             {
+                HumanoidVisualLayers.Face => MarkingCategories.Face,
                 HumanoidVisualLayers.Hair => MarkingCategories.Hair,
                 HumanoidVisualLayers.FacialHair => MarkingCategories.FacialHair,
                 HumanoidVisualLayers.Head => MarkingCategories.Head,
@@ -38,6 +43,8 @@ namespace Content.Shared.Humanoid.Markings
                 HumanoidVisualLayers.HeadSide => MarkingCategories.HeadSide,
                 HumanoidVisualLayers.Snout => MarkingCategories.Snout,
                 HumanoidVisualLayers.Chest => MarkingCategories.Chest,
+                HumanoidVisualLayers.Underwear => MarkingCategories.Underwear, // Floof, add underwear
+                HumanoidVisualLayers.Undershirt => MarkingCategories.Undershirt, // Floof, add underwear
                 HumanoidVisualLayers.RArm => MarkingCategories.RightArm,
                 HumanoidVisualLayers.LArm => MarkingCategories.LeftArm,
                 HumanoidVisualLayers.RHand => MarkingCategories.RightHand,
@@ -46,8 +53,8 @@ namespace Content.Shared.Humanoid.Markings
                 HumanoidVisualLayers.RLeg => MarkingCategories.RightLeg,
                 HumanoidVisualLayers.LFoot => MarkingCategories.LeftFoot,
                 HumanoidVisualLayers.RFoot => MarkingCategories.RightFoot,
-                HumanoidVisualLayers.Tail => MarkingCategories.Tail,
                 HumanoidVisualLayers.Wings => MarkingCategories.Wings,
+                HumanoidVisualLayers.Tail => MarkingCategories.Tail,
                 _ => MarkingCategories.Overlay
             };
         }

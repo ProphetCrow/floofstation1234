@@ -14,10 +14,12 @@ marking-slot-remove = Remove
 # Categories
 
 markings-category-Hair = Hair
+markings-category-Face = Face
 markings-category-FacialHair = Facial Hair
 markings-category-Head = Head
 markings-category-HeadTop = Head (Top)
 markings-category-HeadSide = Head (Side)
+markings-category-Eyes = Eyes
 markings-category-Snout = Snout
 markings-category-Chest = Chest
 markings-category-RightArm = Right Arm

@@ -6,6 +6,7 @@ using Content.Server.Administration.Managers;
 using Content.Server.Atmos.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
+using Content.Server.Players.RateLimiting;
 using Content.Server.Language;
 using Content.Server.Speech.Components;
 using Content.Server.Speech.EntitySystems;
@@ -15,6 +16,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.Examine;
 using Content.Shared.Ghost;
 using Content.Shared.Language;
 using Content.Shared.IdentityManagement;
@@ -22,8 +24,9 @@ using Content.Shared.Interaction;
 using Content.Shared.Language.Systems;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Players;
+using Content.Shared.Players.RateLimiting;
 using Content.Shared.Radio;
-using Content.Shared.Speech;
+using Content.Shared.Whitelist;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -41,12 +44,16 @@ using Content.Shared.Actions;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Dynamics.Joints;
+using Content.Server.Effects;
+using Content.Server.Hands.Systems;
+using Content.Shared.Popups;
+
 
 namespace Content.Server.Chat.Systems;
 
 // Dear contributor. When I was introducing changes to this system only god and I knew what I was doing.
 // Now only god knows. Please don't touch this code ever again. If you do have to, increment this counter as a warning for others:
-// TOTAL_HOURS_WASTED_HERE_EE = 19
+// TOTAL_HOURS_WASTED_HERE_EE = 20
 
 // TODO refactor whatever active warzone this class and chatmanager have become
 /// <summary>
@@ -73,6 +80,11 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly LanguageSystem _language = default!;
     [Dependency] private readonly TelepathicChatSystem _telepath = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private readonly EmpathyChatSystem _empathy = default!;
+    [Dependency] private readonly SharedPopupSystem _popups = default!; // Floof
+    [Dependency] private readonly HandsSystem _hands = default!; // Floof
 
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
@@ -81,6 +93,17 @@ public sealed partial class ChatSystem : SharedChatSystem
     public const string DefaultAnnouncementSound = "/Audio/Announcements/announce.ogg";
     public const float DefaultObfuscationFactor = 0.2f; // Percentage of symbols in a whispered message that can be seen even by "far" listeners
     public readonly Color DefaultSpeakColor = Color.White;
+
+    // Floofstation START - vars for whether or not certain chat types respect line of sight (LOS) when sending messages
+    public const bool SpeakRespectsLOS = false; // do speak says go through walls?
+    // todo: merge whisper's cool LOS muffling system thing into the generic speak system
+    public const bool WhisperRespectsLOS = false; // do whispers go through walls? sorta! (they use their own system)
+    public const bool EmoteRespectsLOS = true; // do emotes go through walls? nope!
+    public const bool SubtleRespectsLOS = true; // do subtles go through walls? nope!
+    public const bool SubtleOOCRespectsLOS = true; // do subtles go through walls? nope!
+    public const bool TelepathicRespectsLOS = false; // do telepathic messages go through walls? yes!
+    public const bool LocalOOCRespectsLOS = false; // do LOOC messages go through walls? yes!
+    // Floofstation END
 
     private bool _loocEnabled = true;
     private bool _deadLoocEnabled;
@@ -187,7 +210,8 @@ public sealed partial class ChatSystem : SharedChatSystem
         string? nameOverride = null,
         bool checkRadioPrefix = true,
         bool ignoreActionBlocker = false,
-        LanguagePrototype? languageOverride = null
+        LanguagePrototype? languageOverride = null,
+        string? color = null
         )
     {
         if (HasComp<GhostComponent>(source))
@@ -197,7 +221,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             return;
         }
 
-        if (player != null && !_chatManager.HandleRateLimit(player))
+        if (player != null && _chatManager.HandleRateLimit(player) != RateLimitStatus.Allowed)
             return;
 
         // Sus
@@ -233,7 +257,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         var language = languageOverride ?? _language.GetLanguage(source);
 
-        bool shouldCapitalize = (desiredType != InGameICChatType.Emote && desiredType != InGameICChatType.Subtle);
+        bool shouldCapitalize = (desiredType != InGameICChatType.Emote && desiredType != InGameICChatType.Subtle && desiredType != InGameICChatType.SubtleOOC);
         bool shouldPunctuate = _configurationManager.GetCVar(CCVars.ChatPunctuation);
         // Capitalizing the word I only happens in English, so we check language here
         bool shouldCapitalizeTheWordI = (!CultureInfo.CurrentCulture.IsNeutralCulture && CultureInfo.CurrentCulture.Parent.Name == "en")
@@ -265,24 +289,78 @@ public sealed partial class ChatSystem : SharedChatSystem
             }
         }
 
+        if (desiredType == InGameICChatType.Telepathic && language.SpeechOverride.EmpathySpeech)
+        {
+            _empathy.SendEmpathyChat(source, message, range == ChatTransmitRange.HideChat);
+            return;
+        }
+
         // Otherwise, send whatever type.
         switch (desiredType)
         {
             case InGameICChatType.Speak:
-                SendEntitySpeak(source, message, range, nameOverride, language, hideLog, ignoreActionBlocker);
+                SendEntitySpeak(
+                    source,
+                    message,
+                    range,
+                    nameOverride,
+                    language,
+                    hideLog,
+                    ignoreActionBlocker
+                    );
                 break;
             case InGameICChatType.Whisper:
-                SendEntityWhisper(source, message, range, null, nameOverride, language, hideLog, ignoreActionBlocker);
+                SendEntityWhisper(
+                    source,
+                    message,
+                    range,
+                    null,
+                    nameOverride,
+                    language,
+                    hideLog,
+                    ignoreActionBlocker
+                    );
                 break;
             case InGameICChatType.Emote:
-                SendEntityEmote(source, message, range, nameOverride, language, hideLog: hideLog, ignoreActionBlocker: ignoreActionBlocker);
+                SendEntityEmote(
+                    source,
+                    message,
+                    range,
+                    nameOverride,
+                    language,
+                    hideLog: hideLog,
+                    ignoreActionBlocker: ignoreActionBlocker
+                    );
                 break;
             case InGameICChatType.Subtle:
-                SendEntitySubtle(source, message, range, nameOverride, hideLog: hideLog, ignoreActionBlocker: ignoreActionBlocker);
+                SendEntitySubtle(
+                    source,
+                    message,
+                    range,
+                    nameOverride,
+                    hideLog: hideLog,
+                    ignoreActionBlocker: ignoreActionBlocker,
+                    color: color
+                    );
+                break;
+            case InGameICChatType.SubtleOOC:
+                SendEntitySubtle(
+                    source,
+                    $"ooc: {message}",
+                    range,
+                    nameOverride,
+                    hideLog: hideLog,
+                    ignoreActionBlocker: ignoreActionBlocker,
+                    color: color
+                    );
                 break;
             //Nyano - Summary: case adds the telepathic chat sending ability.
             case InGameICChatType.Telepathic:
-                _telepath.SendTelepathicChat(source, message, range == ChatTransmitRange.HideChat);
+                _telepath.SendTelepathicChat(
+                    source,
+                    message,
+                    range == ChatTransmitRange.HideChat
+                    );
                 break;
         }
     }
@@ -299,7 +377,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (!CanSendInGame(message, shell, player))
             return;
 
-        if (player != null && !_chatManager.HandleRateLimit(player))
+        if (player != null && _chatManager.HandleRateLimit(player) != RateLimitStatus.Allowed)
             return;
 
         // It doesn't make any sense for a non-player to send in-game OOC messages, whereas non-players may be sending
@@ -325,7 +403,7 @@ public sealed partial class ChatSystem : SharedChatSystem
                 SendDeadChat(source, player, message, hideChat);
                 break;
             case InGameOOCChatType.Looc:
-                SendLOOC(source, player, message, hideChat);
+                SendLOOC(source, player, message, hideChat, checkLOS: LocalOOCRespectsLOS);
                 break;
         }
     }
@@ -413,7 +491,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             return;
 
         // The original message
-        var message = TransformSpeech(source, FormattedMessage.RemoveMarkup(originalMessage), language);
+        var message = TransformSpeech(source, originalMessage, language); // Floofstation - DO NOT remove markup, there's an EscapeText call upstream.
 
         if (message.Length == 0)
             return;
@@ -428,7 +506,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
         else
         {
-            var nameEv = new TransformSpeakerSpeechEvent(source, Name(source));
+            var nameEv = new TransformSpeakerNameEvent(source, Name(source));
             RaiseLocalEvent(source, nameEv);
             name = nameEv.VoiceName ?? Name(source);
             // Check for a speech verb override
@@ -444,7 +522,18 @@ public sealed partial class ChatSystem : SharedChatSystem
         // The language-obfuscated message wrapped in a "x says y" string
         var wrappedObfuscated = WrapPublicMessage(source, name, obfuscated, language: language);
 
-        SendInVoiceRange(ChatChannel.Local, name, message, wrappedMessage, obfuscated, wrappedObfuscated, source, range, languageOverride: language);
+        SendInVoiceRange(
+            ChatChannel.Local,
+            name,
+            message,
+            wrappedMessage,
+            obfuscated,
+            wrappedObfuscated,
+            source,
+            range,
+            languageOverride: language,
+            checkLOS: SpeakRespectsLOS || language.SpeechOverride.RequireLOS // Floof - added the LOS thing
+            );
 
         var ev = new EntitySpokeEvent(source, message, null, false, language);
         RaiseLocalEvent(source, ev, true);
@@ -486,7 +575,16 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
             return;
 
-        var message = TransformSpeech(source, FormattedMessage.RemoveMarkup(originalMessage), language);
+        // Floof
+        if (language.SpeechOverride.RequireHands
+            // Sign language requires at least two complexly-interacting hands
+            && !(_actionBlocker.CanComplexInteract(source) && _hands.EnumerateHands(source).Count(hand => hand.IsEmpty) >= 2))
+        {
+            _popups.PopupEntity(Loc.GetString("chat-manager-language-requires-hands"), source, source, PopupType.Medium);
+            return;
+        }
+
+        var message = TransformSpeech(source, originalMessage, language); // Floofstation - DO NOT remove markup, there's an EscapeText call upstream.
         if (message.Length == 0)
             return;
 
@@ -500,9 +598,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
         else
         {
-            var nameEv = new TransformSpeakerSpeechEvent(source, Name(source));
+            var nameEv = new TransformSpeakerNameEvent(source, Name(source));
             RaiseLocalEvent(source, nameEv);
-            name = nameEv.VoiceName ?? Name(source);
+            name = nameEv.VoiceName;
         }
         name = FormattedMessage.EscapeText(name);
 
@@ -527,13 +625,15 @@ public sealed partial class ChatSystem : SharedChatSystem
             // Result is the intermediate message derived from the perceived one via obfuscation
             // Wrapped message is the result wrapped in an "x says y" string
             string result, wrappedMessage;
-            if (data.Range <= WhisperClearRange)
+            // Floof: handle languages that require LOS
+            if (!language.SpeechOverride.RequireLOS && data.Range <= WhisperClearRange
+                || _examine.InRangeUnOccluded(source, listener, WhisperClearRange))
             {
                 // Scenario 1: the listener can clearly understand the message
                 result = perceivedMessage;
                 wrappedMessage = WrapWhisperMessage(source, "chat-manager-entity-whisper-wrap-message", name, result, language);
             }
-            else if (_interactionSystem.InRangeUnobstructed(source, listener, WhisperMuffledRange, Shared.Physics.CollisionGroup.Opaque))
+            else if (_examine.InRangeUnOccluded(source, listener, WhisperMuffledRange))
             {
                 // Scenario 2: if the listener is too far, they only hear fragments of the message
                 result = ObfuscateMessageReadability(perceivedMessage);
@@ -541,6 +641,10 @@ public sealed partial class ChatSystem : SharedChatSystem
             }
             else
             {
+                // Floof: If there is no LOS, the listener doesn't see at all
+                if (language.SpeechOverride.RequireLOS)
+                    continue;
+
                 // Scenario 3: If listener is too far and has no line of sight, they can't identify the whisperer's identity
                 result = ObfuscateMessageReadability(perceivedMessage);
                 wrappedMessage = WrapWhisperMessage(source, "chat-manager-entity-whisper-unknown-wrap-message", string.Empty, result, language);
@@ -596,11 +700,22 @@ public sealed partial class ChatSystem : SharedChatSystem
         var wrappedMessage = Loc.GetString("chat-manager-entity-me-wrap-message",
             ("entityName", name),
             ("entity", ent),
-            ("message", FormattedMessage.RemoveMarkup(action)));
+            ("message", action)); // Floofstation - DO NOT remove markup, there's an EscapeText call upstream.
 
         if (checkEmote)
             TryEmoteChatInput(source, action);
-        SendInVoiceRange(ChatChannel.Emotes, name, action, wrappedMessage, obfuscated: "", obfuscatedWrappedMessage: "", source, range, author);
+        SendInVoiceRange(
+            ChatChannel.Emotes,
+            name,
+            action,
+            wrappedMessage,
+            obfuscated: "",
+            obfuscatedWrappedMessage: "",
+            source,
+            range,
+            author,
+            checkLOS: EmoteRespectsLOS // Floofstation: some things dont go through walls (but they go through windows!)
+            );
         if (!hideLog)
             if (name != Name(source))
                 _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Emote from {ToPrettyString(source):user} as {name}: {action}");
@@ -615,7 +730,8 @@ public sealed partial class ChatSystem : SharedChatSystem
         string? nameOverride,
         bool hideLog = false,
         bool ignoreActionBlocker = false,
-        NetUserId? author = null
+        NetUserId? author = null,
+        string? color = null
         )
     {
         if (!_actionBlocker.CanEmote(source) && !ignoreActionBlocker)
@@ -629,7 +745,8 @@ public sealed partial class ChatSystem : SharedChatSystem
         var wrappedMessage = Loc.GetString("chat-manager-entity-subtle-wrap-message",
             ("entityName", name),
             ("entity", ent),
-            ("message", FormattedMessage.RemoveMarkup(action)));
+            ("color", color ?? DefaultSpeakColor.ToHex()),
+            ("message", action)); // Floofstation - DO NOT remove markup, there's an EscapeText call upstream.
 
         foreach (var (session, data) in GetRecipients(source, WhisperClearRange))
         {
@@ -639,7 +756,10 @@ public sealed partial class ChatSystem : SharedChatSystem
             if (MessageRangeCheck(session, data, range) == MessageRangeCheckResult.Disallowed)
                 continue;
 
-            _chatManager.ChatMessageToOne(ChatChannel.Emotes, action, wrappedMessage, source, false, session.Channel);
+            if (SubtleOOCRespectsLOS && !data.InLOS)
+                continue; // Floofstation: some things dont go through walls (but they go through windows!)
+
+            _chatManager.ChatMessageToOne(ChatChannel.Subtle, action, wrappedMessage, source, false, session.Channel);
         }
 
         if (!hideLog)
@@ -650,7 +770,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     }
 
     // ReSharper disable once InconsistentNaming
-    private void SendLOOC(EntityUid source, ICommonSession player, string message, bool hideChat)
+    private void SendLOOC(EntityUid source, ICommonSession player, string message, bool hideChat, bool checkLOS)
     {
         var name = FormattedMessage.EscapeText(Identity.Name(source, EntityManager));
 
@@ -674,7 +794,9 @@ public sealed partial class ChatSystem : SharedChatSystem
             source,
             hideChat ? ChatTransmitRange.HideChat : ChatTransmitRange.Normal,
             player.UserId,
-            languageOverride: LanguageSystem.Universal);
+            languageOverride: LanguageSystem.Universal,
+            checkLOS: checkLOS
+            );
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"LOOC from {player:Player}: {message}");
     }
 
@@ -772,12 +894,34 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// <summary>
     ///     Sends a chat message to the given players in range of the source entity.
     /// </summary>
-    private void SendInVoiceRange(ChatChannel channel, string name, string message, string wrappedMessage, string obfuscated, string obfuscatedWrappedMessage, EntityUid source, ChatTransmitRange range, NetUserId? author = null, LanguagePrototype? languageOverride = null)
+    private void SendInVoiceRange(
+        ChatChannel channel,
+        string name,
+        string message,
+        string wrappedMessage,
+        string obfuscated,
+        string obfuscatedWrappedMessage,
+        EntityUid source,
+        ChatTransmitRange range,
+        NetUserId? author = null,
+        LanguagePrototype? languageOverride = null,
+        bool checkLOS = false
+        )
     {
+        var ignoreLanguage = channel.IsExcemptFromLanguages(); // Floof
         var language = languageOverride ?? _language.GetLanguage(source);
+        // Floof
+        if (!ignoreLanguage && language.SpeechOverride.RequireHands
+            // Sign language requires at least two complexly-interacting hands
+            && !(_actionBlocker.CanComplexInteract(source) && _hands.EnumerateHands(source).Count(hand => hand.IsEmpty) >= 2))
+        {
+            _popups.PopupEntity(Loc.GetString("chat-manager-language-requires-hands"), source, source, PopupType.Medium);
+            return;
+        }
+
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
-            if (language.SpeechOverride.RequireSpeech && channel != ChatChannel.LOOC && channel != ChatChannel.Emotes )
+            if (language.SpeechOverride.RequireSpeech && channel != ChatChannel.LOOC && channel != ChatChannel.Emotes)
             {
                 var sourceGrid = Transform(source).GridUid;
                 float transmitRange = VoiceRange;
@@ -797,20 +941,19 @@ public sealed partial class ChatSystem : SharedChatSystem
 
                 if (session.AttachedEntity != null && Transform(source).Coordinates.TryDistance(EntityManager, Transform(session.AttachedEntity.Value).Coordinates, out var distance) && distance > transmitRange)
                     continue;
-
             }
-
             var entRange = MessageRangeCheck(session, data, range);
             if (entRange == MessageRangeCheckResult.Disallowed)
                 continue;
             var entHideChat = entRange == MessageRangeCheckResult.HideChat;
             if (session.AttachedEntity is not { Valid: true } playerEntity)
                 continue;
+            if (checkLOS && !data.Observer && !data.InLOS)
+                continue; // Floofstation: some things dont go through walls (but they go through windows!)
             EntityUid listener = session.AttachedEntity.Value;
 
-
             // If the channel does not support languages, or the entity can understand the message, send the original message, otherwise send the obfuscated version
-            if (channel == ChatChannel.LOOC || channel == ChatChannel.Emotes || _language.CanUnderstand(listener, language.ID))
+            if (ignoreLanguage || _language.CanUnderstand(listener, language.ID)) // Floof - ignoreLanguage
             {
                 _chatManager.ChatMessageToOne(channel, message, wrappedMessage, source, entHideChat, session.Channel, author: author);
             }
@@ -850,7 +993,15 @@ public sealed partial class ChatSystem : SharedChatSystem
     }
 
     // ReSharper disable once InconsistentNaming
-    private string SanitizeInGameICMessage(EntityUid source, string message, out string? emoteStr, bool capitalize = true, bool punctuate = false, bool capitalizeTheWordI = true)
+    private string SanitizeInGameICMessage(
+        EntityUid source,
+        string message,
+        out string? emoteStr,
+        bool capitalize = true,
+        bool punctuate = false,
+        bool capitalizeTheWordI = true,
+        bool numbersAsWords = true // Floof
+    )
     {
         var newMessage = message.Trim();
         newMessage = SanitizeMessageReplaceWords(newMessage);
@@ -864,7 +1015,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         _sanitizer.TrySanitizeOutSmilies(newMessage, source, out newMessage, out emoteStr);
 
-        return newMessage;
+        return FormattedMessage.EscapeText(newMessage); // Floofstation - where did this sanitization go?
     }
 
     private string SanitizeInGameOOCMessage(string message)
@@ -1004,22 +1155,35 @@ public sealed partial class ChatSystem : SharedChatSystem
 
             var observer = ghostHearing.HasComponent(playerEntity);
 
+            sourceCoords.TryDistance(EntityManager, transformEntity.Coordinates, out var distance);
+
+            // InRangeUnOccluded does this check, but it also checks for occlusion
+            // which doesn't really work for modes that are supposed to go through walls, like Speak
+            var inRange = distance <= voiceGetRange;
+
+            var isVisible = observer || (inRange && _examine.InRangeUnOccluded(source, playerEntity, voiceGetRange));
+
             // even if they are a ghost hearer, in some situations we still need the range
-            if (sourceCoords.TryDistance(EntityManager, transformEntity.Coordinates, out var distance) && distance < voiceGetRange)
+            if (inRange)
             {
-                recipients.Add(player, new ICChatRecipientData(distance, observer));
+                recipients.Add(player, new ICChatRecipientData(distance, observer, InLOS: isVisible));
                 continue;
             }
 
             if (observer)
-                recipients.Add(player, new ICChatRecipientData(-1, true));
+                recipients.Add(player, new ICChatRecipientData(-1, true, InLOS: isVisible));
         }
 
-        RaiseLocalEvent(new ExpandICChatRecipientstEvent(source, voiceGetRange, recipients));
+        RaiseLocalEvent(new ExpandICChatRecipientsEvent(source, voiceGetRange, recipients));
         return recipients;
     }
 
-    public readonly record struct ICChatRecipientData(float Range, bool Observer, bool? HideChatOverride = null)
+    public readonly record struct ICChatRecipientData(
+        float Range,
+        bool Observer,
+        bool? HideChatOverride = null,
+        bool InLOS = true // Floofstation: Detects if the player can see the entity speaking (for emotes, etc.)
+        )
     {
     }
 
@@ -1073,7 +1237,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 ///     This event is raised before chat messages are sent out to clients. This enables some systems to send the chat
 ///     messages to otherwise out-of view entities (e.g. for multiple viewports from cameras).
 /// </summary>
-public record ExpandICChatRecipientstEvent(EntityUid Source, float VoiceRange, Dictionary<ICommonSession, ChatSystem.ICChatRecipientData> Recipients)
+public record ExpandICChatRecipientsEvent(EntityUid Source, float VoiceRange, Dictionary<ICommonSession, ChatSystem.ICChatRecipientData> Recipients)
 {
 }
 

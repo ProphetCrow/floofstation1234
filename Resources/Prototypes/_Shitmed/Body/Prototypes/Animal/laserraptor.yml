@@ -1,0 +1,43 @@
+- type: body
+  id: LaserRaptor
+  name: "space dragon"
+  root: torso
+  slots:
+    head:
+      part: HeadReptilian
+      connections:
+      - torso
+      organs:
+        brain: OrganHumanBrain
+        eyes: OrganLaserEyes
+    torso:
+      part: TorsoReptilian
+      organs:
+        heart: OrganAnimalHeart
+        lungs: OrganAnimalLungs
+        stomach: OrganReptilianStomach
+        liver: OrganAnimalLiver
+        kidneys: OrganAnimalKidneys
+      connections:
+      - right arm # Floof
+      - left arm # Floof
+      - legs
+      - head # Shitmed
+    right arm: # Floof
+      part: RightArmReptilian
+      connections:
+      - right hand
+    left arm:
+      part: LeftArmReptilian
+      connections:
+      - left hand
+    right hand:
+      part: RightHandReptilian
+    left hand:
+      part: LeftHandReptilian
+    legs:
+      part: LegsAnimal
+      connections:
+      - feet
+    feet:
+      part: FeetAnimal

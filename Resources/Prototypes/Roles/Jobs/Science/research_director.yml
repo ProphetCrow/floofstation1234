@@ -3,7 +3,6 @@
   name: job-name-rd
   description: job-description-rd
   playTimeTracker: JobResearchDirector
-  antagAdvantage: 6 # DeltaV - Reduced TC: Head of Staff
   requirements:
     - !type:CharacterDepartmentTimeRequirement
       department: Epistemics # DeltaV - Epistemics Department replacing Science
@@ -17,12 +16,6 @@
         - !type:CharacterTraitRequirement
           traits:
             - AnomalousPositronics
-    - !type:CharacterLogicOrRequirement
-      requirements:
-        - !type:CharacterSpeciesRequirement
-          inverted: true
-          species:
-            - Shadowkin
   weight: 10
   startingGear: ResearchDirectorGear
   icon: "JobIconResearchDirector"

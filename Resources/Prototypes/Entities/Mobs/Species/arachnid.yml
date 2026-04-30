@@ -25,6 +25,7 @@
     - FootstepSound
     - DoorBumpOpener
     - SpiderCraft
+    - ArachnidEmotes # Floof - M3739 - #631
   - type: Butcherable
     butcheringType: Spike
     spawned:
@@ -75,6 +76,7 @@
     understands:
     - TauCetiBasic
     - Arachnic
+    naturalLanguage: Arachnic # Floof: explicitly stated natural languages
   - type: Vocal
     sounds:
       Male: UnisexArachnid
@@ -84,14 +86,18 @@
     proto: spider
   - type: Sprite # I'd prefer if these maps were better. Insert map pun here.
     layers:
+      - map: [ "enum.HumanoidVisualLayers.TailBehind" ]
       - map: [ "enum.HumanoidVisualLayers.Chest" ]
       - map: [ "enum.HumanoidVisualLayers.Head" ]
       - map: [ "enum.HumanoidVisualLayers.Snout" ]
       - map: [ "enum.HumanoidVisualLayers.Eyes" ]
+      - map: [ "enum.HumanoidVisualLayers.Face" ]
       - map: [ "enum.HumanoidVisualLayers.RArm" ]
       - map: [ "enum.HumanoidVisualLayers.LArm" ]
       - map: [ "enum.HumanoidVisualLayers.RLeg" ]
       - map: [ "enum.HumanoidVisualLayers.LLeg" ]
+      - map: [ "enum.HumanoidVisualLayers.Underwear" ] # Floof, add underwear
+      - map: [ "enum.HumanoidVisualLayers.Undershirt" ] # Floof, add underwear
       - map: ["jumpsuit"]
       - map: ["enum.HumanoidVisualLayers.LFoot"]
       - map: ["enum.HumanoidVisualLayers.RFoot"]
@@ -106,6 +112,7 @@
       - map: [ "id" ]
       - map: [ "enum.HumanoidVisualLayers.Tail" ] # Mentioned in moth code: This needs renaming lol.
       - map: [ "neck" ]
+      - map: [ "enum.HumanoidVisualLayers.TailOversuit" ]
       - map: [ "back" ]
       - map: [ "enum.HumanoidVisualLayers.FacialHair" ]
       - map: [ "enum.HumanoidVisualLayers.Hair" ] # Do these need to be here? (arachnid hair arachnid hair)

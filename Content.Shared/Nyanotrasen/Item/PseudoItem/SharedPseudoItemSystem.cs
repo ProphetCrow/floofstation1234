@@ -120,6 +120,7 @@ public abstract partial class SharedPseudoItemSystem : EntitySystem
     protected virtual void OnGettingPickedUpAttempt(EntityUid uid, PseudoItemComponent component,
         GettingPickedUpAttemptEvent args)
     {
+        args.Cancel();
         // Floof - this is a terrible idea. This triggers every time ANY system checks if a pseudo-item can be picked up.
         // WHY DID YOU DO THAT, NYANOTRASEN???
 
@@ -186,8 +187,7 @@ public abstract partial class SharedPseudoItemSystem : EntitySystem
         var ev = new PseudoItemInsertDoAfterEvent();
         var args = new DoAfterArgs(EntityManager, inserter, 5f, ev, toInsert, toInsert, storageEntity)
         {
-            BreakOnTargetMove = true,
-            BreakOnUserMove = true,
+            BreakOnMove = true,
             NeedHand = true
         };
 

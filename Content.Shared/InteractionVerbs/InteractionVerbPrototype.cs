@@ -2,6 +2,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.InteractionVerbs.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Robust.Shared.Utility;
 
@@ -108,13 +109,12 @@ public sealed partial class InteractionVerbPrototype : IPrototype, IInheritingPr
     ///     The user, target, needHand, event, and other required parameters are set up automatically when the do-after is created.
     /// </summary>
     [DataField]
-    public DoAfterArgs DoAfter = new DoAfterArgs()
+    public DoAfterArgs DoAfter = new()
     {
         User = EntityUid.Invalid,
         NetUser = NetEntity.Invalid,
         BreakOnDamage = true,
-        BreakOnTargetMove = true,
-        BreakOnUserMove = true,
+        BreakOnMove = true,
         BreakOnWeightlessMove = true,
         RequireCanInteract = false,
         // Never used, but must be present because the field is non-nullable and will error during serialization if not set.
@@ -151,6 +151,17 @@ public sealed partial class InteractionVerbPrototype : IPrototype, IInheritingPr
 
     [DataField]
     public bool RequiresHands = false;
+
+    // Floofstation section
+    [DataField]
+    public bool RequiresConsciousness = true;
+
+    /// <summary>
+    ///     The true "requires can interact", checks if the user is not cuffed and is not otherwise incapacitated.
+    /// </summary>
+    [DataField("checkInteractionBlocker")]
+    public bool RequiresCanInteract = true;
+    // Floofstation section end
 
     /// <summary>
     ///     Whether this verb requires the user to be able to access the target normally (with their hands or otherwise).
@@ -191,6 +202,13 @@ public sealed partial class InteractionVerbPrototype : IPrototype, IInheritingPr
             DebugTools.Assert(!Inverse, "Inverse ranges do not support clamping.");
             return Math.Clamp(value, Min, Max);
         }
+
+        // Floofstation
+        public float Random(IRobustRandom random)
+        {
+            DebugTools.Assert(!Inverse, "Inverse ranges do not support randomization.");
+            return Min > Max ? random.NextFloat(Max, Min) : random.NextFloat(Min, Max);
+        }
     }
 
     [DataDefinition, Serializable]
@@ -219,10 +237,7 @@ public sealed partial class InteractionVerbPrototype : IPrototype, IInheritingPr
         public bool SoundPerceivedByOthers = true;
 
         [DataField]
-        public AudioParams SoundParams = new AudioParams()
-        {
-            Variation = 0.1f
-        };
+        public AudioParams? SoundParams = null; // Floof - null by default
     }
 
     [Serializable, Flags]

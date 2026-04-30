@@ -35,6 +35,7 @@
     damage:
       types:
         Blunt: 0
+  - type: DamageOtherOnHit
   - type: PhysicalComposition
     materialComposition:
       Cloth: 100
@@ -253,7 +254,10 @@
   description: An adorable stuffed toy that resembles a lizardperson. Made by CentCom as a token initiative to combat speciesism in work environments. "Welcome your new colleagues as you do this plush, with open arms!"
   components:
   - type: Sprite
+    sprite: Objects/Fun/toys.rsi
     state: plushie_lizard
+  - type: Item
+    heldPrefix: plushielizard
   - type: EmitSoundOnUse
     sound:
       path: /Audio/Items/Toys/weh.ogg
@@ -425,9 +429,23 @@
   - type: Sprite
     sprite: Objects/Fun/sharkplush.rsi
     state: blue
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/Items/Toys/rawr.ogg
+  - type: EmitSoundOnActivate
+    sound:
+      path: /Audio/Items/Toys/rawr.ogg
   - type: Item
     heldPrefix: blue
     storedRotation: -90
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    soundHit:
+      path: /Audio/Items/Toys/rawr.ogg
+    attackRate: 1.25 # Floofstation - this is hertz, not seconds
+    damage:
+      types:
+        Blunt: 0
   - type: Tag
     tags:
       - PlushieSharkBlue
@@ -1386,7 +1404,7 @@
     sprite: Objects/Fun/toys.rsi
     state: foamblade
   - type: MeleeWeapon
-    attackRate: 1.5
+    attackRate: 1.5 # Floofstation - this is hertz, not seconds
     angle: 0
     animation: WeaponArcThrust
     wideAnimationRotation: 90
@@ -1582,68 +1600,71 @@
   name: toy sword
   description: New Sandy-Cat plastic sword! Comes with realistic sound and full color! Looks almost like the real thing!
   components:
-    - type: EnergySword
-      colorOptions:
-        - DodgerBlue
-    - type: ItemToggle
-      soundActivate:
-        path: /Audio/Weapons/ebladeon.ogg
-      soundDeactivate:
-        path: /Audio/Weapons/ebladeoff.ogg
-    - type: ItemToggleActiveSound
-      activeSound:
-        path: /Audio/Weapons/ebladehum.ogg
-    - type: Sprite
-      sprite: Objects/Fun/toy_sword.rsi
-      layers:
-        - state: e_sword
-        - state: e_sword_blade
-          color: "#FFFFFF"
-          visible: false
-          shader: unshaded
-          map: [ "blade" ]
-    - type: Item
-      size: Small
-      sprite: Objects/Fun/toy_sword.rsi
-    - type: UseDelay
-      delay: 1.0
-    - type: PointLight
-      enabled: false
-      radius: 2
-      energy: 2
-      color: white
-      netsync: false
-    - type: Appearance
-    - type: ToggleableLightVisuals
-      spriteLayer: blade
-      inhandVisuals:
-        left:
-          - state: inhand-left-blade
-            shader: unshaded
-        right:
-          - state: inhand-right-blade
-            shader: unshaded
-    - type: DisarmMalus
-      malus: 0
-    - type: StaminaDamageOnHit
-      damage: 8
-    - type: MeleeWeapon
-      damage:
-        types:
-          Blunt: 0
-    - type: ItemToggleMeleeWeapon
-      activatedSoundOnHit:
-        path: /Audio/Weapons/eblade1.ogg
-        params:
-          variation: 0.250
-      activatedSoundOnHitNoDamage:
-        path: /Audio/Weapons/eblade1.ogg
-        params:
-          variation: 0.250
-      activatedSoundOnSwing:
-        path: /Audio/Weapons/eblademiss.ogg
-        params:
-          variation: 0.125
+  - type: EnergySword
+    colorOptions:
+      - DodgerBlue
+  - type: ItemToggle
+    soundActivate:
+      path: /Audio/Weapons/ebladeon.ogg
+    soundDeactivate:
+      path: /Audio/Weapons/ebladeoff.ogg
+  - type: ItemToggleActiveSound
+    activeSound:
+      path: /Audio/Weapons/ebladehum.ogg
+  - type: Sprite
+    sprite: Objects/Fun/toy_sword.rsi
+    layers:
+      - state: e_sword
+      - state: e_sword_blade
+        color: "#FFFFFF"
+        visible: false
+        shader: unshaded
+        map: [ "blade" ]
+  - type: Item
+    size: Small
+    sprite: Objects/Fun/toy_sword.rsi
+  - type: UseDelay
+    delay: 1.0
+  - type: ItemTogglePointLight
+  - type: PointLight
+    enabled: false
+    radius: 2
+    energy: 2
+    color: white
+    netsync: false
+  - type: Appearance
+  - type: ToggleableLightVisuals
+    spriteLayer: blade
+    inhandVisuals:
+      left:
+      - state: inhand-left-blade
+        shader: unshaded
+      right:
+      - state: inhand-right-blade
+        shader: unshaded
+  - type: DisarmMalus
+    malus: 0
+  - type: StaminaDamageOnHit
+    damage: 8
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 1.25 # Floofstation - this is hertz, not seconds
+    damage:
+      types:
+        Blunt: 0
+  - type: ItemToggleMeleeWeapon
+    activatedSoundOnHit:
+      path: /Audio/Weapons/eblade1.ogg
+      params:
+        variation: 0.250
+    activatedSoundOnHitNoDamage:
+      path: /Audio/Weapons/eblade1.ogg
+      params:
+        variation: 0.250
+    activatedSoundOnSwing:
+      path: /Audio/Weapons/eblademiss.ogg
+      params:
+        variation: 0.125
 
 - type: entity
   parent: BasePlushie
@@ -1672,7 +1693,7 @@
     sprite: Objects/Weapons/Melee/cutlass.rsi
     state: foam_icon
   - type: MeleeWeapon
-    attackRate: 1.5
+    attackRate: 1.5 # Floofstation - this is hertz, not seconds
     range: 2.0
     angle: 0
     animation: WeaponArcThrust
@@ -1922,12 +1943,12 @@
   - type: ItemToggle
   - type: UseDelay
     delay: 1
-#  - type: ItemToggleActiveSound # DeltaV - No more annoying clicking
-#    activeSound:
-#      path: /Audio/Items/newton_cradle.ogg
-#      params:
-#        volume: -9
-#        maxDistance: 3
+  - type: ItemToggleActiveSound # Floof - Yes have clicking
+    activeSound:
+      path: /Audio/Items/newton_cradle.ogg
+      params:
+        volume: -9
+        maxDistance: 3
 
 - type: entity
   name: The Throngler
@@ -1943,7 +1964,7 @@
       damage: 0.8
     - type: MeleeWeapon
       wideAnimationRotation: -135
-      attackRate: 10
+      attackRate: 10 # Floofstation - this is hertz, not seconds
       damage:
         types:
           Blunt: 0
@@ -1966,3 +1987,83 @@
     - type: Sprite
       sprite: Objects/Fun/toys.rsi
       state: shadowkin
+    - type: EmitSoundOnUse # floof, all sound components
+      sound:
+        path: /Audio/Voice/Shadowkin/mar.ogg
+    - type: EmitSoundOnLand
+      sound:
+        path: /Audio/Nyanotrasen/Voice/Felinid/cat_mew1.ogg
+    - type: EmitSoundOnActivate
+      sound:
+        path: /Audio/Voice/Shadowkin/mar.ogg
+    - type: EmitSoundOnTrigger
+      sound:
+        path: /Audio/Voice/Shadowkin/mar.ogg
+    - type: Food
+      requiresSpecialDigestion: true
+      useSound:
+        path: /Audio/Voice/Shadowkin/mar.ogg
+    - type: MeleeWeapon
+      wideAnimationRotation: 180
+      soundHit:
+        path: /Audio/Voice/Shadowkin/mar.ogg
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieMort
+  name: morty plushie
+  description: A plushie of the lovely Morty. It's a resilient, yet sensitive type of plush.
+  components:
+    - type: Sprite
+      sprite: Objects/Fun/toys.rsi
+      state: mortplush
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieHarpy
+  name: harpy plushie
+  description: A soft plushie of a harpy! A small tag on it guarantees that all feathers are ethically sourced.
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/toys.rsi
+    state: harpyplushie
+  - type: StaminaDamageOnHit
+    damage: 0.8
+  - type: EmitSoundOnActivate
+    sound:
+      path: /Audio/DeltaV/Voice/Harpy/caw1.ogg
+      params:
+        variation: 0.05
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/DeltaV/Voice/Harpy/caw1.ogg
+  - type: EmitSoundOnCollide
+    sound:
+      path: /Audio/DeltaV/Voice/Harpy/caw1.ogg
+      params:
+        variation: 0.05
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/DeltaV/Voice/Harpy/caw1.ogg
+      params:
+        variation: 0.05
+  - type: UseDelay
+    delay: 0.8
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 2 # Floofstation - this is hertz, not seconds
+    damage:
+      types:
+        Blunt: 0
+    soundHit:
+      path: /Audio/DeltaV/Voice/Harpy/caw1.ogg
+      params:
+        variation: 0.05
+    soundSwing:
+      path: /Audio/DeltaV/Voice/Harpy/caw1.ogg
+      params:
+        variation: 0.05
+    soundNoDamage:
+      path: /Audio/DeltaV/Voice/Harpy/caw1.ogg
+      params:
+        variation: 0.05

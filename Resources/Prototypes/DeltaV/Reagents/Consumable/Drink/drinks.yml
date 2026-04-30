@@ -59,6 +59,10 @@
     Poison:
       effects:
       - !type:HealthChange
+        conditions:
+        - !type:OrganType
+          type: Vox
+          shouldHave: false
         damage:
           types:
             Poison: 0.5
@@ -155,12 +159,20 @@
     Poison:
       effects:
       - !type:HealthChange
+        conditions:
+          - !type:OrganType
+            type: Vox
+            shouldHave: false
         damage:
           types:
             Heat: 2
       - !type:FlammableReaction
         multiplier: 0.5
       - !type:Ignite
+          conditions:
+          - !type:OrganType
+            type: Vox
+            shouldHave: false
       - !type:Emote
         emote: Laugh
         probability: 0.25
@@ -213,3 +225,24 @@
     Poison:
       effects:
       - !type:Jitter
+
+- type: reagent
+  id: LemonLimeBitters
+  name: reagent-name-lemon-lime-bitters
+  parent: BaseDrink
+  desc: reagent-desc-lemon-lime-bitters
+  physicalDesc: reagent-physical-desc-fizzy
+  flavor: lemonlimebitters
+  color: "#ffa37e"
+  metamorphicSprite:
+    sprite: DeltaV/Objects/Consumable/Drinks/lemonlimebitters.rsi
+    state: icon_empty
+  metamorphicMaxFillLevels: 4
+  metamorphicFillBaseName: fill-
+  metamorphicChangeColor: false
+  fizziness: 0.2
+  metabolisms:
+    Drink:
+      effects:
+      - !type:SatiateThirst
+        factor: 2

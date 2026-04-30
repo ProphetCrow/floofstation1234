@@ -4,8 +4,10 @@
   abstract: true
   components:
   - type: Sprite
-  - type: Item
-    size: Huge
+  - type: Item # Floof - Gun Shape Refactor
+    size: Large
+    shape:
+    - 0,0,4,1
   - type: Clothing
     sprite: Objects/Weapons/Guns/Battery/laser_retro.rsi
     quickEquip: false
@@ -21,7 +23,6 @@
     fireOnDropChance: 0.15
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser.ogg
-    doRecoil: false
   - type: Battery
     maxCharge: 1000
     startingCharge: 1000
@@ -32,6 +33,25 @@
   - type: Appearance
   - type: StaticPrice
     price: 500
+  - type: MeleeWeapon
+    attackRate: 1.3333
+    damage:
+      types:
+        Blunt: 8.5
+    bluntStaminaDamageFactor: 1.25
+    swapKeys: true
+    disableHeavy: true
+    animation: WeaponArcThrust
+    wideAnimationRotation: 180
+    soundHit:
+      collection: MetalThud
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 2.5
+  - type: DamageOtherOnHit
+    staminaCost: 7
+  # Shitmed Change
   - type: Cautery
     speed: 0.9
   - type: SurgeryTool
@@ -54,7 +74,6 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser.ogg
-    doRecoil: false
   - type: MagazineAmmoProvider
   - type: ItemSlots
     slots:
@@ -73,6 +92,25 @@
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
+  - type: MeleeWeapon
+    attackRate: 1.3333
+    damage:
+      types:
+        Blunt: 9.0
+    bluntStaminaDamageFactor: 1.25
+    swapKeys: true
+    disableHeavy: true
+    animation: WeaponArcThrust
+    wideAnimationRotation: 180
+    soundHit:
+      collection: MetalThud
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 2.5
+  - type: DamageOtherOnHit
+    staminaCost: 7
+  # Shitmed Change
   - type: Cautery
     speed: 0.9
   - type: SurgeryTool
@@ -98,14 +136,26 @@
     slots:
     - Belt
     - suitStorage
+  - type: MeleeWeapon
+    attackRate: 1.2
+    damage:
+      types:
+        Blunt: 7.5
+    bluntStaminaDamageFactor: 1.0
+    wideAnimationRotation: 135
+  - type: DamageOtherOnHit
+    staminaCost: 5
 
 - type: entity
   id: BaseWeaponPowerCellSmall
   parent: BaseWeaponPowerCell
   abstract: true
   components:
-  - type: Item
+  - type: Item # Floof - Gun Shape Refactor
     size: Small
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
   - type: Tag
     tags:
     - Sidearm
@@ -114,6 +164,15 @@
     quickEquip: false
     slots:
     - Belt
+  - type: MeleeWeapon
+    attackRate: 1.2
+    damage:
+      types:
+        Blunt: 7.5
+    bluntStaminaDamageFactor: 1.0
+    wideAnimationRotation: 135
+  - type: DamageOtherOnHit
+    staminaCost: 5
 
 - type: entity
   name: svalinn laser pistol
@@ -248,6 +307,10 @@
     fireCost: 62.5
   - type: StaticPrice
     price: 300
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 4
 
 - type: entity
   name: pulse pistol
@@ -377,6 +440,14 @@
   - type: HitscanBatteryAmmoProvider
     proto: RedHeavyLaser
     fireCost: 100
+  - type: MeleeWeapon
+    attackRate: 1.4
+    damage:
+      types:
+        Blunt: 10
+    bluntStaminaDamageFactor: 1.3333
+  - type: DamageOtherOnHit
+    staminaCost: 9.5
 
 - type: entity
   name: portable particle decelerator
@@ -408,6 +479,22 @@
     - type: Battery
       maxCharge: 10000
       startingCharge: 10000
+    - type: MeleeWeapon
+      attackRate: 1.6
+      damage: # This is super expensive, low attack rate, slows down the user and high stam cost so it can be high
+        types:
+          Blunt: 34
+          Structural: 10
+      swapKeys: false
+      disableHeavy: false
+      disableClick: true
+      bluntStaminaDamageFactor: 1.5
+      heavyRateModifier: 1.0
+      heavyDamageBaseModifier: 1.0
+      heavyStaminaCost: 21
+      wideAnimationRotation: 270
+    - type: DamageOtherOnHit
+      staminaCost: 48
 
 - type: entity
   name: x-ray cannon
@@ -477,6 +564,12 @@
     - type: GuideHelp
       guides:
       - Security
+    - type: MeleeWeapon
+      damage:
+        types:
+          Blunt: 5.0
+      bluntStaminaDamageFactor: 2.5
+      wideAnimationRotation: 135
 
 - type: entity
   name: disabler SMG
@@ -484,8 +577,10 @@
   id: WeaponDisablerSMG
   description: Advanced weapon that exhausts organic targets, weakening them until they collapse.
   components:
-  - type: Item
+  - type: Item # Floof - Gun Shape Refactor
     size: Large
+    shape: 
+    - 0,0,3,1
   - type: Tag
     tags:
       - Taser
@@ -515,6 +610,12 @@
     zeroVisible: true
   - type: StaticPrice
     price: 260
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 6.5
+    bluntStaminaDamageFactor: 2.5
+    wideAnimationRotation: 180
 
 - type: entity
   name: practice disabler
@@ -540,6 +641,11 @@
     - type: ProjectileBatteryAmmoProvider
       proto: BulletDisablerPractice
       fireCost: 100
+    - type: MeleeWeapon
+      damage:
+        types:
+          Blunt: 3
+      bluntStaminaDamageFactor: 1.0
 
 - type: entity
   name: taser
@@ -615,7 +721,20 @@
   - type: StaticPrice
     price: 750
   - type: StealTarget
-    stealGroup: WeaponCaptain
+    stealGroup: WeaponAntiqueLaser
+  - type: MeleeWeapon
+    attackRate: 1.3333
+    damage:
+      types:
+        Blunt: 9
+    bluntStaminaDamageFactor: 1.25
+    wideAnimationRotation: 135
+  - type: DamageOtherOnHit
+    staminaCost: 5
+  - type: SentienceTarget # I hope this is only the captain's gun
+    flavorKind: station-event-random-sentience-flavor-inanimate
+    weight: 0.0002 # 5,000 times less likely than 1 regular animal
+    # not putting a BlockMovement component here cause that's funny.
 
 - type: entity
   name: advanced laser pistol
@@ -651,6 +770,12 @@
   - type: Appearance
   - type: StaticPrice
     price: 63
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 8
+  - type: DamageOtherOnHit
+    staminaCost: 6
 
 - type: entity
   name: C.H.I.M.P. handcannon
@@ -745,3 +870,100 @@
   - type: Appearance
   - type: StaticPrice
     price: 750
+
+- type: entity
+  name: EG-5 energy shotgun
+  parent: [BaseWeaponBattery, BaseGunWieldable]
+  id: WeaponEnergyShotgun
+  description: A rare energy weapon that uses various shotgun configurations. It offers the possibility of both lethal and non-lethal shots, making it a versatile weapon.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-unshaded-4
+        map: ["enum.GunVisualLayers.MagUnshaded"]
+        shader: unshaded
+  - type: Clothing
+    sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
+  - type: Gun
+    fireRate: 2
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
+  - type: ProjectileBatteryAmmoProvider
+    proto: BulletLaserSpread
+    fireCost: 150
+  - type: BatteryWeaponFireModes
+    fireModes:
+    - proto: BulletLaserSpread
+      fireCost: 150
+    - proto: BulletLaserSpreadNarrow
+      fireCost: 200
+    - proto: BulletDisablerSmgSpread
+      fireCost: 120
+  - type: Item # Floof - Gun Shape Refactor
+    size: Large
+    shape:
+    - 0,0,4,1
+    sprite: Objects/Weapons/Guns/Battery/inhands_64x.rsi
+    heldPrefix: energy
+  - type: Tag
+    tags:
+    - HighRiskItem
+  - type: StealTarget
+    stealGroup: HoSAntiqueWeapon
+  - type: GunRequiresWield #remove when inaccuracy on spreads is fixed
+  - type: Battery
+    maxCharge: 1200
+    startingCharge: 1200
+  - type: BatterySelfRecharger
+    autoRecharge: true
+    autoRechargeRate: 24
+    autoRechargePause: true
+    autoRechargePauseTime: 10
+
+- type: entity # Floofstation - Non Recharging Variant
+  name: EG-5-B energy shotgun
+  parent: [BaseWeaponBattery, BaseGunWieldable]
+  id: WeaponSecurityEnergyShotgun
+  description: A rare energy weapon that uses various shotgun configurations. It offers the possibility of both lethal and non-lethal shots, making it a versatile weapon. This variant lacks the iconic self charging battery.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-unshaded-4
+        map: ["enum.GunVisualLayers.MagUnshaded"]
+        shader: unshaded
+  - type: Clothing
+    sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
+  - type: Gun
+    fireRate: 2
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
+  - type: ProjectileBatteryAmmoProvider
+    proto: BulletLaserSpread
+    fireCost: 150
+  - type: BatteryWeaponFireModes
+    fireModes:
+    - proto: BulletLaserSpread
+      fireCost: 150
+    - proto: BulletLaserSpreadNarrow
+      fireCost: 200
+    - proto: BulletDisablerSmgSpread
+      fireCost: 120
+  - type: Item # Floof - Gun Shape Refactor
+    size: Large
+    shape:
+    - 0,0,4,1
+    sprite: Objects/Weapons/Guns/Battery/inhands_64x.rsi
+    heldPrefix: energy
+  - type: Tag
+    tags:
+    - HighRiskItem
+  - type: GunRequiresWield #remove when inaccuracy on spreads is fixed
+  - type: Battery
+    maxCharge: 2400
+    startingCharge: 2400

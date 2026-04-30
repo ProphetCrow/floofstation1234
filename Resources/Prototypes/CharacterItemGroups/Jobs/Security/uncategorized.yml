@@ -20,6 +20,8 @@
       id: LoadoutClothingBeltSecurity
     - type: loadout
       id: LoadoutClothingBeltHolster
+    - type: loadout # Floof - M3739 - #1328
+      id: LoadoutSecurityBeltJudo
 
 #- type: characterItemGroup
 #  id: LoadoutSecurityEars
@@ -50,14 +52,22 @@
       id: LoadoutSpeedLoaderMagnumRubber
     - type: loadout
       id: LoadoutSpeedLoaderMagnumRubberSpare
+    # - type: loadout
+    #  id: LoadoutMagazineMagnum
+    # - type: loadout
+    #  id: LoadoutMagazineMagnumRubber
+    # - type: loadout
+    #  id: LoadoutMagazineMagnumSpare
+    # - type: loadout
+    #  id: LoadoutMagazineMagnumRubberSpare
     - type: loadout
-      id: LoadoutMagazineMagnum
+      id: LoadoutSpeedLoaderRifleHeavy
     - type: loadout
-      id: LoadoutMagazineMagnumRubber
+      id: LoadoutSpeedLoaderRifleHeavySpare
     - type: loadout
-      id: LoadoutMagazineMagnumSpare
+      id: LoadoutSpeedLoaderRifleHeavyRubber
     - type: loadout
-      id: LoadoutMagazineMagnumRubberSpare
+      id: LoadoutSpeedLoaderRifleHeavyRubberSpare
 
 - type: characterItemGroup
   maxItems: 1
@@ -77,10 +87,10 @@
       id: LoadoutSecurityRevolverDeckard
     - type: loadout
       id: LoadoutSecurityRevolverDeckardNonLethal
-    - type: loadout
-      id: LoadoutSecurityPistolN1984
-    - type: loadout
-      id: LoadoutSecurityPistolN1984NonLethal
+   # - type: loadout
+   #   id: LoadoutSecurityPistolN1984
+   # - type: loadout
+   #   id: LoadoutSecurityPistolN1984NonLethal
     - type: loadout
       id: LoadoutSecurityPistolViper
     - type: loadout
@@ -115,6 +125,20 @@
       id: LoadoutSecurityRevolverPython
     - type: loadout
       id: LoadoutSecurityRevolverPythonNonlethal
+    - type: loadout
+      id: LoadoutSecurityArgenti
+    - type: loadout
+      id: LoadoutSecurityArgentiNonLethal
+    - type: loadout
+      id: LoadoutSecurityEquipmentEnergySword
+    - type: loadout # Floofstation - A little special something for the weebs
+      id: LoadoutSecurityKatanaSheath
+    - type: loadout
+      id: LoadoutSecurityDisablerSMG
+    - type: loadout # Floofstation - Wardens need a little love
+      id: LoadoutSecurityWeaponEnergyShotgun
+    - type: loadout # Floofstation - BSO Energy Revolver
+      id: LoadoutSecurityEnergyRevolver
 
 - type: characterItemGroup
   id: LoadoutSecurityEyes
@@ -152,11 +176,13 @@
 #  maxItems: 1
 #  items:
 #
-#- type: characterItemGroup
-#  id: LoadoutSecurityNeck
-#  maxItems: 1
-#  items:
-#
+- type: characterItemGroup 
+  id: LoadoutSecurityNeck # Floof - M3739 - #988
+  maxItems: 1
+  items:
+    - type: loadout
+      id: LoadoutSecurityNeckNeckerchief
+
 - type: characterItemGroup
   id: LoadoutSecurityMask
   maxItems: 1
@@ -173,11 +199,15 @@
     - type: loadout
       id: LoadoutClothingOuterArmorPlateCarrier
     - type: loadout
+      id: LoadoutClothingOuterWinterCoatSec
+    - type: loadout
       id: LoadoutClothingOuterArmorDuraVest
     - type: loadout
       id: LoadoutClothingOuterArmorBasic
     - type: loadout
       id: LoadoutClothingOuterArmorSlim
+    - type: loadout
+      id: LoadoutClothingOuterCoatGreatcoat # Floof - M3739 - #690
 
 - type: characterItemGroup
   id: LoadoutSecurityShoes

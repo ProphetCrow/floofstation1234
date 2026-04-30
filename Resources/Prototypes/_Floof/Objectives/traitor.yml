@@ -1,0 +1,23 @@
+- type: entity
+  parent: [BaseTraitorObjective, BaseTeachLessonObjective]
+  id: TeachLessonRandomHeadObjective
+  description: Kill them, and show everyone we mean business. They only need to die once.
+  components:
+  - type: Objective
+    difficulty: 3.0
+    unique: true
+  - type: TargetObjective
+    title: objective-condition-teach-person-title
+  - type: PickRandomHead
+  - type: TeachLessonCondition
+
+- type: entity # Warden Gloves Steal Objective
+  categories: [HideSpawnMenu]
+  parent: BaseTraitorStealObjective
+  id: WardenGlovesStealObjective
+  components:
+  - type: StealCondition
+    stealGroup: ClothingHandsGlovesKravMaga
+    owner: job-name-warden
+  - type: Objective
+    difficulty: 1

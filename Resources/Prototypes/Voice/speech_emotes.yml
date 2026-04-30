@@ -3,13 +3,10 @@
   id: Scream
   name: chat-emote-name-scream
   category: Vocal
-  icon: Interface/Actions/scream.png
+  icon: Interface/Emotes/scream.png
   whitelist:
     components:
     - Vocal
-  blacklist:
-    components:
-    - BorgChassis
   chatMessages: ["chat-emote-msg-scream"]
   chatTriggers:
     - screams
@@ -25,9 +22,6 @@
   whitelist:
     components:
     - Vocal
-  blacklist:
-    components:
-    - BorgChassischatMessages
   chatMessages: ["chat-emote-msg-laugh"]
   chatTriggers:
     - laughs
@@ -40,12 +34,12 @@
   name: chat-emote-name-honk
   category: Vocal
   icon: Interface/Emotes/honk.png
+  blacklist:
+    tags:
+      - ArachnidEmotes # Floof - M3739 - #631
+      - MothEmotes # Floof - M3739 - #631
+      - ChitinidEmotes # Floof - M3739 - #726
   chatMessages: ["chat-emote-msg-honk"]
-  whitelist:
-    requireAll: true
-    components:
-    - Vocal
-    - BorgChassischatMessages
   chatTriggers:
     - honks
 
@@ -58,8 +52,12 @@
     components:
     - Vocal
   blacklist:
-    components:
-    - BorgChassischatMessages
+    tags:
+      - DionaEmotes # Floof - M3739 - #631
+      - UnathiEmotes
+      - ArachnidEmotes # Floof - M3739 - #631
+      - MothEmotes # Floof - M3739 - #631
+      - ChitinidEmotes # Floof - M3739 - #726
   chatMessages: ["chat-emote-msg-sigh"]
   chatTriggers:
     - sighs
@@ -73,8 +71,11 @@
     components:
     - Vocal
   blacklist:
-    components:
-    - BorgChassis
+    tags:
+      - DionaEmotes # Floof - M3739 - #631
+      - ArachnidEmotes # Floof - M3739 - #631
+      - MothEmotes # Floof - M3739 - #631
+      - ChitinidEmotes # Floof - M3739 - #726
   chatMessages: ["chat-emote-msg-whistle"]
   chatTriggers:
     - whistles
@@ -88,8 +89,11 @@
     components:
     - Vocal
   blacklist:
-    components:
-    - BorgChassis
+    tags:
+      - DionaEmotes # Floof - M3739 - #631
+      - ArachnidEmotes # Floof - M3739 - #631
+      - MothEmotes # Floof - M3739 - #631
+      - ChitinidEmotes # Floof - M3739 - #726
   chatMessages: ["chat-emote-msg-crying"]
   chatTriggers:
     - cries
@@ -104,7 +108,10 @@
   whitelist:
     components:
     - Vocal
+    - Slime # imp
   blacklist:
+    tags:
+      - SiliconEmotes
     components:
     - BorgChassis
   chatMessages: ["chat-emote-msg-squish"]
@@ -121,6 +128,8 @@
     components:
     - Vocal
   blacklist:
+    tags:
+      - SiliconEmotes
     components:
     - BorgChassis
   chatMessages: ["chat-emote-msg-chitter"]
@@ -137,6 +146,8 @@
     components:
       - Vocal
   blacklist:
+    tags:
+      - SiliconEmotes
     components:
     - BorgChassis
   chatMessages: ["chat-emote-msg-squeak"]
@@ -153,6 +164,8 @@
     components:
     - Vocal
   blacklist:
+    tags:
+      - SiliconEmotes
     components:
     - BorgChassis
   chatMessages: ["chat-emote-msg-click"]
@@ -174,6 +187,26 @@
   chatMessages: ["chat-emote-msg-clap"]
   chatTriggers:
     - claps
+
+- type: emote
+  id: ClapSingle
+  name: chat-emote-name-clap-single
+  category: Hands
+  icon: Interface/Emotes/clap.png #TODO: Needs a sprite that distinguishes it better from clap
+  whitelist:
+    components:
+    - Hands
+  blacklist:
+    tags:
+    - SiliconEmotes
+  chatMessages: [ "chat-emote-msg-clap-single" ]
+  chatTriggers:
+    - clap
+    - claps once # floof
+    - claps their hands together
+    - claps her hands together
+    - claps his hands together
+    - claps its hands together
 
 - type: emote
   id: Snap
@@ -243,6 +276,9 @@
   whitelist:
     components:
     - MobState
+  blacklist:
+    tags:
+    - SiliconEmotes
   chatMessages: ["chat-emote-msg-deathgasp"]
   chatTriggers:
   - deathgasp
@@ -256,6 +292,10 @@
 - type: emote
   id: SiliconDeathgasp
   name: chat-emote-name-deathgasp
+  icon: Interface/Emotes/deathgasp.png
+  whitelist:
+    tags:
+    - SiliconEmotes
   chatMessages: ["chat-emote-msg-deathgasp-silicon"]
   chatTriggers:
   - sdeathgasp
@@ -266,10 +306,9 @@
   category: Vocal
   icon: Interface/Emotes/buzz.png
   whitelist:
-    requireAll: true
-    components:
-    - BorgChassis
-    - Vocal
+    tags:
+    - SiliconEmotes
+    - HarpyEmotes
   chatMessages: ["chat-emote-msg-buzz"]
   chatTriggers:
     - buzzes
@@ -279,7 +318,15 @@
   name: chat-emote-name-weh
   category: Vocal
   icon: Interface/Emotes/weh.png
-  chatMessages: [ wehs ]
+  chatMessages: [ floof-chat-emote-msg-weh ]
+  whitelist:
+    components:
+      - Vocal
+  blacklist:
+    tags:
+      - SiliconEmotes
+    components:
+      - BorgChassis
   chatTriggers: # Floof - you can weh now
     - weh
     - wehs
@@ -290,7 +337,9 @@
   category: Vocal
   icon: Interface/Emotes/chirp.png
   whitelist:
-    requireAll: true
+    tags:
+    - HarpyEmotes
+    - ResomiEmotes
     components:
     - Nymph
   chatMessages: ["chat-emote-msg-chirp"]
@@ -304,10 +353,9 @@
   category: Vocal
   icon: Interface/Emotes/beep.png
   whitelist:
-    requireAll: true
-    components:
-    - BorgChassis
-    - Vocal
+    tags:
+    - SiliconEmotes
+    - HarpyEmotes
   chatMessages: ["chat-emote-msg-beep"]
   chatTriggers:
     - beeps
@@ -316,6 +364,10 @@
   id: Boop
   name: chat-emote-name-boop
   category: Vocal
+  whitelist:
+    tags:
+    - SiliconEmotes
+    - HarpyEmotes
   chatMessages: [ boops ]
   chatTriggers:
     - boops
@@ -326,10 +378,9 @@
   category: Vocal
   icon: Interface/Emotes/chime.png
   whitelist:
-    requireAll: true
-    components:
-    - BorgChassis
-    - Vocal
+    tags:
+    - SiliconEmotes
+    - HarpyEmotes
   chatMessages: ["chat-emote-msg-chime"]
   chatTriggers:
     - chimes
@@ -340,10 +391,9 @@
   category: Vocal
   icon: Interface/Emotes/buzztwo.png
   whitelist:
-    requireAll: true
-    components:
-    - BorgChassis
-    - Vocal
+    tags:
+    - SiliconEmotes
+    - HarpyEmotes
   chatMessages: ["chat-emote-msg-buzzestwo"]
   chatTriggers:
     - buzzes twice
@@ -354,10 +404,9 @@
   category: Vocal
   icon: Interface/Emotes/ping.png
   whitelist:
-    requireAll: true
-    components:
-    - BorgChassis
-    - Vocal
+    tags:
+    - SiliconEmotes
+    - HarpyEmotes
   chatMessages: ["chat-emote-msg-ping"]
   chatTriggers:
     - pings
@@ -365,6 +414,11 @@
 - type: emote
   id: Whirr
   name: chat-emote-name-whirr
+  category: Vocal
+  whitelist:
+    tags:
+    - SiliconEmotes
+    - HarpyEmotes
   chatMessages: [ whirrs ]
   chatTriggers:
     - whirrs
@@ -373,6 +427,15 @@
   id: Mars
   name: chat-emote-name-mars
   category: Vocal
+  whitelist:
+    tags:
+    - ShadowkinEmotes
+    - HarpyEmotes
+  blacklist:
+    tags:
+      - SiliconEmotes
+    components:
+    - BorgChassis
   chatMessages: [ mars ]
   chatTriggers:
     - mars
@@ -381,6 +444,15 @@
   id: Wurble
   name: chat-emote-name-wurble
   category: Vocal
+  whitelist:
+    tags:
+    - ShadowkinEmotes
+    - HarpyEmotes
+  blacklist:
+    tags:
+      - SiliconEmotes
+    components:
+    - BorgChassis
   chatMessages: [ wurble ]
   chatTriggers:
     - wurble

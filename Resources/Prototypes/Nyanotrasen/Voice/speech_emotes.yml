@@ -1,17 +1,41 @@
 # vocal emotes
 - type: emote
   id: Hiss
-  name: chat-emote-name-cathisses
+  name: chat-emote-name-hisses
   category: Vocal
-  chatMessages: [ hisses ]
+  icon: Interface/Emotes/hiss.png
+  whitelist:
+    tags:
+    - FelinidEmotes
+    - HarpyEmotes
+    - ShadowkinEmotes
+    - UnathiEmotes
+    - ChitinidEmotes # Floof - M3739 - #726
+  blacklist:
+    tags:
+      - SiliconEmotes
+    components:
+    - BorgChassis
+  chatMessages: [ floof-chat-emote-msg-hiss ]
   chatTriggers:
     - hisses
 
 - type: emote
   id: Meow
-  name: chat-emote-name-catmeow
+  name: chat-emote-name-meow
   category: Vocal
-  chatMessages: [ meows ]
+  icon: Interface/Emotes/meow.png
+  whitelist:
+    tags:
+    - FelinidEmotes
+    - HarpyEmotes
+    - ShadowkinEmotes
+  blacklist:
+    tags:
+      - SiliconEmotes
+    components:
+    - BorgChassis
+  chatMessages: [ floof-chat-emote-msg-meow ]
   chatTriggers:
     - meows
     - miaus
@@ -20,24 +44,59 @@
 
 - type: emote
   id: Mew
-  name: chat-emote-name-catmew
+  name: chat-emote-name-mew
   category: Vocal
-  chatMessages: [ mews ]
+  icon: Interface/Emotes/mew.png
+  whitelist:
+    tags:
+    - FelinidEmotes
+    - HarpyEmotes
+    - ShadowkinEmotes
+  blacklist:
+    tags:
+      - SiliconEmotes
+    components:
+    - BorgChassis
+  chatMessages: [ floof-chat-emote-msg-mew ]
   chatTriggers:
     - mews
 
 - type: emote
   id: Growl
-  name: chat-emote-name-catgrowl
+  name: chat-emote-name-growl
   category: Vocal
-  chatMessages: [ growls ]
+  icon: Interface/Emotes/growl.png
+  whitelist:
+    tags:
+    - FelinidEmotes
+    - HarpyEmotes
+    - ShadowkinEmotes
+    - VulpEmotes
+    - KitsuneEmotes
+  blacklist:
+    tags:
+      - SiliconEmotes
+    components:
+    - BorgChassis
+  chatMessages: [ floof-chat-emote-msg-growl ]
   chatTriggers:
     - growls
 
 - type: emote
   id: Purr
-  name: chat-emote-name-catpurr
+  name: chat-emote-name-purr
   category: Vocal
-  chatMessages: [ purrs ]
+  icon: Interface/Emotes/purr.png
+  whitelist:
+    tags:
+    - FelinidEmotes
+    - HarpyEmotes
+    - ShadowkinEmotes
+  blacklist:
+    tags:
+      - SiliconEmotes
+    components:
+    - BorgChassis
+  chatMessages: [ floof-chat-emote-msg-purr ]
   chatTriggers:
     - purrs

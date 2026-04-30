@@ -28,6 +28,11 @@ namespace Content.Shared.Kitchen
         [DataField("result", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
         public string Result { get; private set; } = string.Empty;
 
+        // Frontier
+        [DataField("resultCount")]
+        public int ResultCount { get; private set; } = 1;
+        // End Frontier
+
         [DataField("time")]
         public uint CookTime { get; private set; } = 5;
 
@@ -36,6 +41,12 @@ namespace Content.Shared.Kitchen
         // TODO Turn this into a ReagentQuantity[]
         public IReadOnlyDictionary<string, FixedPoint2> IngredientsReagents => _ingsReagents;
         public IReadOnlyDictionary<string, FixedPoint2> IngredientsSolids => _ingsSolids;
+
+        /// <summary>
+        /// Is this recipe unavailable in normal circumstances?
+        /// </summary>
+        [DataField]
+        public bool SecretRecipe = false;
 
         /// <summary>
         ///    Count the number of ingredients in a recipe for sorting the recipe list.
@@ -52,5 +63,23 @@ namespace Content.Shared.Kitchen
             }
             return n;
         }
+
+        //Floofstation specific method - Start
+        /// <summary>
+        ///     Sums the quantity of reagents in a recipe for sorting the recipe list.
+        ///     A fallback check if the IngredientCount is equal when sorting the
+        ///     recipe list.
+        /// </summary>
+        /// <returns></returns>
+        public FixedPoint2 ReagentQuantity()
+        {
+            FixedPoint2 n = 0;
+            foreach (FixedPoint2 i in _ingsReagents.Values)
+            {
+                n += i;
+            }
+            return n;
+        }
+        //Floofstation specific method - End
     }
 }

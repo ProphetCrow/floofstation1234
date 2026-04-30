@@ -1,0 +1,26 @@
+# TODO make this a subcategory of items when EE splits items into subcategories
+- type: loadoutCategory
+  id: ItemsLewd
+  root: true
+
+# Justice
+- type: loadoutCategory
+  id: JobsJustice
+  subCategories:
+    - JobsJusticeAAUncategorized
+    - JobsServiceLawyer
+    - JobsJusticeClerk
+    - JobsJusticeChiefJustice
+    - JobsJusticeProsecutor
+
+- type: loadoutCategory
+  id: JobsJusticeAAUncategorized
+
+- type: loadoutCategory
+  id: JobsJusticeClerk
+
+- type: loadoutCategory
+  id: JobsJusticeChiefJustice
+
+- type: loadoutCategory
+  id: JobsJusticeProsecutor

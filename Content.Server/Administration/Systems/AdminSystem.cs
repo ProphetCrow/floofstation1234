@@ -16,7 +16,9 @@ using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Inventory;
+using Content.Shared.Mind;
 using Content.Shared.PDA;
+using Content.Shared.Players;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
@@ -62,6 +64,7 @@ namespace Content.Server.Administration.Systems
 
         private readonly HashSet<NetUserId> _roundActivePlayers = new();
         public readonly PanicBunkerStatus PanicBunker = new();
+        public readonly BabyJailStatus BabyJail = new();
 
         public override void Initialize()
         {
@@ -70,12 +73,24 @@ namespace Content.Server.Administration.Systems
             _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
             _adminManager.OnPermsChanged += OnAdminPermsChanged;
 
+            // Panic Bunker Settings
             Subs.CVar(_config, CCVars.PanicBunkerEnabled, OnPanicBunkerChanged, true);
             Subs.CVar(_config, CCVars.PanicBunkerDisableWithAdmins, OnPanicBunkerDisableWithAdminsChanged, true);
             Subs.CVar(_config, CCVars.PanicBunkerEnableWithoutAdmins, OnPanicBunkerEnableWithoutAdminsChanged, true);
             Subs.CVar(_config, CCVars.PanicBunkerCountDeadminnedAdmins, OnPanicBunkerCountDeadminnedAdminsChanged, true);
             Subs.CVar(_config, CCVars.PanicBunkerShowReason, OnShowReasonChanged, true);
             Subs.CVar(_config, CCVars.PanicBunkerMinAccountAge, OnPanicBunkerMinAccountAgeChanged, true);
+            Subs.CVar(_config, CCVars.PanicBunkerMinOverallHours, OnPanicBunkerMinOverallHoursChanged, true);
+
+            /*
+             * TODO: Remove baby jail code once a more mature gateway process is established. This code is only being issued as a stopgap to help with potential tiding in the immediate future.
+             */
+
+            // Baby Jail Settings
+            Subs.CVar(_config, CCVars.BabyJailEnabled, OnBabyJailChanged, true);
+            Subs.CVar(_config, CCVars.BabyJailShowReason, OnBabyJailShowReasonChanged, true);
+            Subs.CVar(_config, CCVars.BabyJailMaxAccountAge, OnBabyJailMaxAccountAgeChanged, true);
+            Subs.CVar(_config, CCVars.BabyJailMaxOverallHours, OnBabyJailMaxOverallHoursChanged, true);
             Subs.CVar(_config, CCVars.PanicBunkerMinOverallHours, OnPanicBunkerMinOverallHoursChanged, true);
 
             SubscribeLocalEvent<IdentityChangedEvent>(OnIdentityChanged);
@@ -234,19 +249,35 @@ namespace Content.Server.Administration.Systems
                 overallPlaytime = playTime;
             }
 
-            return new PlayerInfo(name, entityName, identityName, startingRole, antag, GetNetEntity(session?.AttachedEntity), data.UserId,
+            return new PlayerInfo(
+                name, entityName, identityName, startingRole, antag, GetNetEntity(session?.AttachedEntity), data.UserId,
                 connected, _roundActivePlayers.Contains(data.UserId), overallPlaytime);
         }
 
         private void OnPanicBunkerChanged(bool enabled)
         {
             PanicBunker.Enabled = enabled;
-            _chat.SendAdminAlert(Loc.GetString(enabled
-                ? "admin-ui-panic-bunker-enabled-admin-alert"
-                : "admin-ui-panic-bunker-disabled-admin-alert"
-            ));
+            _chat.SendAdminAlert(
+                Loc.GetString(
+                    enabled
+                        ? "admin-ui-panic-bunker-enabled-admin-alert"
+                        : "admin-ui-panic-bunker-disabled-admin-alert"
+                ));
 
             SendPanicBunkerStatusAll();
+        }
+
+        private void OnBabyJailChanged(bool enabled)
+        {
+            BabyJail.Enabled = enabled;
+            _chat.SendAdminAlert(
+                Loc.GetString(
+                    enabled
+                        ? "admin-ui-baby-jail-enabled-admin-alert"
+                        : "admin-ui-baby-jail-disabled-admin-alert"
+                ));
+
+            SendBabyJailStatusAll();
         }
 
         private void OnPanicBunkerDisableWithAdminsChanged(bool enabled)
@@ -273,10 +304,22 @@ namespace Content.Server.Administration.Systems
             SendPanicBunkerStatusAll();
         }
 
-        private void OnPanicBunkerMinAccountAgeChanged(int minutes)
+        private void OnBabyJailShowReasonChanged(bool enabled)
         {
-            PanicBunker.MinAccountAgeHours = minutes / 60;
+            BabyJail.ShowReason = enabled;
+            SendBabyJailStatusAll();
+        }
+
+        private void OnPanicBunkerMinAccountAgeChanged(int hours)
+        {
+            PanicBunker.MinAccountAgeHours = hours;
             SendPanicBunkerStatusAll();
+        }
+
+        private void OnBabyJailMaxAccountAgeChanged(int hours)
+        {
+            BabyJail.MaxOverallHours = hours;
+            SendBabyJailStatusAll();
         }
 
         private void OnPanicBunkerMinOverallHoursChanged(int hours)
@@ -285,12 +328,31 @@ namespace Content.Server.Administration.Systems
             SendPanicBunkerStatusAll();
         }
 
+        private void OnBabyJailMaxOverallHoursChanged(int hours)
+        {
+            BabyJail.MaxAccountAgeHours = hours;
+            SendBabyJailStatusAll();
+        }
+
         private void UpdatePanicBunker()
         {
             var admins = PanicBunker.CountDeadminnedAdmins
                 ? _adminManager.AllAdmins
                 : _adminManager.ActiveAdmins;
             var hasAdmins = admins.Any();
+
+            // TODO Fix order dependent Cvars
+            // Please for the sake of my sanity don't make cvars & order dependent.
+            // Just make a bool field on the system instead of having some cvars automatically modify other cvars.
+            //
+            // I.e., this:
+            //   /sudo cvar game.panic_bunker.enabled true
+            //   /sudo cvar game.panic_bunker.disable_with_admins true
+            // and this:
+            //   /sudo cvar game.panic_bunker.disable_with_admins true
+            //   /sudo cvar game.panic_bunker.enabled true
+            //
+            // should have the same effect, but currently setting the disable_with_admins can modify enabled.
 
             if (hasAdmins && PanicBunker.DisableWithAdmins)
             {
@@ -313,75 +375,93 @@ namespace Content.Server.Administration.Systems
             }
         }
 
+        private void SendBabyJailStatusAll()
+        {
+            var ev = new BabyJailChangedEvent(BabyJail);
+            foreach (var admin in _adminManager.AllAdmins)
+            {
+                RaiseNetworkEvent(ev, admin);
+            }
+        }
+
         /// <summary>
         ///     Erases a player from the round.
         ///     This removes them and any trace of them from the round, deleting their
         ///     chat messages and showing a popup to other players.
         ///     Their items are dropped on the ground.
         /// </summary>
-        public void Erase(ICommonSession player)
+        public void Erase(NetUserId uid)
         {
-            var entity = player.AttachedEntity;
-            _chat.DeleteMessagesBy(player);
+            _chat.DeleteMessagesBy(uid);
 
-            if (entity != null && !TerminatingOrDeleted(entity.Value))
+            if (!_minds.TryGetMind(uid, out var mindId, out var mind) || mind.OwnedEntity == null ||
+                TerminatingOrDeleted(mind.OwnedEntity.Value))
+                return;
+
+            var entity = mind.OwnedEntity.Value;
+
+            if (TryComp(entity, out TransformComponent? transform))
             {
-                if (TryComp(entity.Value, out TransformComponent? transform))
-                {
-                    var coordinates = _transform.GetMoverCoordinates(entity.Value, transform);
-                    var name = Identity.Entity(entity.Value, EntityManager);
-                    _popup.PopupCoordinates(Loc.GetString("admin-erase-popup", ("user", name)), coordinates, PopupType.LargeCaution);
-                    var filter = Filter.Pvs(coordinates, 1, EntityManager, _playerManager);
-                    var audioParams = new AudioParams().WithVolume(3);
-                    _audio.PlayStatic("/Audio/DeltaV/Misc/reducedtoatmos.ogg", filter, coordinates, true, audioParams);
-                }
+                var coordinates = _transform.GetMoverCoordinates(entity, transform);
+                var name = Identity.Entity(entity, EntityManager);
+                _popup.PopupCoordinates(
+                    Loc.GetString("admin-erase-popup", ("user", name)), coordinates, PopupType.LargeCaution);
+                var filter = Filter.Pvs(coordinates, 1, EntityManager, _playerManager);
+                var audioParams = new AudioParams().WithVolume(3);
+                _audio.PlayStatic("/Audio/Effects/pop_high.ogg", filter, coordinates, true, audioParams);
+            }
 
-                foreach (var item in _inventory.GetHandOrInventoryEntities(entity.Value))
+            foreach (var item in _inventory.GetHandOrInventoryEntities(entity))
+            {
+                if (TryComp(item, out PdaComponent? pda) &&
+                    TryComp(pda.ContainedId, out StationRecordKeyStorageComponent? keyStorage) &&
+                    keyStorage.Key is { } key &&
+                    _stationRecords.TryGetRecord(key, out GeneralStationRecord? record))
                 {
-                    if (TryComp(item, out PdaComponent? pda) &&
-                        TryComp(pda.ContainedId, out StationRecordKeyStorageComponent? keyStorage) &&
-                        keyStorage.Key is { } key &&
-                        _stationRecords.TryGetRecord(key, out GeneralStationRecord? record))
+                    if (TryComp(entity, out DnaComponent? dna) &&
+                        dna.DNA != record.DNA)
                     {
-                        if (TryComp(entity, out DnaComponent? dna) &&
-                            dna.DNA != record.DNA)
-                        {
-                            continue;
-                        }
-
-                        if (TryComp(entity, out FingerprintComponent? fingerPrint) &&
-                            fingerPrint.Fingerprint != record.Fingerprint)
-                        {
-                            continue;
-                        }
-
-                        _stationRecords.RemoveRecord(key);
-                        Del(item);
+                        continue;
                     }
-                }
 
-                if (_inventory.TryGetContainerSlotEnumerator(entity.Value, out var enumerator))
-                {
-                    while (enumerator.NextItem(out var item, out var slot))
+                    if (TryComp(entity, out FingerprintComponent? fingerPrint) &&
+                        fingerPrint.Fingerprint != record.Fingerprint)
                     {
-                        if (_inventory.TryUnequip(entity.Value, entity.Value, slot.Name, true, true))
-                            _physics.ApplyAngularImpulse(item, ThrowingSystem.ThrowAngularImpulse);
+                        continue;
                     }
-                }
 
-                if (TryComp(entity.Value, out HandsComponent? hands))
-                {
-                    foreach (var hand in _hands.EnumerateHands(entity.Value, hands))
-                    {
-                        _hands.TryDrop(entity.Value, hand, checkActionBlocker: false, doDropInteraction: false, handsComp: hands);
-                    }
+                    _stationRecords.RemoveRecord(key);
+                    Del(item);
                 }
             }
 
-            _minds.WipeMind(player);
+            if (_inventory.TryGetContainerSlotEnumerator(entity, out var enumerator))
+            {
+                while (enumerator.NextItem(out var item, out var slot))
+                {
+                    if (_inventory.TryUnequip(entity, entity, slot.Name, true, true))
+                        _physics.ApplyAngularImpulse(item, ThrowingSystem.ThrowAngularImpulse);
+                }
+            }
+
+            if (TryComp(entity, out HandsComponent? hands))
+            {
+                foreach (var hand in _hands.EnumerateHands(entity, hands))
+                {
+                    _hands.TryDrop(entity, hand, checkActionBlocker: false, doDropInteraction: false, handsComp: hands);
+                }
+            }
+
+            _minds.WipeMind(mindId, mind);
             QueueDel(entity);
 
-            _gameTicker.SpawnObserver(player);
+            if (_playerManager.TryGetSessionById(uid, out var session))
+                _gameTicker.SpawnObserver(session);
+        }
+
+        private void OnSessionPlayTimeUpdated(ICommonSession session)
+        {
+            UpdatePlayerList(session);
         }
     }
 }

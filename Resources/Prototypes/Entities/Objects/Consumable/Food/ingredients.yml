@@ -34,6 +34,9 @@
     solution: food
   - type: TrashOnSolutionEmpty
     solution: food
+  - type: Tag
+    tags:
+      - Ingredient
 
 - type: entity
   abstract: true
@@ -89,10 +92,10 @@
   - type: SolutionContainerManager
     solutions:
       food:
-        maxVol: 50
+        maxVol: 100
         reagents:
         - ReagentId: Flour
-          Quantity: 50
+          Quantity: 100
 
 - type: entity
   parent: [ReagentPacketBase, ItemHeftyBase]
@@ -121,9 +124,10 @@
   - type: SolutionContainerManager
     solutions:
       food:
+        maxVol: 100
         reagents:
         - ReagentId: Cornmeal
-          Quantity: 50
+          Quantity: 100
 
 - type: entity
   parent: ReagentPacketBase
@@ -152,9 +156,10 @@
   - type: SolutionContainerManager
     solutions:
       food:
+        maxVol: 100
         reagents:
         - ReagentId: Rice
-          Quantity: 50
+          Quantity: 100
 
 - type: entity
   parent: ReagentPacketBase
@@ -183,9 +188,10 @@
   - type: SolutionContainerManager
     solutions:
       food:
+        maxVol: 100
         reagents:
         - ReagentId: Sugar
-          Quantity: 50
+          Quantity: 100
 
 - type: entity
   parent: ReagentPacketBase
@@ -208,8 +214,8 @@
 - type: entity
   parent: ReagentPacketBase
   id: ReagentContainerOliveoil
-  name: olive oil
-  description: Olive oil. From space olives presumably.
+  name: olive oil #frontier for consolidating vegetable oils
+  description: Olive oil. From space olives presumably. #frontier
   components:
   - type: Sprite
     state: oliveoil
@@ -272,6 +278,9 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
+  - type: Tag
+    tags:
+      - Ingredient
 
 - type: entity
   name: dough
@@ -302,6 +311,27 @@
       - dough
   - type: Sprite
     state: dough-slice
+  - type: Tag
+    tags:
+    - Slice
+  - type: Construction
+    graph: DoughRope
+    node: start
+
+- type: entity
+  name: dough rope
+  parent: FoodBakingBase
+  id: FoodDoughRope
+  description: A thin noodle of dough. Can be cooked into a bagel.
+  components:
+  - type: FlavorProfile
+    flavors:
+      - dough
+  - type: Sprite
+    state: dough-rope
+  - type: Construction
+    graph: DoughRope
+    node: rolled
 
 - type: entity
   name: cornmeal dough
@@ -331,6 +361,9 @@
       - dough
   - type: Sprite
     state: cornmealdough-slice
+  - type: Tag
+    tags:
+    - Slice
 
 - type: entity
   name: tortilla dough
@@ -363,6 +396,9 @@
   - type: Construction
     graph: Tortilla
     node: start
+  - type: Tag
+    tags:
+    - Slice
 
 - type: entity
   name: flattened tortilla dough
@@ -418,6 +454,9 @@
   - type: Construction
     graph: Pizza
     node: flat
+  - type: SliceableFood
+    count: 3
+    slice: FoodCroissantRaw
 
 - type: entity
   name: pizza bread
@@ -448,6 +487,29 @@
   components:
   - type: Sprite
     state: butter
+  - type: Slippery
+  - type: StepTrigger
+    intersectRatio: 0.2
+  - type: CollisionWake
+    enabled: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      slips:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.2,0.3,0.2"
+        layer:
+        - SlipLayer
+        hard: false
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.2,0.3,0.2"
+        density: 10
+        mask:
+        - ItemMask
   - type: SolutionContainerManager
     solutions:
       food:
@@ -455,7 +517,31 @@
         reagents:
         - ReagentId: Butter
           Quantity: 15
-  - type: Extractable
+  - type: SliceableFood
+    count: 3
+    slice: FoodButterSlice
+  - type: Extractable  # need it for Liquid Butter Floof
+    grindableSolutionName: food
+
+- type: entity
+  name: butter slice
+  parent: FoodBakingBase
+  id: FoodButterSlice
+  description: A pat of delicious, golden, fatty goodness.
+  components:
+  - type: Sprite
+    state: butter-slice
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 6
+        reagents:
+        - ReagentId: Butter
+          Quantity: 5
+  - type: Tag
+    tags:
+    - Slice
+  - type: Extractable # need it for Liquid Butter Floof
     grindableSolutionName: food
 
 - type: entity
@@ -512,6 +598,13 @@
         reagents:
         - ReagentId: Nutriment
           Quantity: 5
+  - type: Tag
+    tags:
+    - Slice
+  - type: FoodSequenceElement
+    entries:
+      Taco: CheeseTaco
+      Burger: CheeseBurger
 
 - type: entity
   name: chèvre log
@@ -559,6 +652,9 @@
           Quantity: 1
         - ReagentId: Vitamin
           Quantity: 0.2
+  - type: Tag
+    tags:
+    - Slice
 
 - type: entity
   name: tofu
@@ -604,6 +700,9 @@
           Quantity: 3
         - ReagentId: Nutriment
           Quantity: 2
+  - type: Tag
+    tags:
+    - Slice
 
 - type: entity
   name: burned mess
@@ -657,6 +756,9 @@
       reagents:
       - ReagentId: CocoaPowder
         Quantity: 2
+  - type: Tag
+    tags:
+      - Ingredient
 
 - type: entity
   parent: BaseFoodCondimentPacket
@@ -677,3 +779,22 @@
   - type: SolutionContainerVisuals
     maxFillLevels: 2
     fillBaseName: packet-solid-
+
+- type: entity
+  name: raw croissant
+  parent: FoodBakingBase
+  id: FoodCroissantRaw
+  description: Buttery, flaky goodness waiting to happen.
+  components:
+  - type: FlavorProfile
+    flavors:
+      - dough
+  - type: Sprite
+    state: croissant-raw
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 4
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 3

@@ -7,7 +7,7 @@
     - PetsNT
     - Zombie
     - Revolutionary
-    - Gorilla
+    - Gorilla # Floof
 
 - type: npcFaction
   id: NanoTrasen
@@ -17,7 +17,7 @@
   - Xeno
   - Zombie
   - Revolutionary
-  - Gorilla
+  - Gorilla # Floof
 
 - type: npcFaction
   id: Mouse
@@ -34,7 +34,10 @@
   - SimpleHostile
   - Zombie
   - Xeno
-  - Gorilla
+  - Gorilla # Floof
+
+- type: npcFaction
+  id: Critter
 
 - type: npcFaction
   id: SimpleHostile
@@ -47,7 +50,8 @@
   - PetsNT
   - Zombie
   - Revolutionary
-  - Gorilla
+  - Gorilla  # Floof
+  - GeometerOfBlood
 
 - type: npcFaction
   id: SimpleNeutral
@@ -60,7 +64,7 @@
   - Xeno
   - PetsNT
   - Zombie
-  - Gorilla
+  - Gorilla # Floof
 
 - type: npcFaction
   id: Xeno
@@ -71,7 +75,7 @@
   - PetsNT
   - Zombie
   - Revolutionary
-  - Gorilla
+  - Gorilla # Floof
 
 - type: npcFaction
   id: Zombie
@@ -83,7 +87,7 @@
   - Passive
   - PetsNT
   - Revolutionary
-  - Gorilla
+  - Gorilla # Floof
 
 - type: npcFaction
   id: Revolutionary
@@ -92,7 +96,7 @@
   - Zombie
   - SimpleHostile
   - Dragon
-  - Gorilla
+  - Gorilla # Floof
 
 - type: npcFaction
   id: Pibble
@@ -117,6 +121,8 @@
 
 - type: npcFaction
   id: Gorilla
+  friendly:
+  - AnimalFriend #floof
   hostile:
   - NanoTrasen
   - Syndicate
@@ -167,4 +173,3 @@
     - GladiabotRed
     - GladiabotGreen
     - GladiabotBlue
-

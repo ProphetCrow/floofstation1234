@@ -1,4 +1,6 @@
 using System.Linq;
+using Content.Shared._Goobstation.MartialArts;
+using Content.Shared._Goobstation.MartialArts.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.CombatMode;
@@ -149,6 +151,13 @@ public sealed partial class StaminaSystem : EntitySystem
             return;
         }
 
+        // Goobstation - Martial Arts
+        if (TryComp<MartialArtsKnowledgeComponent>(args.User, out var knowledgeComp)
+            && TryComp<MartialArtBlockedComponent>(args.Weapon, out var blockedComp)
+            && knowledgeComp.MartialArtsForm == blockedComp.Form)
+            return;
+        // Goobstation
+
         var ev = new StaminaDamageOnHitAttemptEvent();
         RaiseLocalEvent(uid, ref ev);
         if (ev.Cancelled)
@@ -173,6 +182,11 @@ public sealed partial class StaminaSystem : EntitySystem
 
             if (hitEvent.Handled)
                 return;
+            
+            // Begin DeltaV additions
+            // Allow users to modifier stamina damage as well, this part of the event is not handle-able by listeners.
+            RaiseLocalEvent(args.User, hitEvent);
+            // End DeltaV additions
 
             var damage = component.Damage;
 

@@ -24,6 +24,10 @@ using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Audio.Systems;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Components;
+using Content.Shared.Power;
+using Content.Server._Floof.Shadekin; // FloofStation
 
 namespace Content.Server.Light.EntitySystems
 {
@@ -150,7 +154,7 @@ namespace Content.Server.Light.EntitySystems
             // removing a working bulb, so require a delay
             _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, userUid, light.EjectBulbDelay, new PoweredLightDoAfterEvent(), uid, target: uid)
             {
-                BreakOnUserMove = true,
+                BreakOnMove = true,
                 BreakOnDamage = true,
             });
 
@@ -303,7 +307,7 @@ namespace Content.Server.Light.EntitySystems
                 case LightBulbState.Normal:
                     if (powerReceiver.Powered && light.On)
                     {
-                        SetLight(uid, true, lightBulb.Color, light, lightBulb.LightRadius, lightBulb.LightEnergy, lightBulb.LightSoftness);
+                        SetLight(uid, true, lightBulb.Color, light, lightBulb.LightRadius, lightBulb.LightEnergy, lightBulb.LightSoftness, lightBulb.Darklight);
                         _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.On, appearance);
                         var time = _gameTiming.CurTime;
                         if (time > light.LastThunk + ThunkDelay)
@@ -414,7 +418,7 @@ namespace Content.Server.Light.EntitySystems
             SetState(uid, enabled, component);
         }
 
-        private void SetLight(EntityUid uid, bool value, Color? color = null, PoweredLightComponent? light = null, float? radius = null, float? energy = null, float? softness = null)
+        private void SetLight(EntityUid uid, bool value, Color? color = null, PoweredLightComponent? light = null, float? radius = null, float? energy = null, float? softness = null, bool? darklight = null)
         {
             if (!Resolve(uid, ref light))
                 return;
@@ -434,6 +438,16 @@ namespace Content.Server.Light.EntitySystems
                     _pointLight.SetEnergy(uid, (float) energy, pointLight);
                 if (softness != null)
                     _pointLight.SetSoftness(uid, (float) softness, pointLight);
+
+                // FloofStation
+                if (darklight != null)
+                {
+                    if ((bool) darklight)
+                        EnsureComp<DarkLightComponent>(uid);
+                    else if (TryComp<DarkLightComponent>(uid, out var darkcomp))
+                        RemComp(uid, darkcomp);
+                }
+                // FloofStation
             }
         }
 

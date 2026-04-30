@@ -14,10 +14,15 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
 using Content.Shared.Throwing;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Robust.Shared.GameStates;
-using Robust.Shared.Player;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Events;
+using Robust.Shared.Physics.Systems;
+using Content.Shared.Actions.Events;
+using Content.Shared.Climbing.Components;
+using Content.Shared._Goobstation.MartialArts.Components;
 
 namespace Content.Shared.Stunnable;
 
@@ -26,9 +31,11 @@ public abstract class SharedStunSystem : EntitySystem
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
 
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
+    [Dependency] private readonly SharedBroadphaseSystem _broadphase = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private readonly StandingStateSystem _standingState = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
     [Dependency] private readonly SharedLayingDownSystem _layingDown = default!;
@@ -45,12 +52,16 @@ public abstract class SharedStunSystem : EntitySystem
         SubscribeLocalEvent<KnockedDownComponent, ComponentInit>(OnKnockInit);
         SubscribeLocalEvent<KnockedDownComponent, ComponentShutdown>(OnKnockShutdown);
         SubscribeLocalEvent<KnockedDownComponent, StandAttemptEvent>(OnStandAttempt);
+        SubscribeLocalEvent<KnockedDownComponent, DisarmAttemptEvent>(KnockdownStun);
 
         SubscribeLocalEvent<SlowedDownComponent, ComponentInit>(OnSlowInit);
         SubscribeLocalEvent<SlowedDownComponent, ComponentShutdown>(OnSlowRemove);
 
         SubscribeLocalEvent<StunnedComponent, ComponentStartup>(UpdateCanMove);
         SubscribeLocalEvent<StunnedComponent, ComponentShutdown>(UpdateCanMove);
+
+        SubscribeLocalEvent<StunOnContactComponent, ComponentStartup>(OnStunOnContactStartup);
+        SubscribeLocalEvent<StunOnContactComponent, StartCollideEvent>(OnStunOnContactCollide);
 
         // helping people up if they're knocked down
         SubscribeLocalEvent<KnockedDownComponent, InteractHandEvent>(OnInteractHand);
@@ -61,7 +72,7 @@ public abstract class SharedStunSystem : EntitySystem
         // Attempt event subscriptions.
         SubscribeLocalEvent<StunnedComponent, ChangeDirectionAttemptEvent>(OnAttempt);
         SubscribeLocalEvent<StunnedComponent, UpdateCanMoveEvent>(OnMoveAttempt);
-        SubscribeLocalEvent<StunnedComponent, InteractionAttemptEvent>(OnAttempt);
+        SubscribeLocalEvent<StunnedComponent, InteractionAttemptEvent>(OnAttemptInteract);
         SubscribeLocalEvent<StunnedComponent, UseAttemptEvent>(OnAttempt);
         SubscribeLocalEvent<StunnedComponent, ThrowAttemptEvent>(OnAttempt);
         SubscribeLocalEvent<StunnedComponent, DropAttemptEvent>(OnAttempt);
@@ -72,7 +83,10 @@ public abstract class SharedStunSystem : EntitySystem
         SubscribeLocalEvent<MobStateComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
 
-
+    private void OnAttemptInteract(Entity<StunnedComponent> ent, ref InteractionAttemptEvent args)
+    {
+        args.Cancelled = true;
+    }
 
     private void OnMobStateChanged(EntityUid uid, MobStateComponent component, MobStateChangedEvent args)
     {
@@ -105,9 +119,29 @@ public abstract class SharedStunSystem : EntitySystem
         _blocker.UpdateCanMove(uid);
     }
 
+    private void OnStunOnContactStartup(Entity<StunOnContactComponent> ent, ref ComponentStartup args)
+    {
+        if (TryComp<PhysicsComponent>(ent, out var body))
+            _broadphase.RegenerateContacts(ent, body);
+    }
+
+    private void OnStunOnContactCollide(Entity<StunOnContactComponent> ent, ref StartCollideEvent args)
+    {
+        if (args.OurFixtureId != ent.Comp.FixtureId)
+            return;
+
+        if (_entityWhitelist.IsBlacklistPass(ent.Comp.Blacklist, args.OtherEntity))
+            return;
+
+        if (!TryComp<StatusEffectsComponent>(args.OtherEntity, out var status))
+            return;
+
+        TryStun(args.OtherEntity, ent.Comp.Duration, true, status);
+        TryKnockdown(args.OtherEntity, ent.Comp.Duration, true, status);
+    }
+
     private void OnKnockInit(EntityUid uid, KnockedDownComponent component, ComponentInit args)
     {
-        RaiseNetworkEvent(new CheckAutoGetUpEvent(GetNetEntity(uid)));
         _layingDown.TryLieDown(uid, null, null, component.DropHeldItemsBehavior);
     }
 
@@ -130,6 +164,7 @@ public abstract class SharedStunSystem : EntitySystem
     {
         if (component.LifeStage <= ComponentLifeStage.Running)
             args.Cancel();
+        component.FollowUp = false;
     }
 
     private void OnSlowInit(EntityUid uid, SlowedDownComponent component, ComponentInit args)
@@ -172,8 +207,7 @@ public abstract class SharedStunSystem : EntitySystem
     /// <summary>
     ///     Knocks down the entity, making it fall to the ground.
     /// </summary>
-    public bool TryKnockdown(EntityUid uid, TimeSpan time, bool refresh,
-        DropHeldItemsBehavior behavior = DropHeldItemsBehavior.DropIfStanding,
+    public bool TryKnockdown(EntityUid uid, TimeSpan time, bool refresh, DropHeldItemsBehavior behavior,
         StatusEffectsComponent? status = null)
     {
         if (time <= TimeSpan.Zero || !Resolve(uid, ref status, false))
@@ -266,6 +300,16 @@ public abstract class SharedStunSystem : EntitySystem
     private void OnKnockedTileFriction(EntityUid uid, KnockedDownComponent component, ref TileFrictionEvent args)
     {
         args.Modifier *= KnockDownModifier;
+    }
+
+    // should make it so that one time when somebody gets knocked over, you can push them for a short stun.
+    // On the slate for a rework once I make combos eat inputs, but that's not my goal right now.
+    private void KnockdownStun(Entity<KnockedDownComponent> ent, ref DisarmAttemptEvent args)
+    {
+        if (ent.Comp.FollowUp || !TryComp<ClimbingComponent>(ent, out var component) || !component.IsClimbing)
+            return;
+        TryParalyze(ent, TimeSpan.FromSeconds(1.5f), false);
+        ent.Comp.FollowUp = true;
     }
 
     #region Attempt Event Handling

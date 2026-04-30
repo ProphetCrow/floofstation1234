@@ -16,7 +16,7 @@
     ClothingOuterPlagueSuit: 3
     ClothingMaskPlague: 3
     ClothingNeckScarfChaplainStole: 3
-    ClothingHeadsetService: 4
+    ClothingHeadsetScience: 4 # Floof - Chaplain is no longer service dept
     ClothingNeckCrucifix: 3
     ClothingNeckStoleChaplain: 1
     ClothingHandsChaplainWarmers: 1 # Floofstation
@@ -26,6 +26,7 @@
     #ClothingHeadsetService: 2 # Delta-V - Chaplain is no longer service dept
     BoxCandle: 2
     BoxCandleSmall: 2
+    BoxCandleInfinite: 1
     Urn: 5
   emaggedInventory:
     ClothingOuterArmorCult: 1

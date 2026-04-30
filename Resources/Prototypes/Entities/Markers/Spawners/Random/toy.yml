@@ -72,8 +72,6 @@
         - PlushieCentCom
         - PlushieSlimeTider
         - PlushieChillHuman
-        #- PlushieDino DO NOT ADD THIS!!
-        - PlushieDragon
         - PlushieFRavager
         - PlushieFPraetorian
         - PlushieFDrone
@@ -85,7 +83,61 @@
         - PlushieHypnoTempCMO
         - PlushieHypnoTempLO
         - PlushieHypnoTempMysta
-        - Plushiegirlfailure # Floof Plushies End
+        # - Plushiegirlfailure
+        - PlushieKitsuneCaptain
+        - PlushieSapphicHarpyPlushie
+        - PlushieSillyResomi
+        # - PlushieFeistyBartender
+        # - PlushieCoolVulp
+        # - PlushieNoticeableSecurityOfficer
+        - PlushieHarpy
+        - PlushieMort
+        - PlushieAvaliHOP
+        - PlushieKoboldCefJustice
+        - PlushieSlimeBartender
+        - PlushieGrumpyQuartermaster
+        - PlushieHardcoreDj
+        - PlushieHos
+        - PlushieRatLogisticsOfficer
+        - PlushieBunnyChiefMedicalOfficer
+        - PlushieAvianMysta
+        - PlushieBunnyStressRelief
+        - PlushieERTFox
+        - PlushieRescueFox
+        - PlushieArachneNobility
+        - PlushieEldritchCaptain
+        - PlushieLargeTailedFox
+        - PlushieTruePirateCaptain
+        - PlushieHawaiianShirtDoggo
+        - PlushieTiredCargoTechPlushie
+        - PlushieUnholyRed
+        - PlushieDetectiveKitty
+        - PlushieUrsineGal
+        - PlushieStealthyBird
+        - PlushieMedicalHarpy
+        - PlushieElectricIPC
+        - PlushieCuddlyIPC
+        - PlushieFluffyVulpkanin
+        - PlushieSecurityTank
+        - MadScientistPlushie
+        - NotASpiderPlushie
+        - NTUnathiPlushie
+        - HappyParamedicPlushie
+        - BraveCaptainPlushie
+        - BlueCorpsmanShadekinPlushie
+        - MedicalMothPlushie
+        - CheerfulQuadborgPlushie
+        - VampiricVulpkaninPlushie
+        - KindDetectivePlushie
+        - MusicianRaccoonPlushie
+        - SleepyHarpyPlushie
+        - GoblinPlushie
+        - MutantPlushie
+        - TwoTailedCommandPlushie
+        - PlushieBrashKitsune
+        - PlushieHarmlessCaptain
+        - PlushieDetectiveVulps
+        # Floof Plushies End
       chance: 0.5
       offset: 0.2
 

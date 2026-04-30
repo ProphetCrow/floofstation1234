@@ -1,7 +1,10 @@
 using System.Linq;
 using System.Text.RegularExpressions;
+using Content.Shared._Floof.LoadoutsAndTraits.Data;
 using Content.Shared.CCVar;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Clothing.Loadouts.Prototypes;
+using Content.Shared.Clothing.Loadouts.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -22,7 +25,7 @@ namespace Content.Shared.Preferences;
 [Serializable, NetSerializable]
 public sealed partial class HumanoidCharacterProfile : ICharacterProfile
 {
-    private static readonly Regex RestrictedNameRegex = new("[^A-Z,a-z,0-9, -]");
+    private static readonly Regex RestrictedNameRegex = new("[^A-Z,a-z,0-9, ,\\-,']"); // Floof, allow apostrophes in character names
     private static readonly Regex ICNameCaseRegex = new(@"^(?<word>\w)|\b(?<word>\w)(?=\w*$)");
 
     public const int MaxNameLength = 64;
@@ -43,13 +46,13 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
 
     /// Enabled traits
     [DataField]
-    private HashSet<string> _traitPreferences = new();
+    private HashSet<TraitPreference> _traitPreferences = new(); // Floof - change to TraitPreference
 
     /// <see cref="_loadoutPreferences"/>
-    public HashSet<string> LoadoutPreferences => _loadoutPreferences;
+    public HashSet<LoadoutPreference> LoadoutPreferences => _loadoutPreferences;
 
     [DataField]
-    private HashSet<string> _loadoutPreferences = new();
+    private HashSet<LoadoutPreference> _loadoutPreferences = new();
 
     [DataField]
     public string Name { get; set; } = "John Doe";
@@ -103,12 +106,16 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
     public IReadOnlySet<string> AntagPreferences => _antagPreferences;
 
     /// <see cref="_traitPreferences"/>
-    public IReadOnlySet<string> TraitPreferences => _traitPreferences;
+    public IReadOnlySet<TraitPreference> TraitPreferences => _traitPreferences; // Floof - change to TraitPreference
 
     /// If we're unable to get one of our preferred jobs do we spawn as a fallback job or do we stay in lobby
     [DataField]
     public PreferenceUnavailableMode PreferenceUnavailable { get; private set; } =
         PreferenceUnavailableMode.SpawnAsOverflow;
+
+    // Floof
+    [DataField]
+    public string? FavoriteDrink { get; private set; }
 
     public HumanoidCharacterProfile(
         string name,
@@ -127,8 +134,11 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
         BackpackPreference backpack,
         PreferenceUnavailableMode preferenceUnavailable,
         HashSet<string> antagPreferences,
-        HashSet<string> traitPreferences,
-        HashSet<string> loadoutPreferences)
+        HashSet<TraitPreference> traitPreferences, // Floof - change to TraitPreference
+        HashSet<LoadoutPreference> loadoutPreferences,
+
+        // Floof
+        string? favoriteDrink)
     {
         Name = name;
         FlavorText = flavortext;
@@ -148,6 +158,9 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
         _antagPreferences = antagPreferences;
         _traitPreferences = traitPreferences;
         _loadoutPreferences = loadoutPreferences;
+
+        // Floof
+        FavoriteDrink = favoriteDrink;
     }
 
     /// <summary>Copy constructor</summary>
@@ -169,8 +182,9 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
             other.Backpack,
             other.PreferenceUnavailable,
             new HashSet<string>(other.AntagPreferences),
-            new HashSet<string>(other.TraitPreferences),
-            new HashSet<string>(other.LoadoutPreferences))
+            new(other.TraitPreferences),
+            new(other.LoadoutPreferences),
+            other.FavoriteDrink)
     {
     }
 
@@ -301,27 +315,50 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
 
     public HumanoidCharacterProfile WithTraitPreference(string traitId, bool pref)
     {
-        var list = new HashSet<string>(_traitPreferences);
+        var list = new HashSet<TraitPreference>(_traitPreferences);
 
         if (pref)
-            list.Add(traitId);
+            list.Add(new(traitId, true));
         else
-            list.Remove(traitId);
+            list.RemoveWhere(it => it.Prototype == traitId);
 
         return new(this) { _traitPreferences = list };
     }
 
-    public HumanoidCharacterProfile WithLoadoutPreference(string loadoutId, bool pref)
-    {
-        var list = new HashSet<string>(_loadoutPreferences);
+    // Floofstation. Deep-copy the trait preferences.
+    public HumanoidCharacterProfile WithTraitPreferences(IEnumerable<TraitPreference> traitPreferences) =>
+        new(this)
+        {
+            _traitPreferences = traitPreferences.Where(it => it.Selected).Select(it => new TraitPreference(it)).ToHashSet()
+        };
 
+    public HumanoidCharacterProfile WithLoadoutPreference(
+        string loadoutId,
+        bool pref,
+        string? customName = null,
+        string? customDescription = null,
+        string? customColor = null,
+        bool? customHeirloom = null)
+    {
+        var list = new HashSet<LoadoutPreference>(_loadoutPreferences);
+
+        list.RemoveWhere(l => l.LoadoutName == loadoutId);
         if (pref)
-            list.Add(loadoutId);
-        else
-            list.Remove(loadoutId);
+            list.Add(new(loadoutId, customName, customDescription, customColor, customHeirloom) { Selected = pref });
 
         return new HumanoidCharacterProfile(this) { _loadoutPreferences = list };
     }
+
+    // Floofstation. Deep-copy the loadout preferences.
+    public HumanoidCharacterProfile WithLoadoutPreferences(IEnumerable<LoadoutPreference> loadoutPreferences) =>
+        new(this)
+        {
+            _loadoutPreferences = loadoutPreferences.Where(it => it.Selected).Select(it => new LoadoutPreference(it)).ToHashSet()
+        };
+
+    // Floofstation
+    public HumanoidCharacterProfile WithFavoriteDrink(string? favoriteDrink) =>
+        new(this) { FavoriteDrink = favoriteDrink };
 
     public string Summary =>
         Loc.GetString(
@@ -346,7 +383,9 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
             && _traitPreferences.SequenceEqual(other._traitPreferences)
             && LoadoutPreferences.SequenceEqual(other.LoadoutPreferences)
             && Appearance.MemberwiseEquals(other.Appearance)
-            && FlavorText == other.FlavorText;
+            && FlavorText == other.FlavorText
+            // Floof
+            && FavoriteDrink == other.FavoriteDrink;
     }
 
     public void EnsureValid(ICommonSession session, IDependencyCollection collection)
@@ -464,14 +503,17 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
 
         var antags = AntagPreferences
             .Where(id => prototypeManager.TryIndex<AntagPrototype>(id, out var antag) && antag.SetPreference)
+            .Distinct()
             .ToList();
 
         var traits = TraitPreferences
-            .Where(prototypeManager.HasIndex<TraitPrototype>)
+            .Where(it => prototypeManager.HasIndex<TraitPrototype>(it.Prototype))
+            .Distinct()
             .ToList();
 
         var loadouts = LoadoutPreferences
-            .Where(prototypeManager.HasIndex<LoadoutPrototype>)
+            .Where(l => prototypeManager.HasIndex<LoadoutPrototype>(l.LoadoutName))
+            .Distinct()
             .ToList();
 
         Name = name;
@@ -500,6 +542,10 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
 
         _loadoutPreferences.Clear();
         _loadoutPreferences.UnionWith(loadouts);
+
+        // Floof
+        if (FavoriteDrink is not null && !prototypeManager.HasIndex<ReagentPrototype>(FavoriteDrink))
+            FavoriteDrink = null;
     }
 
     public ICharacterProfile Validated(ICommonSession session, IDependencyCollection collection)
@@ -539,6 +585,10 @@ public sealed partial class HumanoidCharacterProfile : ICharacterProfile
         hashCode.Add((int) SpawnPriority);
         hashCode.Add((int) PreferenceUnavailable);
         hashCode.Add(Customspeciename);
+
+        // Floof
+        hashCode.Add(FavoriteDrink);
+
         return hashCode.ToHashCode();
     }
 
