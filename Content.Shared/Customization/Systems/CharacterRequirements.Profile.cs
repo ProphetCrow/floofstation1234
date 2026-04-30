@@ -323,7 +323,7 @@ public sealed partial class CharacterTraitRequirement : CharacterRequirement
             ("traits", $"[color={color}]{string.Join($"[/color], [color={color}]",
                 Traits.Select(t => Loc.GetString($"trait-name-{t}")))}[/color]"));
 
-        return Traits.Any(t => profile.TraitPreferences.Contains(t.ToString()));
+        return Traits.Any(t => profile.TraitPreferences.Any(it => it.Prototype == t));
     }
 }
 
@@ -384,15 +384,18 @@ public sealed partial class CharacterItemGroupRequirement : CharacterRequirement
     {
         var group = prototypeManager.Index(Group);
 
-        // Get the count of items in the group that are in the profile
-        var items = group.Items.Select(item => item.TryGetValue(profile, prototypeManager, out _) ? item.ID : null)
-            .Where(id => id != null)
-            .ToList();
-        var count = items.Count;
-
-        // If prototype is selected, remove one from the count
-        if (items.ToList().Contains(prototype.ID))
-            count--;
+        // Floof: let traits have negative item group slots (allowing more traits to be taken from that category)
+        var count = group.Items.Select(item => item.TryGetValue(profile, prototypeManager, out _) ? item.ID : null)
+            .Where(id => id != null && id != prototype.ID)
+            .Sum(id =>
+        {
+            // This disgusting ELIF nest requires an engine PR to make less terrible.
+            if (prototypeManager.TryIndex<LoadoutPrototype>(id!, out var loadoutPrototype))
+                return loadoutPrototype.Slots;
+            if (prototypeManager.TryIndex<TraitPrototype>(id!, out var traitPrototype))
+                return traitPrototype.ItemGroupSlots;
+            return 1;
+        });
 
         reason = Loc.GetString(
             "character-item-group-requirement",

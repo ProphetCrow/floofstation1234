@@ -34,7 +34,6 @@ public sealed class LoadoutSystem : EntitySystem
     [Dependency] private readonly ISerializationManager _serialization = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
 
 
     public override void Initialize()
@@ -46,11 +45,9 @@ public sealed class LoadoutSystem : EntitySystem
     private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)
     {
         if (ev.JobId == null
-            || !_protoMan.TryIndex<JobPrototype>(ev.JobId, out var job)
+            || !_protoMan.TryIndex<JobPrototype>(ev.JobId, out _)
             || !_configurationManager.GetCVar(CCVars.GameLoadoutsEnabled))
             return;
-
-        _stationSpawning.EquipJobName(ev.Mob, job);
 
         ApplyCharacterLoadout(
             ev.Mob,
@@ -90,7 +87,13 @@ public sealed class LoadoutSystem : EntitySystem
         }
 
         foreach (var loadout in allLoadouts)
+        #if EXCEPTION_TOLERANCE
+        try // Floofstation - try-catch in exception tolerance mode
+        #endif
         {
+            if (!Exists(loadout.Item1))
+                continue; // Floofstation - skip failed loadouts. This used to cause roundstart loop.
+
             var loadoutProto = _protoMan.Index<LoadoutPrototype>(loadout.Item2.LoadoutName);
             if (loadoutProto.CustomName && loadout.Item2.CustomName != null)
                 _meta.SetEntityName(loadout.Item1, loadout.Item2.CustomName);
@@ -112,8 +115,19 @@ public sealed class LoadoutSystem : EntitySystem
             foreach (var function in loadoutProto.Functions)
                 function.OnPlayerSpawn(uid, loadout.Item1, _componentFactory, EntityManager, _serialization);
         }
+        #if EXCEPTION_TOLERANCE
+        catch (Exception e) // Also floofstation
+        {
+            Log.Error("Caught exception while spawning loadouts.", e);
+        }
+        #endif
 
+
+        #if EXCEPTION_TOLERANCE
+        try { // Floofstation
+        #endif
         // Pick the heirloom
+        heirlooms.RemoveAll(it => !Exists(it.Item1)); // Floofstation - exclude invalid heirlooms
         if (heirlooms.Any())
         {
             var heirloom = _random.Pick(heirlooms);
@@ -124,5 +138,10 @@ public sealed class LoadoutSystem : EntitySystem
             Dirty(uid, haver);
             Dirty(heirloom.Item1, comp);
         }
+        #if EXCEPTION_TOLERANCE
+        } catch (Exception e) { // Also floofstation
+            Log.Error("Caught exception while applying heirloom.", e);
+        }
+        #endif
     }
 }

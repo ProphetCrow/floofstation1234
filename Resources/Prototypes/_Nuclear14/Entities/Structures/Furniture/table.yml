@@ -458,7 +458,7 @@
 
 - type: entity
   id: N14TableWoodSettler
-  parent: Table
+  parent: TableWood # Floof - M3739  - #1113 - No more growing steel.
   name: wooden table
   description: A wooden table used by settlers.
   components:
@@ -492,5 +492,5 @@
   - type: Icon
     sprite: _Nuclear14/Structures/Furniture/Tables/barcounter.rsi
   - type: Construction
-    graph: N14TableCounterBarRecipes
-    node: start
+    graph: BarCounter
+    node: barcounter

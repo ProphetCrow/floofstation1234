@@ -11,11 +11,25 @@
         lungs: OrganDragonLungs
         stomach: OrganAnimalStomach
         liver: OrganAnimalLiver
-        heart: OrganAnimalHeart
+        heart: OrganDragonHeart # Floof
         kidneys: OrganAnimalKidneys
     legs:
       part: LegsAnimal
       connections:
+      - right arm # Floof
+      - left arm # Floof
       - feet
+    right arm: # Floof
+      part: RightArmFish
+      connections:
+      - right hand
+    left arm:
+      part: LeftArmFish
+      connections:
+      - left hand
+    right hand:
+      part: RightHandFish
+    left hand:
+      part: LeftHandFish
     feet:
       part: FeetAnimal

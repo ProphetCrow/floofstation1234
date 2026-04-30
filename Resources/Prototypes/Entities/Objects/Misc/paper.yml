@@ -77,6 +77,25 @@
     sound: /Audio/SimpleStation14/Items/Handling/paper_drop.ogg
   - type: EmitSoundOnLand
     sound: /Audio/SimpleStation14/Items/Handling/paper_drop.ogg
+  # FLOOF ADD START: Slide papers and such under doors
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemSlideUnderDoorMask
+        restitution: 0.3
+        friction: 0.2
+  # FLOOF ADD END
+# Corvax-Printer-Start
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      SheetPrinter: 100
+# Corvax-Printer-End
 
 - type: entity
   name: paper scrap
@@ -349,6 +368,13 @@
     damage:
       types:
         Piercing: 3
+  # Floof: make pens clicky
+  # TODO: make this toggle writeable state
+  - type: EmitSoundOnUse
+    sound:
+      collection: PenClick
+  - type: UseDelay
+    delay: 0.5
 
 - type: entity
   parent: Pen
@@ -845,3 +871,16 @@
   - type: Construction
     graph: PaperEnvelope
     node: envelope
+  # FLOOF ADD START: Slide papers and such under doors
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemSlideUnderDoorMask
+        restitution: 0.3
+        friction: 0.2
+  # FLOOF ADD END

@@ -45,6 +45,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Dynamics.Joints;
 using Content.Server.Effects;
+using Content.Server.Hands.Systems;
 using Content.Shared.Popups;
 
 
@@ -52,7 +53,7 @@ namespace Content.Server.Chat.Systems;
 
 // Dear contributor. When I was introducing changes to this system only god and I knew what I was doing.
 // Now only god knows. Please don't touch this code ever again. If you do have to, increment this counter as a warning for others:
-// TOTAL_HOURS_WASTED_HERE_EE = 19
+// TOTAL_HOURS_WASTED_HERE_EE = 20
 
 // TODO refactor whatever active warzone this class and chatmanager have become
 /// <summary>
@@ -83,6 +84,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly ExamineSystemShared _examine = default!;
     [Dependency] private readonly EmpathyChatSystem _empathy = default!;
     [Dependency] private readonly SharedPopupSystem _popups = default!; // Floof
+    [Dependency] private readonly HandsSystem _hands = default!; // Floof
 
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
@@ -489,7 +491,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             return;
 
         // The original message
-        var message = TransformSpeech(source, FormattedMessage.RemoveMarkup(originalMessage), language);
+        var message = TransformSpeech(source, originalMessage, language); // Floofstation - DO NOT remove markup, there's an EscapeText call upstream.
 
         if (message.Length == 0)
             return;
@@ -573,7 +575,16 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
             return;
 
-        var message = TransformSpeech(source, FormattedMessage.RemoveMarkup(originalMessage), language);
+        // Floof
+        if (language.SpeechOverride.RequireHands
+            // Sign language requires at least two complexly-interacting hands
+            && !(_actionBlocker.CanComplexInteract(source) && _hands.EnumerateHands(source).Count(hand => hand.IsEmpty) >= 2))
+        {
+            _popups.PopupEntity(Loc.GetString("chat-manager-language-requires-hands"), source, source, PopupType.Medium);
+            return;
+        }
+
+        var message = TransformSpeech(source, originalMessage, language); // Floofstation - DO NOT remove markup, there's an EscapeText call upstream.
         if (message.Length == 0)
             return;
 
@@ -614,13 +625,15 @@ public sealed partial class ChatSystem : SharedChatSystem
             // Result is the intermediate message derived from the perceived one via obfuscation
             // Wrapped message is the result wrapped in an "x says y" string
             string result, wrappedMessage;
-            if (data.Range <= WhisperClearRange)
+            // Floof: handle languages that require LOS
+            if (!language.SpeechOverride.RequireLOS && data.Range <= WhisperClearRange
+                || _examine.InRangeUnOccluded(source, listener, WhisperClearRange))
             {
                 // Scenario 1: the listener can clearly understand the message
                 result = perceivedMessage;
                 wrappedMessage = WrapWhisperMessage(source, "chat-manager-entity-whisper-wrap-message", name, result, language);
             }
-            else if (_interactionSystem.InRangeUnobstructed(source, listener, WhisperMuffledRange, Shared.Physics.CollisionGroup.Opaque))
+            else if (_examine.InRangeUnOccluded(source, listener, WhisperMuffledRange))
             {
                 // Scenario 2: if the listener is too far, they only hear fragments of the message
                 result = ObfuscateMessageReadability(perceivedMessage);
@@ -628,6 +641,10 @@ public sealed partial class ChatSystem : SharedChatSystem
             }
             else
             {
+                // Floof: If there is no LOS, the listener doesn't see at all
+                if (language.SpeechOverride.RequireLOS)
+                    continue;
+
                 // Scenario 3: If listener is too far and has no line of sight, they can't identify the whisperer's identity
                 result = ObfuscateMessageReadability(perceivedMessage);
                 wrappedMessage = WrapWhisperMessage(source, "chat-manager-entity-whisper-unknown-wrap-message", string.Empty, result, language);
@@ -683,7 +700,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         var wrappedMessage = Loc.GetString("chat-manager-entity-me-wrap-message",
             ("entityName", name),
             ("entity", ent),
-            ("message", FormattedMessage.RemoveMarkup(action)));
+            ("message", action)); // Floofstation - DO NOT remove markup, there's an EscapeText call upstream.
 
         if (checkEmote)
             TryEmoteChatInput(source, action);
@@ -729,7 +746,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             ("entityName", name),
             ("entity", ent),
             ("color", color ?? DefaultSpeakColor.ToHex()),
-            ("message", FormattedMessage.RemoveMarkupPermissive(action)));
+            ("message", action)); // Floofstation - DO NOT remove markup, there's an EscapeText call upstream.
 
         foreach (var (session, data) in GetRecipients(source, WhisperClearRange))
         {
@@ -742,7 +759,7 @@ public sealed partial class ChatSystem : SharedChatSystem
             if (SubtleOOCRespectsLOS && !data.InLOS)
                 continue; // Floofstation: some things dont go through walls (but they go through windows!)
 
-            _chatManager.ChatMessageToOne(ChatChannel.Emotes, action, wrappedMessage, source, false, session.Channel);
+            _chatManager.ChatMessageToOne(ChatChannel.Subtle, action, wrappedMessage, source, false, session.Channel);
         }
 
         if (!hideLog)
@@ -894,9 +911,11 @@ public sealed partial class ChatSystem : SharedChatSystem
         var ignoreLanguage = channel.IsExcemptFromLanguages(); // Floof
         var language = languageOverride ?? _language.GetLanguage(source);
         // Floof
-        if (!ignoreLanguage && language.SpeechOverride.RequireHands && !_actionBlocker.CanInteract(source, null))
+        if (!ignoreLanguage && language.SpeechOverride.RequireHands
+            // Sign language requires at least two complexly-interacting hands
+            && !(_actionBlocker.CanComplexInteract(source) && _hands.EnumerateHands(source).Count(hand => hand.IsEmpty) >= 2))
         {
-            _popups.PopupEntity(Loc.GetString("chat-manager-language-requires-hands"), source, PopupType.Medium);
+            _popups.PopupEntity(Loc.GetString("chat-manager-language-requires-hands"), source, source, PopupType.Medium);
             return;
         }
 
@@ -974,7 +993,15 @@ public sealed partial class ChatSystem : SharedChatSystem
     }
 
     // ReSharper disable once InconsistentNaming
-    private string SanitizeInGameICMessage(EntityUid source, string message, out string? emoteStr, bool capitalize = true, bool punctuate = false, bool capitalizeTheWordI = true)
+    private string SanitizeInGameICMessage(
+        EntityUid source,
+        string message,
+        out string? emoteStr,
+        bool capitalize = true,
+        bool punctuate = false,
+        bool capitalizeTheWordI = true,
+        bool numbersAsWords = true // Floof
+    )
     {
         var newMessage = message.Trim();
         newMessage = SanitizeMessageReplaceWords(newMessage);
@@ -988,7 +1015,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         _sanitizer.TrySanitizeOutSmilies(newMessage, source, out newMessage, out emoteStr);
 
-        return newMessage;
+        return FormattedMessage.EscapeText(newMessage); // Floofstation - where did this sanitization go?
     }
 
     private string SanitizeInGameOOCMessage(string message)
@@ -1147,7 +1174,7 @@ public sealed partial class ChatSystem : SharedChatSystem
                 recipients.Add(player, new ICChatRecipientData(-1, true, InLOS: isVisible));
         }
 
-        RaiseLocalEvent(new ExpandICChatRecipientstEvent(source, voiceGetRange, recipients));
+        RaiseLocalEvent(new ExpandICChatRecipientsEvent(source, voiceGetRange, recipients));
         return recipients;
     }
 
@@ -1210,7 +1237,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 ///     This event is raised before chat messages are sent out to clients. This enables some systems to send the chat
 ///     messages to otherwise out-of view entities (e.g. for multiple viewports from cameras).
 /// </summary>
-public record ExpandICChatRecipientstEvent(EntityUid Source, float VoiceRange, Dictionary<ICommonSession, ChatSystem.ICChatRecipientData> Recipients)
+public record ExpandICChatRecipientsEvent(EntityUid Source, float VoiceRange, Dictionary<ICommonSession, ChatSystem.ICChatRecipientData> Recipients)
 {
 }
 

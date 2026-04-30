@@ -3,6 +3,12 @@
   files:
     - /Audio/_Floof/Voice/Avali/avali_scream.ogg
 
+# seriously, we do need more sounds for these little guys.
+- type: soundCollection
+  id: AvaliLaughs
+  files:
+    - /Audio/_Floof/Voice/Avali/avali_laugh.ogg
+
 - type: emoteSounds
   id: MaleAvali
   params:
@@ -11,7 +17,7 @@
     Scream:
       collection: AvaliScreams
     Laugh:
-      collection: MaleLaugh
+      collection: AvaliLaughs
     Sneeze:
       collection: MaleSneezes
     Cough:
@@ -40,6 +46,8 @@
       collection: Whistles
     Weh:
       collection: Weh
+    Coo:
+      collection: HarpyCoos
 
 - type: emoteSounds
   id: FemaleAvali
@@ -49,7 +57,7 @@
     Scream:
       collection: AvaliScreams
     Laugh:
-      collection: FemaleLaugh
+      collection: AvaliLaughs
     Sneeze:
       collection: FemaleSneezes
     Cough:
@@ -78,3 +86,5 @@
       collection: Whistles
     Weh:
       collection: Weh
+    Coo:
+      collection: HarpyCoos

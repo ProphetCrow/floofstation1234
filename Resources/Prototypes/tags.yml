@@ -993,6 +993,9 @@
   id: NoBlockAnchoring
 
 - type: Tag
+  id: NoConsoleSound
+
+- type: Tag
   id: NoPaint
 
 - type: Tag
@@ -1460,6 +1463,9 @@
 
 - type: Tag
   id: ResomiEmotes
+
+- type: Tag
+  id: SlimeEmotes
 # Floof - M3739 - End Floof species tags
 # EE Emote Fix End
 

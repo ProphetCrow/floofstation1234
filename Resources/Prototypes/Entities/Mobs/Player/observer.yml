@@ -8,6 +8,7 @@
     noRot: true
     overrideContainerOcclusion: true # Always show up regardless of where they're contained.
     drawdepth: Ghosts
+  - type: FTLSmashImmune
   - type: CargoSellBlacklist
   - type: MovementSpeedModifier
     baseSprintSpeed: 12
@@ -57,7 +58,7 @@
   - type: Examiner
     skipChecks: true
   - type: Ghost
-  - type: GhostHearing
+#  - type: GhostHearing | Floof - M3739 - #1300 | Restrict normal ghosts from hearing everything
   - type: IntrinsicRadioReceiver
   - type: ActiveRadio
     receiveAllChannels: true
